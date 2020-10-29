@@ -1,0 +1,58 @@
+---
+title: "Matrix Example - Southern Sea Ice over Time"
+output: html_document
+vignette: >
+  %\VignetteIndexEntry{Matrix Example - Southern Sea Ice over Time}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+```
+
+
+
+```{r setup}
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+
+```{r}
+sea_ice_area
+```
+
+
+First Iteration with `{emphatic}`
+------------------------------------------------------------------------------
+
+```{r}
+sea_ice_area %>%
+  hl_matrix(colour = scale_color_viridis_c(option = 'A')) %>%
+  hl_opt(na = '', text_contrast = 0.4)
+```
+
+
+
+Second Iteration with `{emphatic}`
+------------------------------------------------------------------------------
+
+```{r}
+sea_ice_area %>%
+  hl_matrix(colour = scale_color_viridis_c(option = 'D'), selection = row(.x) %in% c(5, 40)) %>%
+  hl_opt(na = '')
+```
+
+
+

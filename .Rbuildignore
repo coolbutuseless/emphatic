@@ -1,0 +1,7 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^README.Rmd$
+^README.md$
+^working$
+^data-raw$
+^pkgdown$

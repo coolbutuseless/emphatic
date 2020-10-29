@@ -1,0 +1,39 @@
+<svg fill="none" viewBox="0 0 600 600" width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+      <foreignObject width="100%" height="100%">
+      <div xmlns="http://www.w3.org/1999/xhtml"><pre><span style='text-decoration: underline;'>                       mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span><span>
+Mazda RX4            </span><span style='color: #AFAF5F;background-color: #FFD75F;'> 21.0   6 160.0 110 3.90 2.620 16.46  0  1</span><span style='color: #B2B2B2;'>    4    4</span><span>
+Mazda RX4 Wag        </span><span style='color: #AFAF5F;background-color: #FFD75F;'> 21.0   6 160.0 110 3.90 2.875 17.02  0  1</span><span style='color: #B2B2B2;'>    4    4</span><span>
+Datsun 710           </span><span style='color: #B2B2B2;'> 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1</span><span>
+Hornet 4 Drive       </span><span style='color: #D7AF5F;background-color: #FFFF5F;'> 21.4   6 258.0 110 3.08 3.215 19.44  1  0</span><span style='color: #B2B2B2;'>    3    1</span><span>
+Hornet Sportabout    </span><span style='color: #87AF5F;background-color: #87D787;'> 18.7   8 360.0 175 3.15 3.440 17.02  0  0</span><span style='color: #B2B2B2;'>    3    2</span><span>
+Valiant              </span><span style='color: #5FAF87;background-color: #87D787;'> 18.1   6 225.0 105 2.76 3.460 20.22  1  0</span><span style='color: #B2B2B2;'>    3    1</span><span>
+Duster 360           </span><span style='color: #87AFAF;background-color: #5F87AF;'> 14.3   8 360.0 245 3.21 3.570 15.84  0  0</span><span style='color: #B2B2B2;'>    3    4</span><span>
+Merc 240D            </span><span style='color: #B2B2B2;'> 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2</span><span>
+Merc 230             </span><span style='color: #B2B2B2;'> 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2</span><span>
+Merc 280             </span><span style='color: #87AF5F;background-color: #87D787;'> 19.2   6 167.6 123 3.92 3.440 18.30  1  0</span><span style='color: #B2B2B2;'>    4    4</span><span>
+Merc 280C            </span><span style='color: #5FAF87;background-color: #87D787;'> 17.8   6 167.6 123 3.92 3.440 18.90  1  0</span><span style='color: #B2B2B2;'>    4    4</span><span>
+Merc 450SE           </span><span style='color: #87D7AF;background-color: #5FAFAF;'> 16.4   8 275.8 180 3.07 4.070 17.40  0  0</span><span style='color: #B2B2B2;'>    3    3</span><span>
+Merc 450SL           </span><span style='color: #5FAF87;background-color: #5FAF87;'> 17.3   8 275.8 180 3.07 3.730 17.60  0  0</span><span style='color: #B2B2B2;'>    3    3</span><span>
+Merc 450SLC          </span><span style='color: #87AFAF;background-color: #5FAFAF;'> 15.2   8 275.8 180 3.07 3.780 18.00  0  0</span><span style='color: #B2B2B2;'>    3    3</span><span>
+Cadillac Fleetwood   </span><span style='color: #875F87;background-color: #5F0087;'> 10.4   8 472.0 205 2.93 5.250 17.98  0  0</span><span style='color: #B2B2B2;'>    3    4</span><span>
+Lincoln Continental  </span><span style='color: #875F87;background-color: #5F0087;'> 10.4   8 460.0 215 3.00 5.424 17.82  0  0</span><span style='color: #B2B2B2;'>    3    4</span><span>
+Chrysler Imperial    </span><span style='color: #87AFAF;background-color: #5F87AF;'> 14.7   8 440.0 230 3.23 5.345 17.42  0  0</span><span style='color: #B2B2B2;'>    3    4</span><span>
+Fiat 128             </span><span style='color: #B2B2B2;'> 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1</span><span>
+Honda Civic          </span><span style='color: #B2B2B2;'> 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2</span><span>
+Toyota Corolla       </span><span style='color: #D787AF;background-color: #FF87D7;'> 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1</span><span>
+Toyota Corona        </span><span style='color: #B2B2B2;'> 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1</span><span>
+Dodge Challenger     </span><span style='color: #87AFAF;background-color: #5FAFAF;'> 15.5   8 318.0 150 2.76 3.520 16.87  0  0</span><span style='color: #B2B2B2;'>    3    2</span><span>
+AMC Javelin          </span><span style='color: #87AFAF;background-color: #5FAFAF;'> 15.2   8 304.0 150 3.15 3.435 17.30  0  0</span><span style='color: #B2B2B2;'>    3    2</span><span>
+Camaro Z28           </span><span style='color: #87AFAF;background-color: #5F87AF;'> 13.3   8 350.0 245 3.73 3.840 15.41  0  0</span><span style='color: #B2B2B2;'>    3    4</span><span>
+Pontiac Firebird     </span><span style='color: #87AF5F;background-color: #87D787;'> 19.2   8 400.0 175 3.08 3.845 17.05  0  0</span><span style='color: #B2B2B2;'>    3    2</span><span>
+Fiat X1-9            </span><span style='color: #B2B2B2;'> 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1</span><span>
+Porsche 914-2        </span><span style='color: #B2B2B2;'> 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2</span><span>
+Lotus Europa         </span><span style='color: #B2B2B2;'> 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2</span><span>
+Ford Pantera L       </span><span style='color: #87AFAF;background-color: #5FAFAF;'> 15.8   8 351.0 264 4.22 3.170 14.50  0  1</span><span style='color: #B2B2B2;'>    5    4</span><span>
+Ferrari Dino         </span><span style='color: #87AF5F;background-color: #AFD75F;'> 19.7   6 145.0 175 3.62 2.770 15.50  0  1</span><span style='color: #B2B2B2;'>    5    6</span><span>
+Maserati Bora        </span><span style='color: #87AFAF;background-color: #5F87AF;'> 15.0   8 301.0 335 3.54 3.570 14.60  0  1</span><span style='color: #B2B2B2;'>    5    8</span><span>
+Volvo 142E           </span><span style='color: #B2B2B2;'> 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</span><span>
+</span></pre></div>
+    </foreignObject>
+    </svg>
+    

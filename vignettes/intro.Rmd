@@ -1,0 +1,115 @@
+---
+title: "Introduction - Guided Example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction - Guided Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+```{r setup}
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+
+
+Goal
+------------------------------------------------------------------------------
+
+Use `{emphatic}` to highlight the `mtcars` dataset where:
+
+* 6 and 8 cylinder cars only
+* colour each row to indicate the miles-per-gallon rating
+* do not colour the `gear` or `carb` columns
+* highlight the car with the maximum miles per gallon in `hotpink`
+* de-emphasise the numeric values to focus on the colour highlighting
+
+
+Step 1: `mtcars`
+------------------------------------------------------------------------------
+
+```{r}
+mtcars
+```
+
+Step 2: Use `{emphatic}`
+------------------------------------------------------------------------------
+
+```{r}
+mtcars %>%
+  hl('skyblue')
+```
+
+Step 3: Highlight only rows where cylinder is 6 or 8
+------------------------------------------------------------------------------
+
+```{r}
+mtcars %>%
+  hl('skyblue', rows = cyl %in% c(6, 8))
+```
+
+Step 4: Shade by `mpg` rating using `ggplot2::scale_colour_viridis_c()`
+------------------------------------------------------------------------------
+
+```{r}
+mtcars %>%
+  hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), cols = mpg)
+```
+
+
+Step 5: Extend shading across all rows except `gear` and `carb` 
+------------------------------------------------------------------------------
+
+```{r}
+mtcars %>%
+  hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), cols = mpg, dest_cols = mpg:am)
+```
+
+
+Step 6: Highlight the maximum mpg
+------------------------------------------------------------------------------
+
+```{r}
+mtcars %>%
+  hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), 
+     cols = mpg, dest_cols = mpg:am) %>%
+  hl('hotpink', rows = mpg == max(mpg))
+```
+
+Step 7: De-emphasise the text
+------------------------------------------------------------------------------
+
+```{r}
+mtcars %>%
+  hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), 
+     cols = mpg, dest_cols = mpg:am) %>%
+  hl('hotpink', rows = mpg == max(mpg)) %>%
+  hl_opt(text_contrast = 0.25)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

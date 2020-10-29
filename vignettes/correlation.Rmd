@@ -1,0 +1,95 @@
+---
+title: "Matrix Example - Correlation Matrices"
+output: html_document
+vignette: >
+  %\VignetteIndexEntry{Matrix Example - Correlation Matrices}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+```
+
+```{r setup}
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+
+The `cor()` function can calculate the correlation between the variables in a data.frame.
+
+A question which is often asked of this correlation information, is which variables 
+have a strong correlation (positive or negative)?
+
+Standard Correlation Matrix
+------------------------------------------------------------------------------
+
+Hunting for the strong and weak correlations in the raw `cor()` output is difficult.
+
+```{r}
+cor(mtcars)
+```
+
+
+Correlation matrix with highlighting using `{emphatic}`
+------------------------------------------------------------------------------
+
+One way to highlight the correlations would be to colour the strong negative 
+correlations in red, and the strong positive correlations in blue.
+
+For this type of colouring, the `ggplot2` colour scale `scale_colour_gradient2()`
+is a perfect fit.
+
+Issue:  *everything* is now coloured - including 
+locations with low correlation.
+
+```{r}
+cor(mtcars) %>%
+  hl_matrix(scale_colour_gradient2()) 
+```
+
+Apply colouring with `{emphatic}` to only locations with high correlation
+------------------------------------------------------------------------------
+
+The selection of locations to colour is controlled with the `selection` argument
+to `hl_matrix()`.
+
+
+The result still isn't great because *everything* is now coloured - including 
+locations with low correlation, as well as the diagonal (which is uninformative)
+
+Issue: the diagonal of the matrix is still highlighted, 
+but it is totally uninformative.
+
+```{r}
+cor(mtcars) %>%
+  hl_matrix(scale_colour_gradient2(), selection = abs(.x) > 0.7) 
+```
+
+
+Change text contrast
+------------------------------------------------------------------------------
+
+Since the magnitude of the correlations is now indicated by colour, we can
+de-emphasise the text by reducing its contrast with the fill colour.
+
+Also, the diagonals are now excluded from the colouring i.e. highlighting is
+now further limited to where`row(.x) != col(.x)`
+
+```{r}
+cor(mtcars) %>%
+  hl_matrix(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) %>%
+  hl_opt(text_contrast = 0.2)
+```
+
+
+

@@ -1,0 +1,112 @@
+---
+title: "Specifying Rows"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Specifying Rows}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+```{r setup}
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+```{r}
+test_df <- head(mtcars, 10)
+```
+
+
+
+Select all rows
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl('skyblue')
+```
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = NULL)
+```
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = .all)
+```
+
+
+Select rows by index
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = 2:5)
+```
+
+Select rows by name
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = c('Mazda RX4', 'Datsun 710'))
+```
+
+Select rows by rowname symbol
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = Valiant)
+```
+
+
+Select rows by expression
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = mpg > 22)
+```
+
+Select rows using `n()` and `row_number()`
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = row_number() > n()/2)
+```
+
+Select rows using selectors like `tidyselect`
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = contains('hornet'))
+```
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = starts_with('m'))
+```
+
+
+```{r}
+test_df %>%
+  hl('skyblue', rows = any_of(c('Valiant', 'Herbie', 'Datsun 710')))
+```
+

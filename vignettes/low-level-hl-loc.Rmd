@@ -1,0 +1,89 @@
+---
+title: "Low-Level control with 'hl_loc()'"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Low-Level control with 'hl_loc()'}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+```{r setup}
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+```{r}
+test_df <- head(mtcars, 10)
+```
+
+Introduction: `hl_loc()`
+------------------------------------------------------------------------------
+
+In general, use `hl()` to highlight data.frames, and `hl_matrix()` to highlight
+matrices.
+
+However, there does exist a low-level function for highlighting matrices and
+data.frames called `hl_loc()`.  This function is useful if you want more control 
+over the process of selecting row, columns and colours.
+
+`hl_loc()` is a little less friendly than `hl()` or `hl_matrix()` as the
+`row_ids` and `col_ids` to be highlighted can *only* be specified as 
+numeric indices.
+
+Highlight a block of rows and columns (all combinations of given row and column ids)
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl_loc('skyblue', row_ids = 3:5, col_ids = c(1, 3, 5))
+```
+
+
+
+Highlight rows and columns (by taking row/col pairs)
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl_loc('skyblue', row_ids = 3:5, col_ids = c(1, 3, 5), expand_grid = FALSE)
+```
+
+
+Apply colour vector to a block
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl_loc(c('skyblue', 'hotpink'), row_ids = 3:5, col_ids = c(1, 3, 5))
+```
+
+Apply colour vector to a block - filling in colours across columns first
+------------------------------------------------------------------------------
+
+```{r}
+test_df %>%
+  hl_loc(c('skyblue', 'hotpink'), row_ids = 3:5, col_ids = c(1, 3, 5), major = 'column')
+```
+
+
+
+
+
+
+
+
+
