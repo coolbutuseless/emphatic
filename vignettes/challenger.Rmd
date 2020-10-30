@@ -43,14 +43,14 @@ challenger
 Ordering by temperature
 ------------------------------------------------------------------------------
 
-When ordered by increasing temperature a trend is somewhat apparent in the
+When ordered by decreasing temperature, a trend is somewhat apparent in the
 data i.e. lower temperatures have more incidents.
 
-Finding this trend still requires close reading of the data.
+Finding this trend still requires close inspection of the data.
 
 ```{r}
 challenger %>% 
-  arrange(temp)
+  arrange(desc(temp))
 ```
 
 
@@ -67,7 +67,7 @@ The cluster of damage at lower temperatures is now much more visually apparent.
 ```{r}
 
 challenger %>%
-  arrange(temp) %>%
+  arrange(desc(temp)) %>%
   hl(colour  = scale_color_viridis_c(option = 'B'), cols = 'temp') %>%
   hl(
     scale_color_gradient(low = 'pink', high = 'red'),
@@ -96,7 +96,7 @@ Second Iteration with `{emphatic}`
 challenger_expanded <- challenger %>%
   mutate(temp = factor(temp, levels = 30:81)) %>%
   tidyr::complete(temp) %>%
-  arrange(temp) %>%
+  arrange(desc(temp)) %>%
   as.data.frame() %>%
   mutate(temp = as.numeric(levels(temp))[temp]) %>%
   select(flight, everything())
