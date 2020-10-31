@@ -1,7 +1,7 @@
 Package: emphatic
 Type: Package
 Title: ANSI Colouring of Data.Frames and Matrices 
-Version: 0.1.0
+Version: 0.1.1
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
 Description: Colour matrix and data.frame output in the console.
@@ -17,6 +17,5 @@ Suggests:
     dplyr,
     ggplot2,
     tidyr,
-    fansi,
     testthat
 VignetteBuilder: knitr

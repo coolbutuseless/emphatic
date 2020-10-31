@@ -1,6 +1,5 @@
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Convert ANSI to HTML
 #'
@@ -12,28 +11,22 @@
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_html <- function(x, style = NULL, ...) {
-  if (requireNamespace('fansi', quietly = TRUE)) {
 
-    if (!is.null(style)) {
-      pre <- paste0("<pre style='", style, "'>")
-    } else {
-      pre <- "<pre>"
-    }
-
-    res <- paste0(pre, fansi::sgr_to_html(as.character(x, ...)), "</pre>")
-    class(res) <- unique(c('knit_asis', class(res)))
+  if (!is.null(style)) {
+    pre <- paste0("<pre style='", style, "'>")
   } else {
-    warning("Please install {fansi} for html conversion")
-    res <- as.character(x, ...)
+    pre <- "<pre>"
   }
+
+  res <- paste0(pre, as.character(x, ..., mode = 'html'), "</pre>")
+  class(res) <- unique(c('knit_asis', class(res)))
 
   res
 }
 
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Automatically utput emphatic matrices and data.frames to HTML knitted documents.
-#'
-#' This function makes use of \code{fansi} package to convert ANSI to HTML.
+#' Automatically output emphatic matrices and data.frames to HTML knitted documents.
 #'
 #' @inheritParams as_html
 #'

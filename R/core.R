@@ -111,15 +111,18 @@ print.emphatic <- function(x, ...) {
 #'
 #' @param x emphatic data.frame or matrix
 #' @param ... other arguments passed on to \code{format()}
+#' @param mode Render mode 'ansi' or 'html' determines how the colours will
+#'        be represented in text
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as.character.emphatic <- function(x, ...) {
+as.character.emphatic <- function(x, ..., mode = 'ansi') {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Sanity check
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   stopifnot(is_emphatic(x))
+  stopifnot(mode %in% c('ansi', 'html'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Build full options by combining global and local options
@@ -177,7 +180,8 @@ as.character.emphatic <- function(x, ...) {
     text_contrast    = opt$text_contrast,
     full_colour      = opt$full_colour,
     dark_mode        = opt$dark_mode,
-    underline_header = opt$underline_header
+    underline_header = opt$underline_header,
+    mode             = mode
   )
 
 
@@ -194,6 +198,7 @@ as.character.emphatic <- function(x, ...) {
 #' @param text,fill matrices of colours to apply to each given cell.
 #'        Dimensions must match that of \code{m}
 #' @inheritParams hl_opt_global
+#' @inheritParams as.character.emphatic
 #'
 #' @return NULL
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,7 +208,8 @@ as_character_inner <- function(m,
                                text_contrast    = 1,
                                full_colour      = FALSE,
                                dark_mode        = TRUE,
-                               underline_header = TRUE) {
+                               underline_header = TRUE,
+                               mode             = 'ansi') {
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -212,12 +218,7 @@ as_character_inner <- function(m,
   stopifnot(is.character(m))
   stopifnot(identical(dim(m), dim(text)))
   stopifnot(identical(dim(m), dim(fill)))
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # After each cell we will add the ansi RESET code to revert
-  # text and fill attributes to the terminal default
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  end <- matrix(reset_code, nrow = nrow(m), ncol = ncol(m))
+  stopifnot(mode %in% c('ansi', 'html'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Automatic constrasting text for foreground?
@@ -236,14 +237,29 @@ as_character_inner <- function(m,
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # After each cell we will add the ansi RESET code to revert
+  # text and fill attributes to the terminal default
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (mode == 'ansi') {
+    end <- matrix(reset_ansi, nrow = nrow(m), ncol = ncol(m))
+  } else if (mode == 'html') {
+    end <- matrix(reset_html, nrow = nrow(m), ncol = ncol(m))
+  }
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Convert matrices of R colours to matrices of ANSI codes
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (isTRUE(full_colour)) {
-    text[] <- col2fg24(text)
-    fill[] <- col2bg24(fill)
-  } else {
-    text[] <- col2fg(text)
-    fill[] <- col2bg(fill)
+  if (mode == 'ansi') {
+    if (isTRUE(full_colour)) {
+      text[] <- col2text_ansi24(text)
+      fill[] <- col2fill_ansi24(fill)
+    } else {
+      text[] <- col2text_ansi(text)
+      fill[] <- col2fill_ansi(fill)
+    }
+  } else if (mode == 'html') {
+    text[] <- col2text_html(text)
+    fill[] <- col2fill_html(fill)
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -295,7 +311,11 @@ as_character_inner <- function(m,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   header <- paste(col_names, collapse = " ")
   if (isTRUE(underline_header)) {
-    header <- paste0(underline_on_code, header, underline_off_code)
+    if (mode == 'ansi') {
+      header <- paste0(underline_on_ansi, header, underline_off_ansi)
+    } else if (mode == 'html') {
+      header <- paste0(underline_on_html, header, underline_off_html)
+    }
   }
   body   <- apply(final, 1, paste, collapse = '')
   res    <- paste(c(header, body), collapse = "\n")

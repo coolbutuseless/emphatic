@@ -3,10 +3,9 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Reset back to terminal defaults
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-reset_code <- "\033[39m\033[49m"
-
-underline_on_code <- "\033[4m"
-underline_off_code <- "\033[24m"
+reset_ansi         <- "\033[39m\033[49m"
+underline_on_ansi  <- "\033[4m"
+underline_off_ansi <- "\033[24m"
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,7 +23,7 @@ underline_off_code <- "\033[24m"
 #'
 #' @importFrom grDevices col2rgb
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-col2bg <- function(rcolour) {
+col2fill_ansi <- function(rcolour) {
   rcolour[rcolour == ''] <- NA_character_
   ifelse(
     is.na(rcolour),
@@ -35,9 +34,9 @@ col2bg <- function(rcolour) {
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' @rdname col2bg
+#' @rdname col2fill_ansi
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-col2fg <- function(rcolour) {
+col2text_ansi <- function(rcolour) {
   rcolour[rcolour == ''] <- NA_character_
   ifelse(
     is.na(rcolour),
@@ -48,7 +47,7 @@ col2fg <- function(rcolour) {
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' @rdname col2bg
+#' @rdname col2fill_ansi
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2code <- function(rcolour) {
   cols <- grDevices::col2rgb(rcolour)
@@ -62,5 +61,48 @@ col2code <- function(rcolour) {
   colour_code <- 16L + 36L * cols[1,] + 6 * cols[2,] + cols[3,]
 
   ifelse(is_grey & !possibly_white, grey_code, colour_code)
+}
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Convert an R colour to an ansi string for 24bit colour supported by some terminals
+#'
+#' Ref: \url{https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit}
+#'
+#' @param rcolour any R colour e.g. 'red', '#445566'.  If rcolour is NA or empty
+#'        string then return an empty string
+#'
+#' @return ANSI escape string for the given colour as a foreground or background
+#'         colour
+#'
+#' @importFrom grDevices col2rgb
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+col2fill_ansi24 <- function(rcolour) {
+  rcolour[rcolour == ''] <- NA_character_
+  ifelse(
+    is.na(rcolour),
+    '',
+    {
+      cols <- grDevices::col2rgb(rcolour)
+      paste0("\033[48;2;", cols[1,], ";", cols[2,], ";", cols[3,], "m")
+    }
+  )
+}
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' @rdname col2fill_ansi24
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+col2text_ansi24 <- function(rcolour) {
+  rcolour[rcolour == ''] <- NA_character_
+  ifelse(
+    is.na(rcolour),
+    '',
+    {
+      cols <- grDevices::col2rgb(rcolour)
+      paste0("\033[38;2;", cols[1,], ";", cols[2,], ";", cols[3,], "m")
+    }
+  )
 }
 

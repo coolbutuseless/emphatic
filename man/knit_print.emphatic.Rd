@@ -2,7 +2,7 @@
 % Please edit documentation in R/knitr.R
 \name{knit_print.emphatic}
 \alias{knit_print.emphatic}
-\title{Automatically utput emphatic matrices and data.frames to HTML knitted documents.}
+\title{Automatically output emphatic matrices and data.frames to HTML knitted documents.}
 \usage{
 knit_print.emphatic(x, style = NULL, ...)
 }
@@ -15,5 +15,5 @@ returned HTML}
 \item{...}{other arguments passed to \code{as.character.emphatic}}
 }
 \description{
-This function makes use of \code{fansi} package to convert ANSI to HTML.
+Automatically output emphatic matrices and data.frames to HTML knitted documents.
 }

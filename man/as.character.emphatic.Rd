@@ -4,12 +4,15 @@
 \alias{as.character.emphatic}
 \title{Convert an \code{emphatic} data.frame or matrix to a string.}
 \usage{
-\method{as.character}{emphatic}(x, ...)
+\method{as.character}{emphatic}(x, ..., mode = "ansi")
 }
 \arguments{
 \item{x}{emphatic data.frame or matrix}
 
 \item{...}{other arguments passed on to \code{format()}}
+
+\item{mode}{Render mode 'ansi' or 'html' determines how the colours will
+be represented in text}
 }
 \description{
 The output contains ANSI escape codes to colour the elements in the

@@ -12,7 +12,8 @@ as_character_inner(
   text_contrast = 1,
   full_colour = FALSE,
   dark_mode = TRUE,
-  underline_header = TRUE
+  underline_header = TRUE,
+  mode = "ansi"
 )
 }
 \arguments{
@@ -46,6 +47,9 @@ If your terminal displays dark text on a light background, set
 
 \item{underline_header}{Draw an underline separating the column header from
 the data? Default: TRUE}
+
+\item{mode}{Render mode 'ansi' or 'html' determines how the colours will
+be represented in text}
 }
 \description{
 Private function for converting an emphatic data.frame or matrix to a string
