@@ -124,6 +124,17 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   stopifnot(is_emphatic(x))
   stopifnot(mode %in% c('ansi', 'html'))
 
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Co-erce tibbles into data.frames.
+  # tibble:::print.tibble() already does some ANSI markup, and in doing so,
+  # the results of calling "format()" are not the same as calling format()
+  # on a data.frame.
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (inherits(x, 'tbl_df')) {
+    x <- as.data.frame(x)
+  }
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Build full options by combining global and local options
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
