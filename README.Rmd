@@ -115,24 +115,24 @@ Vignettes
 
 Intro
 
-* [Highlighting data.frames](https://coolbutuseless.github.io/package/emphatic/articles/intro.html)
-* [Highlighting matrices](https://coolbutuseless.github.io/package/emphatic/articles/examples-matrices.html)
-* [Highlighting vectors](https://coolbutuseless.github.io/package/emphatic/articles/examples-vectors.html)
+* [Highlighting data.frames](https://coolbutuseless.github.io/package/emphatic/articles/aaa-data-frames.html)
+* [Highlighting matrices](https://coolbutuseless.github.io/package/emphatic/articles/aaa--matrices.html)
+* [Highlighting vectors](https://coolbutuseless.github.io/package/emphatic/articles/aaa-vectors.html)
 
 Specifying rows, columns and colours
 
-* [Specifying rows](https://coolbutuseless.github.io/package/emphatic/articles/row-specification.html)
-* [Specifying columns](https://coolbutuseless.github.io/package/emphatic/articles/col-specification.html)
-* [Specifying colours](https://coolbutuseless.github.io/package/emphatic/articles/colour-specification.html)
+* [Specifying rows](https://coolbutuseless.github.io/package/emphatic/articles/specify-rows.html)
+* [Specifying columns](https://coolbutuseless.github.io/package/emphatic/articles/specify-columns.html)
+* [Specifying colours](https://coolbutuseless.github.io/package/emphatic/articles/specify-colours.html)
 
 
 
 Test cases on Real data
 
 * [Space Shuttle O-ring dataset - Challenger Disaster](https://coolbutuseless.github.io/package/emphatic/articles/challenger.html)
-* [Southern Sea Ice Area](https://coolbutuseless.github.io/package/emphatic/articles/sea-ice.html)
-* [`volcano` dataset](https://coolbutuseless.github.io/package/emphatic/articles/volcano.html)
-* [Correlation matrix](https://coolbutuseless.github.io/package/emphatic/articles/correlation.html)
+* [Southern Sea Ice Area](https://coolbutuseless.github.io/package/emphatic/articles/example-sea-ice.html)
+* [`volcano` dataset](https://coolbutuseless.github.io/package/emphatic/articles/example-volcano.html)
+* [Correlation matrix](https://coolbutuseless.github.io/package/emphatic/articles/example-correlation.html)
 
 Advanced:
 
@@ -160,23 +160,21 @@ mtcars %>%
 <img src="man/figures/example1.svg" width="100%">
 
 
-Example of highlighting specific rows and columns
+Example of highlighting a data.frame and include a legend
 ------------------------------------------------------------------------------
 
 
 Use `{emphatic}` to highlight the `mtcars` dataset where:
 
-* 6 and 8 cylinder cars only
 * colour each row to indicate the miles-per-gallon rating
 * do not colour the `gear` or `carb` columns
 * highlight the car with the maximum miles per gallon in `hotpink`
-* de-emphasise the numeric values to focus on the colour highlighting
 
 
 ```{r eval = FALSE}
 mtcars %>%
-  hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), 
-     cols = mpg, dest_cols = mpg:am) %>%
+  hl(ggplot2::scale_colour_viridis_c(),
+     cols = mpg, dest_cols = mpg:am, show_legend = TRUE) %>%
   hl('hotpink', rows = mpg == max(mpg)) %>%
   hl_opt(text_contrast = 0.25)
 ```
@@ -184,10 +182,10 @@ mtcars %>%
 
 ```{r echo = FALSE}
 mtcars %>%
-  hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), 
-     cols = mpg, dest_cols = mpg:am) %>%
+  hl(ggplot2::scale_colour_viridis_c(),
+     cols = mpg, dest_cols = mpg:am, show_legend = TRUE) %>%
   hl('hotpink', rows = mpg == max(mpg)) %>%
-  hl_opt(text_contrast = 0.25) %>%
+  hl_opt(text_contrast = 0.75) %>%
   as_svg(600, 600) %>%
   cat(file = "man/figures/example2.svg")
 ```

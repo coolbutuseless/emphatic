@@ -13,7 +13,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://github.com/coolbutuseless/emphatic/workflows/R-CMD-check/badge.svg)](https://github.com/coolbutuseless/emphatic/actions)
 <!-- badges: end -->
 
-#### `{emphatic}` augments the output of data.frames and matrices in R by adding user-defined ANSI highlighting.
+#### `{emphatic}` augments the output of data.frames, matrices and simple vectors in R by adding user-defined ANSI highlighting.
 
 <img src="man/figures/examples.gif"/>
 
@@ -23,14 +23,15 @@ for vignettes and more examples.
 
 ## What’s in the box
 
-There are separate high-level functions for highlighting data.frames and
-matrices, and a low-level function which can be used on both.
+There are separate high-level functions for highlighting data.frames,
+matrices and simple vectors. There is also a low-level highlghting
+function which can be used on data.frames and matrices.
 
 The `hl_` prefix can be read as `highlight`.
 
 -   `hl()` for highlighting data.frames
 -   `hl_mat()` for highlighting matrices
--   `hl_vec()` for highlighting atomic vectors
+-   `hl_vec()` for highlighting simple atomic vectors
 -   `hl_loc()` for low-level control of highlighting of both data.frames
     and matrices
 -   `hl_opt()` to set some local options on the current `emphatic`
@@ -64,35 +65,39 @@ remotes::install_github('coolbutuseless/emphatic')
 
 Intro
 
--   [Guided
-    Example](https://coolbutuseless.github.io/package/emphatic/articles/intro.html)
+-   [Highlighting
+    data.frames](https://coolbutuseless.github.io/package/emphatic/articles/aaa-data-frames.html)
+-   [Highlighting
+    matrices](https://coolbutuseless.github.io/package/emphatic/articles/aaa--matrices.html)
+-   [Highlighting
+    vectors](https://coolbutuseless.github.io/package/emphatic/articles/aaa-vectors.html)
 
-Speicifying rows, columns and colours
+Specifying rows, columns and colours
 
 -   [Specifying
-    rows](https://coolbutuseless.github.io/package/emphatic/articles/row-specification.html)
+    rows](https://coolbutuseless.github.io/package/emphatic/articles/specify-rows.html)
 -   [Specifying
-    columns](https://coolbutuseless.github.io/package/emphatic/articles/col-specification.html)
+    columns](https://coolbutuseless.github.io/package/emphatic/articles/specify-columns.html)
 -   [Specifying
-    colours](https://coolbutuseless.github.io/package/emphatic/articles/colour-specification.html)
+    colours](https://coolbutuseless.github.io/package/emphatic/articles/specify-colours.html)
 
 Test cases on Real data
 
 -   [Space Shuttle O-ring dataset - Challenger
     Disaster](https://coolbutuseless.github.io/package/emphatic/articles/challenger.html)
 -   [Southern Sea Ice
-    Area](https://coolbutuseless.github.io/package/emphatic/articles/sea-ice.html)
+    Area](https://coolbutuseless.github.io/package/emphatic/articles/example-sea-ice.html)
 -   [`volcano`
-    dataset](https://coolbutuseless.github.io/package/emphatic/articles/volcano.html)
+    dataset](https://coolbutuseless.github.io/package/emphatic/articles/example-volcano.html)
 -   [Correlation
-    matrix](https://coolbutuseless.github.io/package/emphatic/articles/correlation.html)
+    matrix](https://coolbutuseless.github.io/package/emphatic/articles/example-correlation.html)
 
 Advanced:
 
 -   [Low level highlighting with
     `hl_loc()`](https://coolbutuseless.github.io/package/emphatic/articles/low-level-hl-loc.html)
 
-## Example: Highlighting a data.frame with alternative row colours
+## Example: Highlighting a data.frame with alternating row colours
 
 ``` r
 library(emphatic)
@@ -104,20 +109,18 @@ mtcars %>%
 
 <img src="man/figures/example1.svg" width="100%">
 
-## Example of highlighting specific rows and columns
+## Example of highlighting a data.frame and include a legend
 
 Use `{emphatic}` to highlight the `mtcars` dataset where:
 
--   6 and 8 cylinder cars only
 -   colour each row to indicate the miles-per-gallon rating
 -   do not colour the `gear` or `carb` columns
 -   highlight the car with the maximum miles per gallon in `hotpink`
--   de-emphasise the numeric values to focus on the colour highlighting
 
 ``` r
 mtcars %>%
-  hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), 
-     cols = mpg, dest_cols = mpg:am) %>%
+  hl(ggplot2::scale_colour_viridis_c(),
+     cols = mpg, dest_cols = mpg:am, show_legend = TRUE) %>%
   hl('hotpink', rows = mpg == max(mpg)) %>%
   hl_opt(text_contrast = 0.25)
 ```
@@ -152,7 +155,7 @@ mtcars %>%
 
 <img src="man/figures/example4.svg" width="100%">
 
-## Example: Highlighting a numeric vector (1)
+## Example: Highlighting a numeric vector
 
 Highlight locations in a numeric vector which match an expression.
 
@@ -163,30 +166,6 @@ sample(10, 30, replace = TRUE, prob = 1:10) %>%
 ```
 
 <img src="man/figures/example5.svg" width="100%">
-
-## Example: Highlighting a numeric vector (2)
-
-Colour a numeric vector using a ggplot colour scale.
-
-``` r
-sample(10, 30, replace = TRUE, prob = 1:10) %>%
-  sort() %>%
-  hl_vec(scale_colour_viridis_c(option = 'A'))
-```
-
-<img src="man/figures/example6.svg" width="100%">
-
-## Example: Highlighting a character vector (3)
-
-Highlight elements of a vector when they are identical to the previous
-element.
-
-``` r
-sample(letters[1:5], 30, replace = TRUE, prob = 1:5) %>%
-  hl_vec('red', .x == lag(.x))
-```
-
-<img src="man/figures/example7.svg" width="100%">
 
 ## Related Software
 
