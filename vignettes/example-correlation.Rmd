@@ -1,8 +1,8 @@
 ---
-title: "Matrix Example - Correlation Matrices"
+title: "Example - Matrix Highlighting - Correlation Matrix"
 output: html_document
 vignette: >
-  %\VignetteIndexEntry{Matrix Example - Correlation Matrices}
+  %\VignetteIndexEntry{Example - Matrix Highlighting - Correlation Matrix}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -54,14 +54,14 @@ locations with low correlation.
 
 ```{r}
 cor(mtcars) %>%
-  hl_matrix(scale_colour_gradient2()) 
+  hl_mat(scale_colour_gradient2()) 
 ```
 
 Apply colouring with `{emphatic}` to only locations with high correlation
 ------------------------------------------------------------------------------
 
 The selection of locations to colour is controlled with the `selection` argument
-to `hl_matrix()`.
+to `hl_mat()`.
 
 
 The result still isn't great because *everything* is now coloured - including 
@@ -72,7 +72,7 @@ but it is totally uninformative.
 
 ```{r}
 cor(mtcars) %>%
-  hl_matrix(scale_colour_gradient2(), selection = abs(.x) > 0.7) 
+  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7) 
 ```
 
 
@@ -87,7 +87,7 @@ now further limited to where`row(.x) != col(.x)`
 
 ```{r}
 cor(mtcars) %>%
-  hl_matrix(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) %>%
+  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) %>%
   hl_opt(text_contrast = 0.2)
 ```
 

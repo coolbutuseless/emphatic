@@ -5,6 +5,8 @@
 #' @param colours Character vector of R colours
 #'
 #' @return Character vector of 6-char hex colours
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2hex <- function(colours) {
 
@@ -22,6 +24,8 @@ col2hex <- function(colours) {
 #' @param colours Chcaracter vector of R colours
 #'
 #' @return Character vector of HTML opening span tags
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2fill_html <- function(colours) {
   no_colour <- is.na(colours) | colours == ''
@@ -44,6 +48,8 @@ col2fill_html <- function(colours) {
 #' @param colours Chcaracter vector of R colours
 #'
 #' @return Character vector of HTML opening span tags
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2text_html <- function(colours) {
   no_colour <- is.na(colours) | colours == ''

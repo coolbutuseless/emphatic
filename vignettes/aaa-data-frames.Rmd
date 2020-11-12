@@ -1,8 +1,8 @@
 ---
-title: "Introduction - Guided Example"
+title: "Quick Start - Data Frames"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction - Guided Example}
+  %\VignetteIndexEntry{Quick Start - Data Frames}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

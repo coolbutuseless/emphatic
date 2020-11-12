@@ -1,7 +1,7 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Convert a matrix or data.frame to an emphatic version
+#' Convert a data.frame, matrix or atomic vector into an emphatic version
 #'
 #' This usually does not need to be called explicitly by the user.
 #'
@@ -12,17 +12,22 @@
 #' Colour information is stored as R colour names (e.g. 'red') or 6 character
 #' hex colours (e.g. '#ff0000').
 #'
-#' @param .data \code{emphatic} matrix or data.frame
+#' @param .data data.frame, matrix or atomic vector
 #'
-#' @return .data with added attributes for text and fill colours
+#' @return An \code{emphatic} version of the given .data with added attributes for text and fill colours
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_emphatic <- function(.data) {
-  stopifnot(is.matrix(.data) || is.data.frame(.data))
+  stopifnot(is_matrix(.data) || is.data.frame(.data) || is_atomic(.data))
 
-  .data <- set_colour_matrix(.data,  'text', matrix(NA_character_, nrow(.data), ncol(.data)))
-  .data <- set_colour_matrix(.data,  'fill', matrix(NA_character_, nrow(.data), ncol(.data)))
+  if (is_atomic(.data)) {
+    .data <- set_colour_matrix(.data,  'text', matrix(NA_character_, 1, length(.data)))
+    .data <- set_colour_matrix(.data,  'fill', matrix(NA_character_, 1, length(.data)))
+  } else {
+    .data <- set_colour_matrix(.data,  'text', matrix(NA_character_, nrow(.data), ncol(.data)))
+    .data <- set_colour_matrix(.data,  'fill', matrix(NA_character_, nrow(.data), ncol(.data)))
+  }
 
   class(.data) <- unique(c('emphatic', class(.data)))
   .data
@@ -43,16 +48,30 @@ get_colour_matrix <- function(.data, elem) {
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 set_colour_matrix <- function(.data, elem, mat) {
   stopifnot(elem %in% c('fill', 'text'))
-  stopifnot(is.matrix(mat))
+  stopifnot(is_matrix(mat))
   stopifnot(is.character(mat))
-  stopifnot(identical(dim(mat), dim(.data)))
+  stopifnot((is_atomic(.data) && length(.data) == length(mat)) || identical(dim(mat), dim(.data)))
   attr(.data, elem) <- mat
   .data
 }
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' check if data.frame is a emphatic data.frame of matrix
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+add_legend <- function(.data, legend) {
+  attr(.data, 'legends') <- c(attr(.data, 'legends', exact = TRUE), list(legend))
+  .data
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+get_legends <- function(.data) {
+  attr(.data, 'legends', exact = TRUE)
+}
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Check if data.frame, matrix or atomic vector is a valid emphatic version
 #'
 #' @param x Object to test
 #'
@@ -67,24 +86,20 @@ is_emphatic <- function(x) {
   # fast rate, and I want to be certain
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   inherits(x, 'emphatic') &&
-    (is.matrix(x) || is.data.frame(x)) &&
+    (is_matrix(x) || is.data.frame(x) || is_atomic(x)) &&
     !is.null(text) &&
     !is.null(fill) &&
-    identical(dim(x), dim(text)) &&
-    identical(dim(x), dim(fill)) &&
-    is.matrix(text) &&
-    is.matrix(fill) &&
+    ((is_atomic(x) && length(x) == length(text)) || identical(dim(x), dim(text))) &&
+    ((is_atomic(x) && length(x) == length(fill)) || identical(dim(x), dim(fill))) &&
+    is_matrix(text) &&
+    is_matrix(fill) &&
     is.character(text) &&
     is.character(fill)
 }
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Print an \code{emphatic} data.frame or matrix
-#'
-#' The printed output contains ANSI escape codes to colour the elements in the
-#' data.frame or matrix using the colour information for each cell stored
-#' in the attributes.
+#' Print an \code{emphatic} data.frame, matrix or atomic vector
 #'
 #' @inheritParams hl_opt_global
 #' @inheritParams as.character.emphatic
@@ -102,17 +117,17 @@ print.emphatic <- function(x, ...) {
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Convert an \code{emphatic} data.frame or matrix to a string.
-#'
+#' Convert an \code{emphatic} data.frame, matrix or atomic vector into a character string.
 #'
 #' The output contains ANSI escape codes to colour the elements in the
-#' data.frame or matrix. This string would then be suitable to pass on to \code{fansi}
+#' object. This string would then be suitable to pass on to \code{fansi}
 #' for further manipulation e.g. conversion to HTML for displaying in a vignette.
 #'
-#' @param x emphatic data.frame or matrix
+#' @param x \code{emphatic} data.frame, matrix or atomic vector
 #' @param ... other arguments passed on to \code{format()}
-#' @param mode Render mode 'ansi' or 'html' determines how the colours will
-#'        be represented in text
+#' @param mode Render mode 'ansi' (default) or 'html' determines how the colours will
+#'        be represented in text. If you're in a terminal or console, then
+#'        choose 'ansi'.
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -124,6 +139,12 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   stopifnot(is_emphatic(x))
   stopifnot(mode %in% c('ansi', 'html'))
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Remove the 'emphatic' class here, so that if any subsequence operations
+  # rely on 'as.character()' for this base class, they don't infitiely
+  # call 'as.character.emphatic'
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  class(x) <- setdiff(class(x), 'emphatic')
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Co-erce tibbles into data.frames.
@@ -144,9 +165,23 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   opt        <- modifyList(opt, local_opt)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # format the data.frame as character matrix
+  # format the data as character matrix
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  mat <- as.matrix(format(x, ...))
+  if (is_atomic(x)) {
+    fx <- x
+    if ((!is.double(fx) && !is.integer(fx) && !is.raw(fx) && !is.complex(fx)) ||  inherits(fx, 'Date')) {
+      fx <- dQuote(fx, FALSE)
+    }
+    fx  <- format(fx)
+    mat <- matrix(fx, nrow = 1)
+    if (!is.null(names(x))) {
+      colnames(mat) <- names(x)
+    } else {
+      mat[]  <- paste0(" ", mat) # need padding if no column names
+    }
+  } else {
+    mat <- as.matrix(format(x, ...))
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Set the NA to whatever the user requests
@@ -165,7 +200,7 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
     fmt <- paste0("-%", max_nchar, 's')
     new_rownames <- sprintf(fmt, new_rownames)
     rownames(mat)  <- new_rownames
-  } else if (is.matrix(x)) {
+  } else if (is_matrix(x)) {
     if (is.null(colnames(x))) {
       new_colnames <- paste0("[,", seq_len(ncol(x)), "]")
       colnames(mat) <- new_colnames
@@ -187,14 +222,15 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
     mat,
     text             = get_colour_matrix(x, 'text'),
     fill             = get_colour_matrix(x, 'fill'),
+    legends          = attr(x, 'legends', exact = TRUE),
     text_mode        = opt$text_mode,
     text_contrast    = opt$text_contrast,
     full_colour      = opt$full_colour,
     dark_mode        = opt$dark_mode,
     underline_header = opt$underline_header,
-    mode             = mode
+    mode             = mode,
+    atomic           = is_atomic(x)
   )
-
 
   res
 }
@@ -208,27 +244,33 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
 #' @param m character matrix
 #' @param text,fill matrices of colours to apply to each given cell.
 #'        Dimensions must match that of \code{m}
+#' @param legends any strings for legends to print. default NULL
 #' @inheritParams hl_opt_global
 #' @inheritParams as.character.emphatic
+#' @param atomic was this originally an atomic vector?  if so use a slightly
+#'        different printing method
 #'
 #' @return NULL
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_character_inner <- function(m,
-                               text, fill,
+                               text, fill, legends = NULL,
                                text_mode        = 'contrast',
                                text_contrast    = 1,
                                full_colour      = FALSE,
                                dark_mode        = TRUE,
                                underline_header = TRUE,
-                               mode             = 'ansi') {
+                               mode             = 'ansi',
+                               atomic           = FALSE) {
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Matrix form assumed to be character
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   stopifnot(is.character(m))
-  stopifnot(identical(dim(m), dim(text)))
-  stopifnot(identical(dim(m), dim(fill)))
+  stopifnot((is_atomic(m) && length(m) == length(text)) || identical(dim(m), dim(text)))
+  stopifnot((is_atomic(m) && length(m) == length(fill)) || identical(dim(m), dim(fill)))
   stopifnot(mode %in% c('ansi', 'html'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -286,51 +328,147 @@ as_character_inner <- function(m,
   col_widths <- apply(m, 2, function(x) {max(nchar(x))})
   col_widths <- pmax(col_widths, nchar(colnames(m)))
 
-
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Do the padding. Pad both the contents and the column heading
+  # Do the padding. Pad both the contents and the column heading such that
+  # the width of any item matches the maxiumum width of any item in that
+  # column - including the column header
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   col_names <- colnames(m)
+  has_col_names <- !is.null(col_names)
 
-  for (i in seq_along(col_widths)) {
-    width <- col_widths[i]
-    fmt   <- sprintf(" %%%is", width)
-    m[,i] <- sprintf(fmt, m[,i])
-    fmt   <- sprintf("%%%is", width)
-    col_names[i] <- sprintf(fmt, col_names[i])
-  }
-
-
-  final <- paste0(text, fill, m, end)
-  final <- matrix(final, nrow = nrow(text), ncol = ncol(text))
-
-  if (!is.null(rownames(m)) && !is.null(colnames(m))) {
-    this_rownames <- rownames(m)
-    max_nchar <- max(nchar(this_rownames))
-    fmt <- paste0("%-", max_nchar + 1, "s ")
-    this_rownames <- sprintf(fmt, this_rownames)
-    final <- cbind(this_rownames, final)
-
-    col_names <- c(sprintf(fmt, ''), col_names)
-  } else {
-    col_names <- c('', col_names)
-  }
-
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Assemble single text string
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  header <- paste(col_names, collapse = " ")
-  if (isTRUE(underline_header)) {
-    if (mode == 'ansi') {
-      header <- paste0(underline_on_ansi, header, underline_off_ansi)
-    } else if (mode == 'html') {
-      header <- paste0(underline_on_html, header, underline_off_html)
+  if (has_col_names) {
+    for (i in seq_along(col_widths)) {
+      width <- col_widths[i]
+      fmt   <- sprintf(" %%%is", width)
+      m[,i] <- sprintf(fmt, m[,i])
+      fmt   <- sprintf("%%%is", width)
+      col_names[i] <- sprintf(fmt, col_names[i])
     }
   }
-  body   <- apply(final, 1, paste, collapse = '')
-  res    <- paste(c(header, body), collapse = "\n")
-  res    <- paste0(res, "\n")
+
+
+  ansi_mat <- paste0(text, fill, m, end)
+  ansi_mat <- matrix(ansi_mat, nrow = nrow(text), ncol = ncol(text))
+
+
+  if (atomic) {
+    if (has_col_names) {
+      col_names <- paste0(" ", col_names)
+    }
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # If the original scalar didn't have names, then we must print an idx
+    # offset at the start of each row to match what R does.
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    max_row_idx_digits <- nchar(as.character(ncol(ansi_mat)))
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # What's the available width of the current terminal for printing
+    # elements once the max_row_idx_digits are taken into account?
+    # If there are column names then we don't need to make any adjustment
+    # for width.
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    text_width <- (options('width')$width) %||% 80
+    if (!has_col_names) {
+      text_width <- text_width - (max_row_idx_digits + 2)
+    }
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Given the width of the current terminal, how many element can I print
+    # per line? And create a list of indices ('chunks') indicating the
+    # values which get printed on each line.
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    element_width <- nchar(m[1])
+    n_per_line    <- floor(text_width/element_width)
+    chunks        <- chunked_indices(ncol(ansi_mat), n_per_line)
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Calculate the row idx used to start each line if atomic vector
+    # doesn't have names
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    if (has_col_names) {
+      row_idx <- rep('', length(chunks))
+    } else {
+      fmt     <- paste0("[%", max_row_idx_digits, 'i]')
+      row_idx <- sprintf(fmt, (seq_along(chunks) - 1) * n_per_line + 1)
+    }
+
+    res <- c()
+    for (i in seq_along(chunks)) {
+      chunk_idx <- chunks[[i]]
+
+      if (has_col_names) {
+        header <- paste(col_names[chunk_idx], collapse = '')
+        res    <- c(res, header)
+      }
+
+      new_row   <- paste(ansi_mat[chunk_idx], collapse = '')
+      new_row   <- paste0(row_idx[i], new_row)
+      res       <- c(res, new_row)
+    }
+    res <- paste(res, collapse = "\n")
+  } else {
+
+
+    if (!is.null(rownames(m)) && !is.null(colnames(m))) {
+      this_rownames <- rownames(m)
+      max_nchar     <- max(nchar(this_rownames))
+      fmt           <- paste0("%-", max_nchar + 1, "s ")
+      this_rownames <- sprintf(fmt, this_rownames)
+      ansi_mat      <- cbind(this_rownames, ansi_mat)
+      col_names     <- c(sprintf(fmt, ''), col_names)
+    } else {
+      col_names <- c('', col_names)
+    }
+
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Assemble single text string
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    if (!has_col_names) {
+      header <- NULL
+    } else {
+      header <- paste(col_names, collapse = " ")
+      if (isTRUE(underline_header)) {
+        if (mode == 'ansi') {
+          header <- paste0(underline_on_ansi, header, underline_off_ansi)
+        } else if (mode == 'html') {
+          header <- paste0(underline_on_html, header, underline_off_html)
+        }
+      }
+    }
+
+    body   <- apply(ansi_mat, 1, paste, collapse = '')
+    res    <- paste(c(header, body), collapse = "\n")
+    res    <- paste0(res, "\n")
+  }
+
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Legends down the bottom.
+  # Generate legend from the legend specifications.
+  # They need to be rendered here rather than at time of calling hl() as
+  # options such as 'full_colour' and 'dark_mode' need to be respected
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (!is.null(legends)) {
+    legend_texts <- vapply(legends, function(spec) {
+      create_legend_string(
+        scale       = spec$scale,
+        values      = spec$values,
+        label       = spec$label,
+        full_colour = full_colour,
+        dark_mode   = dark_mode,
+        mode        = mode
+      )},
+      character(1)
+    )
+
+    if (atomic) {
+      legend_texts <- c('', legend_texts)
+    }
+
+    res <- paste(c(res, legend_texts), collapse = "\n")
+  }
 
 
   res
@@ -353,6 +491,8 @@ as_character_inner <- function(m,
 #' @return contrasting text colour for readable text
 #'
 #' @importFrom grDevices col2rgb
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 calc_contrasting_text <- function(fill, text_contrast, dark_mode) {
 
@@ -409,6 +549,8 @@ calc_contrasting_text <- function(fill, text_contrast, dark_mode) {
 #' @param frac fraction linear interpolation between the two
 #'
 #' @importFrom grDevices col2rgb convertColor rgb
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 interp_colour <- function(colour1, colour2, frac) {
 

@@ -2,32 +2,36 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Highlight elements of a matrix
+#' Highlight elements of a matrix or atomic vector
+#'
+#' \code{hl_mat()} and \code{hl_vec()} are identical functions which both work on
+#' matrices and atomic vectors.
 #'
 #' @inheritParams hl
-#' @param .data emphatic matrix
+#' @param .data \code{emphatic} matrix or atomic vector.
 #' @param selection specify the locations in the matrix which will be highlighted.
 #'        \describe{
 #'        \item{NULL}{(default) Apply highlighting to all elements}
 #'        \item{numeric vector}{Numeric vector of indices. e.g. \code{c(1, 2, 3)}}
 #'        \item{logical vector}{Either length 1, or a length which matches the
-#'             total number of elements in the matrix. e.g. \code{TRUE}}
+#'             total number of elements in the matrix/vector e.g. \code{TRUE}}
 #'        \item{expression}{An expression which evaluates to a logical vector,
 #'             or vector of indices.
-#'             The matrix itself can be referenced in these expressions
+#'             The matrix/vector itself can be referenced in these expressions
 #'             using the variable \code{.x}
 #'             E.g. \code{abs(.x)> 0.5 & .x != 1}  or \code{row(.x) == 3}}
 #'        }
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_matrix <- function(.data, colour, selection = NULL, elem = 'fill') {
+hl_mat <- function(.data, colour, selection = NULL, elem = 'fill',
+                      show_legend = FALSE) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Sanity check
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   stopifnot(elem %in% c('text', 'fill'))
-  stopifnot(is.matrix(.data))
+  stopifnot(is_matrix(.data) || is_atomic(.data))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Promote to
@@ -56,14 +60,14 @@ hl_matrix <- function(.data, colour, selection = NULL, elem = 'fill') {
   } else if (is.null(mat_ids)) {
     mat_ids <- seq_len(length(.data))
   } else if (!is.numeric(mat_ids)) {
-    stop("hl_matrix() `selection` must by a numeric vector or be an expression with evaluates to a logical vector")
+    stop("hl_mat() `selection` must by a numeric vector or be an expression with evaluates to a logical vector")
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # No NAs allowed in mat_ids
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (anyNA(mat_ids)) {
-    stop("hl_matrix() `selection`  must not contain NAs: ", deparse(mat_ids))
+    stop("hl_mat() `selection`  must not contain NAs: ", deparse(mat_ids))
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,11 +83,31 @@ hl_matrix <- function(.data, colour, selection = NULL, elem = 'fill') {
     vals         <- .data[mat_ids]
     colour$train(vals)
     final_colour <- colour$map(vals)
+
+    if (isTRUE(show_legend)) {
+      legend <- list(
+        scale  = colour,
+        values = vals,
+        label  = 'legend'
+      )
+      .data <- add_legend(.data, legend)
+    }
+
   } else if (inherits(colour, 'ScaleDiscrete')) {
     stopifnot(all(colour$aesthetics %in% c('colour', 'color', 'fill')))
     vals <- .data[mat_ids]
     colour$train(vals)
     final_colour <- colour$map(vals)
+
+    if (isTRUE(show_legend)) {
+      legend <- list(
+        scale  = colour,
+        values = vals,
+        label  = 'legend'
+      )
+      .data <- add_legend(.data, legend)
+    }
+
   } else if (is.character(colour)) {
     final_colour <- colour
   } else {
@@ -102,77 +126,61 @@ hl_matrix <- function(.data, colour, selection = NULL, elem = 'fill') {
 }
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' @rdname hl_mat
+#' @export
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+hl_vec <- hl_mat
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Example 1  Random matrix colouring
+# Example 1  Matrices
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if (FALSE) {
 
   library(dplyr)
 
-  matrix(runif(100), 10, 10) %>%
-    hl_matrix('limegreen', row(.x) == 5) %>%
-    print(digits = 3)
+  matrix(round(runif(100), 3), 10, 10) %>%
+    hl_mat('limegreen', row(.x) == 5)
+
+  matrix(round(runif(100), 3), 10, 10) %>%
+    hl_mat(colour = ggplot2::scale_color_viridis_c())
 
 
+  matrix(round(runif(100), 3), 10, 10)  %>%
+    hl_mat(colour = ggplot2::scale_color_viridis_c(), selection = .x > 0.5,
+              show_legend = TRUE)
 
-  matrix(runif(100), 10, 10) %>%
-    hl_matrix(colour = ggplot2::scale_color_viridis_c()) %>%
-    print(digits = 3)
+}
 
 
+if (FALSE) {
 
-  matrix(runif(100), 10, 10) %>%
-    hl_matrix(colour = ggplot2::scale_color_viridis_c(), selection = .x > 0.5) %>%
-    print(digits = 3)
+  v <- as.character(1:50)
+  v
+  v %>% hl_vec('blue')
+
+  v <- rep(Sys.Date(), 50)
+  v
+  v %>% hl_vec('blue')
+
+  v <- complex(50)
+  v
+  v %>% hl_vec('blue')
+
 
 }
 
 
 
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Example 3:
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-if (FALSE) {
-
-  library(dplyr)
-  library(emphatic)
-
-  as.matrix(eurodist) %>%
-    hl_matrix(ggplot2::scale_color_gradient(low = 'white', high = 'red'))
-
-}
 
 
 
-if (FALSE) {
-  library(dplyr)
-  library(ggplot2)
-  library(emphatic)
-
-  cor(mtcars) %>%
-    hl_matrix(scale_colour_viridis_c())
-
-}
 
 
-if (FALSE) {
-  cor(mtcars) %>%
-    hl_matrix(scale_colour_gradient2(low = 'red', high = 'blue'), .x != 1 & abs(.x) > 0.6)
 
 
-  library(dplyr)
-  library(ggplot2)
-  library(emphatic)
-
-  iris %>%
-    mutate(Species = as.numeric(Species)) %>%
-    cor() %>%
-    hl_matrix(scale_colour_gradient2(low = 'red', high = 'blue'), .x != 1) %>%
-    print(full_colour = FALSE)
-}
 
 
 

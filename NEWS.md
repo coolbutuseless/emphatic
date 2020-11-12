@@ -1,3 +1,8 @@
+# emphatic 0.1.2  2020-11-12
+
+* Added support for highlighting atomic vectors
+* Added ability to add legends when using scales to assign colours
+
 # emphatic 0.1.2  2020-11-11
 
 * Added support for tibbles (by internally converting to data.frames 

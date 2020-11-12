@@ -2,20 +2,21 @@
 % Please edit documentation in R/core.R
 \name{as.character.emphatic}
 \alias{as.character.emphatic}
-\title{Convert an \code{emphatic} data.frame or matrix to a string.}
+\title{Convert an \code{emphatic} data.frame, matrix or atomic vector into a character string.}
 \usage{
 \method{as.character}{emphatic}(x, ..., mode = "ansi")
 }
 \arguments{
-\item{x}{emphatic data.frame or matrix}
+\item{x}{\code{emphatic} data.frame, matrix or atomic vector}
 
 \item{...}{other arguments passed on to \code{format()}}
 
-\item{mode}{Render mode 'ansi' or 'html' determines how the colours will
-be represented in text}
+\item{mode}{Render mode 'ansi' (default) or 'html' determines how the colours will
+be represented in text. If you're in a terminal or console, then
+choose 'ansi'.}
 }
 \description{
 The output contains ANSI escape codes to colour the elements in the
-data.frame or matrix. This string would then be suitable to pass on to \code{fansi}
+object. This string would then be suitable to pass on to \code{fansi}
 for further manipulation e.g. conversion to HTML for displaying in a vignette.
 }

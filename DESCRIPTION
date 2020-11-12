@@ -1,10 +1,12 @@
 Package: emphatic
 Type: Package
-Title: ANSI Colouring of Data.Frames and Matrices 
-Version: 0.1.2
+Title: ANSI Colouring of Data.Frames, Matrices and Atomic Vectors
+Version: 0.1.3
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
-Description: Colour matrix and data.frame output in the console.
+Description: Colour data.frame, matrix and vector output in the console.
+URL: https://coolbutuseless.github.io/package/emphatic, https://github.com/coolbutuseless/emphatic
+BugReports: https://github.com/coolbutuseless/emphatic/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

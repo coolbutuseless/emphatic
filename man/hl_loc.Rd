@@ -2,7 +2,7 @@
 % Please edit documentation in R/data.frame.R
 \name{hl_loc}
 \alias{hl_loc}
-\title{Highlight elements within an \code{emphatic} matrix or data.frame by location.}
+\title{Highlight elements by location within an \code{emphatic} data.frame or matrix.}
 \usage{
 hl_loc(
   .data,
@@ -15,7 +15,7 @@ hl_loc(
 )
 }
 \arguments{
-\item{.data}{\code{emphatic} data.frame}
+\item{.data}{\code{emphatic} data.frame or matrix.}
 
 \item{colour}{colour to use for highlighting.  This may be an R colour,
 a vector of R colours, or
@@ -39,5 +39,5 @@ Otherwise the locations are
 created using a simpler call to \code{cbind()}.}
 }
 \description{
-Highlight elements within an \code{emphatic} matrix or data.frame by location.
+Highlight elements by location within an \code{emphatic} data.frame or matrix.
 }

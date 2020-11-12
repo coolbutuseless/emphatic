@@ -1,8 +1,8 @@
 ---
-title: "Matrix Highlighing Example: Volcano dataset"
+title: "Example - Matrix Highlighing  of the Volcano Dataset"
 output: html_document
 vignette: >
-  %\VignetteIndexEntry{Matrix Highlighing Example: Volcano dataset}
+  %\VignetteIndexEntry{Example - Matrix Highlighing  of the Volcano Dataset}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -43,14 +43,14 @@ head(volcano, 2)
 
 ```{r echo = TRUE, eval = FALSE}
 volcano %>%
-  hl_matrix(colour = ggplot2::scale_color_viridis_c()) 
+  hl_mat(colour = ggplot2::scale_color_viridis_c()) 
 ```
 
 
 
 ```{r echo=FALSE, eval=TRUE}
 volcano %>%
-  hl_matrix(colour = ggplot2::scale_color_viridis_c())  %>%
+  hl_mat(colour = ggplot2::scale_color_viridis_c())  %>%
   knit_print.emphatic(style = 'font-size: 6px;')
 ```
 

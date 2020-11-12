@@ -1,0 +1,122 @@
+---
+title: "Quick Start - Matrices"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Quick Start - Matrices}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+```{r setup}
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+```{r}
+test_df <- head(mtcars, 10)
+```
+
+
+Demo data
+------------------------------------------------------------------------------
+
+```{r}
+mat <- volcano[50:59, 50:59]
+mat
+```
+
+
+
+
+Highlighting a numeric vector using expressions
+------------------------------------------------------------------------------
+
+Highlight locations in a numeric vector which match an expression.
+
+
+```{r eval=TRUE}
+mat %>%
+  hl_mat('green', .x < 105) %>%
+  hl_mat('blue', .x > 115)
+```
+
+
+
+
+Highlighting a numeric vector with a colour scale
+------------------------------------------------------------------------------
+
+Colour a numeric vector using a ggplot colour scale.
+
+
+```{r eval=TRUE}
+mat %>%
+  hl_mat(scale_colour_viridis_c(option = 'A'))
+```
+
+
+
+
+Highlighting a numeric vector with a colour scale and legend
+------------------------------------------------------------------------------
+
+
+```{r eval=TRUE}
+mat %>%
+  hl_mat(scale_colour_viridis_c(option = 'A'), show_legend = TRUE)
+```
+
+
+
+
+Highlighting by location index
+------------------------------------------------------------------------------
+
+
+```{r eval=TRUE}
+mat %>%
+  hl_mat('blue', seq(1, 30, 2))
+```
+
+
+
+
+
+Highlighting with alternating values
+------------------------------------------------------------------------------
+
+
+```{r eval=TRUE}
+mat %>%
+  hl_mat(rep(c('blue', 'green', 'red'), length.out = length(.)))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

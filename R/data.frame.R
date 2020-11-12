@@ -2,9 +2,10 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Highlight elements within an \code{emphatic} matrix or data.frame by location.
+#' Highlight elements by location within an \code{emphatic} data.frame or matrix.
 #'
 #' @inheritParams hl
+#' @param .data \code{emphatic} data.frame or matrix.
 #' @param row_ids,col_ids numeric indices of which rows and columns to highlight
 #' @param major which is the direction in which to first replicate colours?
 #'        i.e. should colour be replicated to match the number of rows first,
@@ -28,6 +29,7 @@ hl_loc <- function(.data, colour, row_ids, col_ids, elem = 'fill', major = 'row'
   stopifnot(major %in% c('row', 'column'))
   stopifnot(is.numeric(row_ids))
   stopifnot(is.numeric(col_ids))
+  stopifnot(is.data.frame(.data) || is_matrix(.data)) # must be a matrix or data.frame
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Promote to emphatic if necessary
@@ -97,8 +99,10 @@ hl_loc <- function(.data, colour, row_ids, col_ids, elem = 'fill', major = 'row'
 #' @inheritParams hl_loc
 #' @param column Single numeric index of the column to colour
 #' @param dest_col_ids column ids to apply highlighting to
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem) {
+hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_legend) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # This inner function only accpt a single source column.
@@ -122,11 +126,31 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem) {
     vals         <- .data[[column]][row_ids]
     colour$train(vals)
     final_colour <- colour$map(vals)
+
+    if (isTRUE(show_legend)) {
+      legend <- list(
+        scale  = colour,
+        values = vals,
+        label  = colnames(.data)[column]
+      )
+      .data <- add_legend(.data, legend)
+    }
+
+
   } else if (inherits(colour, 'ScaleDiscrete')) {
     stopifnot(all(colour$aesthetics %in% c('colour', 'color', 'fill')))
     vals <- .data[[column]][row_ids]
     colour$train(vals)
     final_colour <- colour$map(vals)
+
+    if (isTRUE(show_legend)) {
+      legend <- list(
+        scale  = colour,
+        values = vals,
+        label  = colnames(.data)[column]
+      )
+      .data <- add_legend(.data, legend)
+    }
   } else if (is.character(colour)) {
     final_colour <- colour
   } else {
@@ -206,6 +230,9 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem) {
 #'        }
 #' @param elem Apply the highlighting to the 'fill' (the background) or the 'text'.
 #'        Default: 'fill'
+#' @param show_legend if a scale object is used for colour, and \code{show_legend = TRUE},
+#'        then a colourbar legend will be added to the bottom of the output.
+#'        Default: FALSE
 #'
 #' @examples
 #' \dontrun{
@@ -215,7 +242,8 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem) {
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl <- function(.data, colour, rows = NULL, cols = NULL, dest_cols, calc_scale = 'first', elem = 'fill') {
+hl <- function(.data, colour, rows = NULL, cols = NULL, dest_cols, calc_scale = 'first', elem = 'fill',
+               show_legend = FALSE) {
 
   stopifnot(is.data.frame(.data))
   stopifnot(elem %in% c('text', 'fill'))
@@ -272,7 +300,8 @@ hl <- function(.data, colour, rows = NULL, cols = NULL, dest_cols, calc_scale = 
       row_ids      = row_ids,
       column       = col_ids[1],
       dest_col_ids = dest_col_ids,
-      elem         = elem
+      elem         = elem,
+      show_legend  = show_legend
     )
   } else if (inherits(colour, "Scale") && calc_scale == 'each') {
     if (!identical(col_ids, dest_col_ids)) {
@@ -285,7 +314,8 @@ hl <- function(.data, colour, rows = NULL, cols = NULL, dest_cols, calc_scale = 
         row_ids      = row_ids,
         column       = col_id,
         dest_col_ids = col_id,
-        elem         = elem
+        elem         = elem,
+        show_legend  = show_legend
       )
     }
   } else {
@@ -329,7 +359,7 @@ if (FALSE) {
 
   # This example seems to not colour some thing
   mtcars %>%
-    hl(ggplot2::scale_fill_viridis_c(), cols = mpg, dest_cols = NULL)
+    hl(ggplot2::scale_fill_viridis_c(), cols = mpg, dest_cols = NULL, show_legend = TRUE)
 
 
   mtcars %>%

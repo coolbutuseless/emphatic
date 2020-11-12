@@ -59,11 +59,12 @@ image_read("man/figures/logo.png")
 
 <!-- badges: start -->
 ![](https://img.shields.io/badge/cool-useless-green.svg)
+![](https://img.shields.io/badge/dependencies-zero-blue.svg)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R build status](https://github.com/coolbutuseless/emphatic/workflows/R-CMD-check/badge.svg)](https://github.com/coolbutuseless/emphatic/actions)
 <!-- badges: end -->
 
-#### `{emphatic}` augments the output of data.frames and matrices in R by adding user-defined ANSI highlighting.
+#### `{emphatic}` augments the output of data.frames, matrices and simple vectors in R by adding user-defined ANSI highlighting.
 
 <img src="man/figures/examples.gif"/>
 
@@ -72,13 +73,14 @@ vignettes and more examples.
 
 ## What's in the box
 
-There are separate high-level functions for highlighting data.frames and matrices, and
-a low-level function which can be used on both.
+There are separate high-level functions for highlighting data.frames, matrices and simple vectors.
+There is also a low-level highlghting function which can be used on data.frames and matrices.
 
 The `hl_` prefix can be read as `highlight`.
 
 * `hl()` for highlighting data.frames
-* `hl_matrix()` for highlighting matrices
+* `hl_mat()` for highlighting matrices
+* `hl_vec()` for highlighting simple atomic vectors
 * `hl_loc()` for low-level control of highlighting of both data.frames and matrices
 * `hl_opt()` to set some local options on the current `emphatic` object
    e.g. `full_colour` option sets 24-bit colour mode.  
@@ -86,10 +88,10 @@ The `hl_` prefix can be read as `highlight`.
   the default unless overridden with a call to `hl_opt()` for the given
   `emphatic` object.
 
-|            | data.frame | matrix        |
-|------------|------------|---------------|
-| High Level | `hl()`     | `hl_matrix()` |
-| Low Level  | `hl_loc()` | `hl_loc()`    |
+|            | data.frame | matrix        | vector     |
+|------------|------------|---------------|------------|
+| High Level | `hl()`     | `hl_mat()`    | `hl_vec()` |
+| Low Level  | `hl_loc()` | `hl_loc()`    | `NA`       |
 
 Installation
 ------------------------------------------------------------------------------
@@ -113,13 +115,17 @@ Vignettes
 
 Intro
 
-* [Guided Example](https://coolbutuseless.github.io/package/emphatic/articles/intro.html)
+* [Highlighting data.frames](https://coolbutuseless.github.io/package/emphatic/articles/intro.html)
+* [Highlighting matrices](https://coolbutuseless.github.io/package/emphatic/articles/examples-matrices.html)
+* [Highlighting vectors](https://coolbutuseless.github.io/package/emphatic/articles/examples-vectors.html)
 
-Speicifying rows, columns and colours
+Specifying rows, columns and colours
 
 * [Specifying rows](https://coolbutuseless.github.io/package/emphatic/articles/row-specification.html)
 * [Specifying columns](https://coolbutuseless.github.io/package/emphatic/articles/col-specification.html)
 * [Specifying colours](https://coolbutuseless.github.io/package/emphatic/articles/colour-specification.html)
+
+
 
 Test cases on Real data
 
@@ -132,7 +138,7 @@ Advanced:
 
 * [Low level highlighting with `hl_loc()`](https://coolbutuseless.github.io/package/emphatic/articles/low-level-hl-loc.html)
 
-Example - set alternating colours on a data.frame
+Example: Highlighting a data.frame with alternating row colours
 ------------------------------------------------------------------------------
 
 
@@ -154,7 +160,7 @@ mtcars %>%
 <img src="man/figures/example1.svg" width="100%">
 
 
-Example 2 - using row and column specification
+Example of highlighting specific rows and columns
 ------------------------------------------------------------------------------
 
 
@@ -189,7 +195,7 @@ mtcars %>%
 <img src="man/figures/example2.svg" width="100%">
 
 
-Example 3 - Rainbows!
+Example: Highlighting a data.frame with rainbows!
 ------------------------------------------------------------------------------
 
 
@@ -210,7 +216,7 @@ mtcars %>%
 <img src="man/figures/example3.svg" width="100%">
 
 
-Example 4: Correlation matrix
+Example: Highlighting a matrix - Correlation matrix
 ------------------------------------------------------------------------------
 
 Create a correlation matrix of some of the variables in `mtcars`.
@@ -224,7 +230,7 @@ and blue.  This colouring is applied using `ggplot2::scale_colour_gradient2()`.
 mtcars %>%
   select(cyl, mpg, hp, disp, vs) %>%
   cor() %>%
-  hl_matrix(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) 
+  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) 
 ```
 
 
@@ -232,12 +238,39 @@ mtcars %>%
 mtcars %>%
   select(cyl, mpg, hp, disp, vs) %>%
   cor() %>%
-  hl_matrix(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) %>%
+  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) %>%
   as_svg(600, 200) %>%
   cat(file = "man/figures/example4.svg")
 ```
 
 <img src="man/figures/example4.svg" width="100%">
+
+
+
+Example: Highlighting a numeric vector 
+------------------------------------------------------------------------------
+
+Highlight locations in a numeric vector which match an expression.
+
+```{r eval=FALSE}
+sample(10, 30, replace = TRUE, prob = 1:10) %>%
+  hl_vec('green', .x < 3) %>%
+  hl_vec('blue', .x > 7)
+```
+
+
+```{r echo=FALSE}
+set.seed(1)
+sample(10, 30, replace = TRUE, prob = 1:10) %>%
+  hl_vec('green', .x < 3) %>%
+  hl_vec('blue', .x > 7) %>%
+  as_svg(600, 50) %>%
+  cat(file = "man/figures/example5.svg")
+```
+
+<img src="man/figures/example5.svg" width="100%">
+
+
 
 
 

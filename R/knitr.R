@@ -1,7 +1,7 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Convert ANSI to HTML
+#' Render an emphatic object to HTML
 #'
 #' @param x emphatic object
 #' @param style html tag styling to apply to the \code{<pre>} wrapper for the
@@ -26,7 +26,7 @@ as_html <- function(x, style = NULL, ...) {
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Automatically output emphatic matrices and data.frames to HTML knitted documents.
+#' Automatically output emphatic objects to HTML knitted documents.
 #'
 #' @inheritParams as_html
 #'

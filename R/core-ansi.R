@@ -1,7 +1,7 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Reset back to terminal defaults
+# Reset back to terminal defaults
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 reset_ansi         <- "\033[39m\033[49m"
 underline_on_ansi  <- "\033[4m"
@@ -22,6 +22,8 @@ underline_off_ansi <- "\033[24m"
 #'         colour
 #'
 #' @importFrom grDevices col2rgb
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2fill_ansi <- function(rcolour) {
   rcolour[rcolour == ''] <- NA_character_
@@ -35,6 +37,8 @@ col2fill_ansi <- function(rcolour) {
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' @rdname col2fill_ansi
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2text_ansi <- function(rcolour) {
   rcolour[rcolour == ''] <- NA_character_
@@ -48,6 +52,8 @@ col2text_ansi <- function(rcolour) {
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' @rdname col2fill_ansi
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2code <- function(rcolour) {
   cols <- grDevices::col2rgb(rcolour)
@@ -77,6 +83,8 @@ col2code <- function(rcolour) {
 #'         colour
 #'
 #' @importFrom grDevices col2rgb
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2fill_ansi24 <- function(rcolour) {
   rcolour[rcolour == ''] <- NA_character_
@@ -93,6 +101,8 @@ col2fill_ansi24 <- function(rcolour) {
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' @rdname col2fill_ansi24
+#'
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2text_ansi24 <- function(rcolour) {
   rcolour[rcolour == ''] <- NA_character_

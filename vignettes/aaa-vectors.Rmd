@@ -1,0 +1,148 @@
+---
+title: "Quick Start - Vectors"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Quick Start - Vectors}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+```{r setup}
+library(dplyr)
+library(ggplot2)
+library(emphatic)
+hl_opt_global(dark_mode = FALSE)
+```
+
+```{r}
+test_df <- head(mtcars, 10)
+```
+
+
+
+Highlighting a numeric vector using expressions
+------------------------------------------------------------------------------
+
+Highlight locations in a numeric vector which match an expression.
+
+```{r echo=FALSE}
+set.seed(1)
+```
+
+```{r eval=TRUE}
+sample(10, 30, replace = TRUE, prob = 1:10) %>%
+  hl_vec('green', .x < 3) %>%
+  hl_vec('blue', .x > 7)
+```
+
+
+
+
+Highlighting a numeric vector with a colour scale
+------------------------------------------------------------------------------
+
+Colour a numeric vector using a ggplot colour scale.
+
+```{r echo=FALSE}
+set.seed(1)
+```
+
+```{r eval=TRUE}
+sample(10, 30, replace = TRUE, prob = 1:10) %>%
+  sort() %>%
+  hl_vec(scale_colour_viridis_c(option = 'A'))
+```
+
+
+
+
+
+Highlighting a character vector
+------------------------------------------------------------------------------
+
+Highlight elements of a vector when they are identical to the previous element.
+
+```{r echo=FALSE}
+set.seed(1)
+```
+
+```{r eval=TRUE}
+sample(letters[1:5], 30, replace = TRUE, prob = 1:5) %>%
+  hl_vec('red', .x == lag(.x))
+```
+
+
+
+
+
+Adding a legend when using a colour scale
+------------------------------------------------------------------------------
+
+```{r echo=FALSE}
+set.seed(1)
+```
+
+```{r eval=TRUE}
+sample(letters[1:5], 30, replace = TRUE, prob = 1:5) %>%
+  hl_vec(scale_colour_viridis_d(), show_legend = TRUE)
+```
+
+
+
+
+Highlighting by location index
+------------------------------------------------------------------------------
+
+```{r echo=FALSE}
+set.seed(1)
+```
+
+
+```{r eval=TRUE}
+sample(letters[1:5], 30, replace = TRUE, prob = 1:5) %>%
+  hl_vec('blue', seq(1, 30, 2))
+```
+
+
+
+
+
+Highlighting with alternating values
+------------------------------------------------------------------------------
+
+```{r echo=FALSE}
+set.seed(1)
+```
+
+```{r eval=TRUE}
+sample(letters[1:5], 30, replace = TRUE, prob = 1:5) %>%
+  hl_vec(c('blue', 'green'))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,9 +1,8 @@
-
 ---
-title: "Challenger O-Ring Failure"
+title: "Example - Challenger O-Ring Failure"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Challenger O-Ring Failure}
+  %\VignetteIndexEntry{Example - Challenger O-Ring Failure}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -86,6 +85,7 @@ Second Iteration with `{emphatic}`
 
 * Expand temperature range to highlight the full limits of flight conditions
 * Highlight the Challenger launch temperature in grey (31 degrees)
+* add a colorbar legend for `damage`
 * It is now obvious that no real information is available at this low temperature,
   but all readings at low temperatures have issues.
 
@@ -108,7 +108,8 @@ challenger_expanded %>%
     scale_color_gradient(low = 'pink', high = 'red'),
     rows = damage > 0,
     cols = damage,
-    dest_cols = erosion:date
+    dest_cols = erosion:date,
+    show_legend = TRUE
   ) %>%
   hl('grey50', rows = temp == 31, cols = erosion:date) %>%
   hl_opt(na = '')

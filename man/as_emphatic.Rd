@@ -2,15 +2,15 @@
 % Please edit documentation in R/core.R
 \name{as_emphatic}
 \alias{as_emphatic}
-\title{Convert a matrix or data.frame to an emphatic version}
+\title{Convert a data.frame, matrix or atomic vector into an emphatic version}
 \usage{
 as_emphatic(.data)
 }
 \arguments{
-\item{.data}{\code{emphatic} matrix or data.frame}
+\item{.data}{data.frame, matrix or atomic vector}
 }
 \value{
-.data with added attributes for text and fill colours
+An \code{emphatic} version of the given .data with added attributes for text and fill colours
 }
 \description{
 This usually does not need to be called explicitly by the user.

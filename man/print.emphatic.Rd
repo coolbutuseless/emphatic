@@ -2,17 +2,15 @@
 % Please edit documentation in R/core.R
 \name{print.emphatic}
 \alias{print.emphatic}
-\title{Print an \code{emphatic} data.frame or matrix}
+\title{Print an \code{emphatic} data.frame, matrix or atomic vector}
 \usage{
 \method{print}{emphatic}(x, ...)
 }
 \arguments{
-\item{x}{emphatic data.frame or matrix}
+\item{x}{\code{emphatic} data.frame, matrix or atomic vector}
 
 \item{...}{other arguments passed on to \code{format()}}
 }
 \description{
-The printed output contains ANSI escape codes to colour the elements in the
-data.frame or matrix using the colour information for each cell stored
-in the attributes.
+Print an \code{emphatic} data.frame, matrix or atomic vector
 }

@@ -11,7 +11,8 @@ hl(
   cols = NULL,
   dest_cols,
   calc_scale = "first",
-  elem = "fill"
+  elem = "fill",
+  show_legend = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,10 @@ option defines how the scale should be applied.
 
 \item{elem}{Apply the highlighting to the 'fill' (the background) or the 'text'.
 Default: 'fill'}
+
+\item{show_legend}{if a scale object is used for colour, and \code{show_legend = TRUE},
+then a colourbar legend will be added to the bottom of the output.
+Default: FALSE}
 }
 \description{
 Highlight elements in a data.frame by specifying rows and columns, and the

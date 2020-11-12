@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{is_emphatic}
 \alias{is_emphatic}
-\title{check if data.frame is a emphatic data.frame of matrix}
+\title{Check if data.frame, matrix or atomic vector is a valid emphatic version}
 \usage{
 is_emphatic(x)
 }
@@ -10,5 +10,5 @@ is_emphatic(x)
 \item{x}{Object to test}
 }
 \description{
-check if data.frame is a emphatic data.frame of matrix
+Check if data.frame, matrix or atomic vector is a valid emphatic version
 }

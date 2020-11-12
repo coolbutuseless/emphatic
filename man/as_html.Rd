@@ -2,7 +2,7 @@
 % Please edit documentation in R/knitr.R
 \name{as_html}
 \alias{as_html}
-\title{Convert ANSI to HTML}
+\title{Render an emphatic object to HTML}
 \usage{
 as_html(x, style = NULL, ...)
 }
@@ -15,5 +15,5 @@ returned HTML}
 \item{...}{other arguments passed to \code{as.character.emphatic}}
 }
 \description{
-Convert ANSI to HTML
+Render an emphatic object to HTML
 }

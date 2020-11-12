@@ -33,14 +33,14 @@ test_df <- head(mtcars, 10)
 Introduction: `hl_loc()`
 ------------------------------------------------------------------------------
 
-In general, use `hl()` to highlight data.frames, and `hl_matrix()` to highlight
+In general, use `hl()` to highlight data.frames, and `hl_mat()` to highlight
 matrices.
 
 However, there does exist a low-level function for highlighting matrices and
 data.frames called `hl_loc()`.  This function is useful if you want more control 
 over the process of selecting row, columns and colours.
 
-`hl_loc()` is a little less friendly than `hl()` or `hl_matrix()` as the
+`hl_loc()` is a little less friendly than `hl()` or `hl_mat()` as the
 `row_ids` and `col_ids` to be highlighted can *only* be specified as 
 numeric indices.
 
