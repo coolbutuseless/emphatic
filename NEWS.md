@@ -1,4 +1,8 @@
-# emphatic 0.1.2  2020-11-12
+# emphatic 0.1.4  2020-11-13
+
+* Fix for rendering of logical atomic vectors
+
+# emphatic 0.1.3  2020-11-12
 
 * Added support for highlighting atomic vectors
 * Added ability to add legends when using scales to assign colours

@@ -168,6 +168,10 @@ if (FALSE) {
   v
   v %>% hl_vec('blue')
 
+  v <- logical(50)
+  v
+  v %>% hl_vec('blue')
+
 
 }
 

@@ -169,7 +169,7 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (is_atomic(x)) {
     fx <- x
-    if ((!is.double(fx) && !is.integer(fx) && !is.raw(fx) && !is.complex(fx)) ||  inherits(fx, 'Date')) {
+    if ((!is.double(fx) && !is.integer(fx) && !is.raw(fx) && !is.complex(fx) && !is.logical(fx)) ||  inherits(fx, 'Date')) {
       fx <- dQuote(fx, FALSE)
     }
     fx  <- format(fx)
