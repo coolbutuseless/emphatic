@@ -100,7 +100,7 @@ You can install from [GitHub](https://github.com/coolbutuseless/emphatic) with:
 
 ``` r
 # install.package('remotes')
-remotes::install_github('coolbutuseless/emphatic')
+remotes::install_github('coolbutuseless/emphatic', ref = 'main')
 ```
 
 Warning

@@ -52,7 +52,7 @@ You can install from
 
 ``` r
 # install.package('remotes')
-remotes::install_github('coolbutuseless/emphatic')
+remotes::install_github('coolbutuseless/emphatic', ref = 'main')
 ```
 
 ## Warning
