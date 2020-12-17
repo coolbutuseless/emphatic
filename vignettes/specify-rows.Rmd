@@ -29,10 +29,7 @@ hl_opt_global(dark_mode = FALSE)
 test_df <- head(mtcars, 10)
 ```
 
-
-
-Select all rows
-------------------------------------------------------------------------------
+## Select all rows
 
 ```{r}
 test_df %>%
@@ -49,50 +46,42 @@ test_df %>%
   hl('skyblue', rows = .all)
 ```
 
-
-Select rows by index
-------------------------------------------------------------------------------
+## Select rows by index
 
 ```{r}
 test_df %>%
   hl('skyblue', rows = 2:5)
 ```
 
-Select rows by name
-------------------------------------------------------------------------------
+## Select rows by name
 
 ```{r}
 test_df %>%
   hl('skyblue', rows = c('Mazda RX4', 'Datsun 710'))
 ```
 
-Select rows by rowname symbol
-------------------------------------------------------------------------------
+## Select rows by rowname symbol
 
 ```{r}
 test_df %>%
   hl('skyblue', rows = Valiant)
 ```
 
-
-Select rows by expression
-------------------------------------------------------------------------------
+## Select rows by expression
 
 ```{r}
 test_df %>%
   hl('skyblue', rows = mpg > 22)
 ```
 
-Select rows using `n()` and `row_number()`
-------------------------------------------------------------------------------
+## Select rows using `n()` and `row_number()`
 
 ```{r}
 test_df %>%
   hl('skyblue', rows = row_number() > n()/2)
 ```
 
-Select rows using selectors like `tidyselect`
-------------------------------------------------------------------------------
+## Select rows using selectors like `tidyselect`
 
 ```{r}
 test_df %>%
@@ -104,9 +93,19 @@ test_df %>%
   hl('skyblue', rows = starts_with('m'))
 ```
 
-
 ```{r}
 test_df %>%
   hl('skyblue', rows = any_of(c('Valiant', 'Herbie', 'Datsun 710')))
 ```
 
+Select rows using grouped data frames
+
+------------------------------------------------------------------------
+
+> Note: For grouped data frames, colours may be supplied for each group but will be chosen automatically if not. Additional customization can be done with the `cols` and `elem` arguments. Other arguments are not supported for grouped data frames.
+
+```{r}
+test_df %>%
+  group_by(cyl) %>%
+  hl()
+```
