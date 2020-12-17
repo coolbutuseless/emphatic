@@ -1,5 +1,17 @@
 
 
+#' Check if a data frame is grouped
+#'
+#' Internal replication of dplyr::is.grouped_df()
+#'
+#' @param x An object
+#'
+#' @return Logical: TRUE if dataframe is grouped; false if not.
+#'
+#' @noRd
+is_grouped <- function(x) {
+  inherits(x, "grouped_df")
+}
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Highlight elements by location within an \code{emphatic} data.frame or matrix.
@@ -74,6 +86,10 @@ hl_loc <- function(.data, colour, row_ids, col_ids, elem = 'fill', major = 'row'
     }
   }
 
+
+
+
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Assign colour
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,10 +100,6 @@ hl_loc <- function(.data, colour, row_ids, col_ids, elem = 'fill', major = 'row'
 
   .data
 }
-
-
-
-
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Private inner function for highlighting
@@ -203,6 +215,10 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_le
 #'      in \code{dplyr::filter()}. E.g. \code{cyl == 6 & mpg > 20}}
 #' }
 #'
+#' Grouped data frames are also supported. Colours are not required for grouped
+#' dataframes, but can be supplied. Additional highlighting customization can be
+#' specified with the the `cols` and `elem` arguments. Other arguments are not
+#' supported for grouped data frames.
 #'
 #' @param .data \code{emphatic} data.frame
 #' @param colour colour to use for highlighting.  This may be an R colour,
@@ -234,6 +250,7 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_le
 #'        then a colourbar legend will be added to the bottom of the output.
 #'        Default: FALSE
 #'
+#' @importFrom grDevices rainbow
 #' @examples
 #' \dontrun{
 #' hl(mtcars, ggplot2::scale_colour_viridis_c(), rows = cyl == 6, cols = mpg, dest_cols = c(mpg, cyl))
@@ -244,6 +261,38 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_le
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl <- function(.data, colour, rows = NULL, cols = NULL, dest_cols, calc_scale = 'first', elem = 'fill',
                show_legend = FALSE) {
+
+  if (is_grouped(.data)) {
+
+    # Grouped data frames can only be created with dplyr, so this is a bit
+    # redundant. Just being careful.
+    if (requireNamespace("dplyr", quietly = TRUE)) {
+      rows <- dplyr::group_rows(.data)
+      colours <- grDevices::rainbow(length(rows))
+
+      # Check if user supplied colours. If they supplied for each group, use
+      # those. Otherwise use default rainbow.
+      if (!missing(colour)) {
+        if (length(colour) == length(rows)) {
+          colours <- colour
+        }
+        else {
+          warning("Number of colours supplied does not match number of groups. Defaulting to rainbow colours.")
+        }
+      }
+
+      .data <- dplyr::ungroup(.data)
+
+      col <- loc_expr_to_ids(.data, expr = substitute(cols), axis = 'column')
+
+      for (i in 1:length(rows)) {
+        .data <- hl_loc(.data, colour = colours[i], row_ids = rows[[i]], col_ids = col, elem = elem)
+      }
+      return(.data)
+    } else {
+      stop("dplyr package is required for highlighting grouped data frames. Please load and retry.")
+    }
+  }
 
   stopifnot(is.data.frame(.data))
   stopifnot(elem %in% c('text', 'fill'))

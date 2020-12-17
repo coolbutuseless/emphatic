@@ -90,6 +90,11 @@ as \code{filter()} and \code{select()}
      the highlighting should apply to.  These will look like statements used
      in \code{dplyr::filter()}. E.g. \code{cyl == 6 & mpg > 20}}
 }
+
+Grouped data frames are also supported. Colours are not required for grouped
+dataframes, but can be supplied. Additional highlighting customization can be
+specified with the the `cols` and `elem` arguments. Other arguments are not
+supported for grouped data frames.
 }
 
 \examples{
