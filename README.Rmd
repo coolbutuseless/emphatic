@@ -60,8 +60,7 @@ image_read("man/figures/logo.png")
 <!-- badges: start -->
 ![](https://img.shields.io/badge/cool-useless-green.svg)
 ![](https://img.shields.io/badge/dependencies-zero-blue.svg)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![R build status](https://github.com/coolbutuseless/emphatic/workflows/R-CMD-check/badge.svg)](https://github.com/coolbutuseless/emphatic/actions)
+[![R-CMD-check](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 #### `{emphatic}` augments the output of data.frames, matrices and simple vectors in R by adding user-defined ANSI highlighting.
@@ -87,6 +86,14 @@ The `hl_` prefix can be read as `highlight`.
 * `hl_opt_global()` sets global options for highlighting.  These values will be
   the default unless overridden with a call to `hl_opt()` for the given
   `emphatic` object.
+* `hl_str_diff()` for highlighting string differences.
+* General highlighting for regular expressions.
+    * `hl_grep(x, pattern)` where `x` is a character string.
+    * `hl_grep_character()` where the general object `x` is converted to a string
+      using `as.character()`.
+    * `hl_grep_print()` as above, but converstion to character via `print()`
+    * `hl_grep_deparse()` as above, but using `deparse1()` to create string representation of object.
+    * `hl_grep_str()` as above, but using `str()` to create string representation of object.
 
 |            | data.frame | matrix        | vector     |
 |------------|------------|---------------|------------|
@@ -146,14 +153,14 @@ Example: Highlighting a data.frame with alternating row colours
 library(emphatic)
 emphatic::hl_opt_global(dark_mode = FALSE)
 
-mtcars %>%
+mtcars |>
   hl(c('red', 'white')) 
 ```
 
 ```{r eval = TRUE, echo = FALSE}
-mtcars %>%
-  hl(c('red', 'white')) %>%
-  as_svg(600, 600) %>%
+mtcars |>
+  hl(c('red', 'white')) |>
+  as_svg(600, 600) |>
   cat(file = "man/figures/example1.svg")
 ```
 
@@ -172,21 +179,21 @@ Use `{emphatic}` to highlight the `mtcars` dataset where:
 
 
 ```{r eval = FALSE}
-mtcars %>%
+mtcars |>
   hl(ggplot2::scale_colour_viridis_c(),
-     cols = mpg, dest_cols = mpg:am, show_legend = TRUE) %>%
-  hl('hotpink', rows = mpg == max(mpg)) %>%
+     cols = mpg, dest_cols = mpg:am, show_legend = TRUE) |>
+  hl('hotpink', rows = mpg == max(mpg)) |>
   hl_opt(text_contrast = 0.25)
 ```
 
 
 ```{r echo = FALSE}
-mtcars %>%
+mtcars |>
   hl(ggplot2::scale_colour_viridis_c(),
-     cols = mpg, dest_cols = mpg:am, show_legend = TRUE) %>%
-  hl('hotpink', rows = mpg == max(mpg)) %>%
-  hl_opt(text_contrast = 0.75) %>%
-  as_svg(600, 600) %>%
+     cols = mpg, dest_cols = mpg:am, show_legend = TRUE) |>
+  hl('hotpink', rows = mpg == max(mpg)) |>
+  hl_opt(text_contrast = 0.75) |>
+  as_svg(600, 650) |>
   cat(file = "man/figures/example2.svg")
 ```
 
@@ -198,16 +205,16 @@ Example: Highlighting a data.frame with rainbows!
 
 
 ```{r eval = FALSE}
-mtcars %>% 
-  hl(rainbow(32)) %>%
+mtcars |> 
+  hl(rainbow(32)) |>
   hl_opt(text_contrast = 0.5)
 ```
 
 ```{r echo = FALSE}
-mtcars %>% 
-  hl(rainbow(32)) %>%
-  hl_opt(text_contrast = 0.5) %>% 
-  as_svg(600, 600) %>%
+mtcars |> 
+  hl(rainbow(32)) |>
+  hl_opt(text_contrast = 0.5) |> 
+  as_svg(600, 600) |>
   cat(file = "man/figures/example3.svg")
 ```
 
@@ -225,19 +232,19 @@ and blue.  This colouring is applied using `ggplot2::scale_colour_gradient2()`.
 
 
 ```{r eval=FALSE}
-mtcars %>%
-  select(cyl, mpg, hp, disp, vs) %>%
-  cor() %>%
+mtcars |>
+  select(cyl, mpg, hp, disp, vs) |>
+  cor() |>
   hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) 
 ```
 
 
 ```{r echo=FALSE}
-mtcars %>%
-  select(cyl, mpg, hp, disp, vs) %>%
-  cor() %>%
-  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) %>%
-  as_svg(600, 200) %>%
+mtcars |>
+  select(cyl, mpg, hp, disp, vs) |>
+  cor() |>
+  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) |>
+  as_svg(600, 200) |>
   cat(file = "man/figures/example4.svg")
 ```
 
@@ -251,23 +258,188 @@ Example: Highlighting a numeric vector
 Highlight locations in a numeric vector which match an expression.
 
 ```{r eval=FALSE}
-sample(10, 30, replace = TRUE, prob = 1:10) %>%
-  hl_vec('green', .x < 3) %>%
+sample(10, 30, replace = TRUE, prob = 1:10) |>
+  hl_vec('green', .x < 3) |>
   hl_vec('blue', .x > 7)
 ```
 
 
 ```{r echo=FALSE}
 set.seed(1)
-sample(10, 30, replace = TRUE, prob = 1:10) %>%
-  hl_vec('green', .x < 3) %>%
-  hl_vec('blue', .x > 7) %>%
-  as_svg(600, 50) %>%
-  cat(file = "man/figures/example5.svg")
+sample(10, 30, replace = TRUE, prob = 1:10) |>
+  hl_vec('green', .x < 3) |>
+  hl_vec('blue', .x > 7) |>
+  as_svg(600, 50) |>
+  cat(file = "man/figures/example5a.svg")
 ```
 
 <img src="man/figures/example5.svg" width="100%">
 
+
+Example: Highlighting the difference between strings
+------------------------------------------------------------------------------
+
+```{r eval = FALSE}
+x <- 'hell there!'
+y <- 'hello there?'
+hl_str_diff(x, y)
+```
+
+```{r echo = FALSE}
+x <- 'hell there!'
+y <- 'hello there?'
+hl_str_diff(x, y) |>
+  as_svg(600, 50) |>
+  cat(file = "man/figures/example-strdiff-1.svg")
+```
+
+<img src="man/figures/example-strdiff-1.svg" width="100%">
+
+```{r eval = FALSE}
+x <- 'hello there?'
+y <- 'hell there!'
+hl_str_diff(x, y)
+```
+
+
+```{r echo = FALSE}
+x <- 'hello there?'
+y <- 'hell there!'
+hl_str_diff(x, y) |>
+  as_svg(600, 50) |>
+  cat(file = "man/figures/example-strdiff-2.svg")
+```
+
+<img src="man/figures/example-strdiff-2.svg" width="100%">
+
+```{r eval = FALSE}
+x <- "Paris in the the spring?"
+y <- "Not Paris in the spring!"
+hl_str_diff(x, y)
+```
+
+```{r echo = FALSE}
+x <- "Paris in the the spring?"
+y <- "Not Paris in the spring!"
+hl_str_diff(x, y) |>
+  as_svg(600, 50) |>
+  cat(file = "man/figures/example-strdiff-3.svg")
+```
+
+<img src="man/figures/example-strdiff-3.svg" width="100%">
+
+
+Highlighting `grep()` matches in character representations of objects
+==============================================================================
+
+
+## Example: Highlight a string in a data.frame
+
+```{r eval=FALSE}
+mtcars |> 
+  head(20) |>
+  hl_grep_print("Merc")
+```
+
+
+```{r echo=FALSE}
+mtcars |> 
+  head(20) |>
+  hl_grep_print("Merc") |>
+  as_svg(600, 400) |>
+  cat(file = "man/figures/grep-df1.svg")
+```
+
+<img src="man/figures/grep-df1.svg" />
+
+### Highlight a row in a data.frame which matches a word
+
+```{r eval=FALSE}
+mtcars |> 
+  head(20) |>
+  hl_grep_print("(?m)^.*wood.*?$", fg = 'blue', bg = 'hotpink')
+```
+
+
+```{r echo=FALSE}
+mtcars |> 
+  head(20) |>
+  hl_grep_print("(?m)^.*wood.*?$", fg = 'blue', bg = 'hotpink') |>
+  as_svg(600, 400) |>
+  cat(file = "man/figures/grep-df2.svg")
+```
+
+<img src="man/figures/grep-df2.svg" />
+
+
+### Highlight text in a string
+
+```{r eval=FALSE}
+string <- 
+"<xml>
+   <this is='not'>a real XML doc</this>
+   <this is='not'>a real HTML doc</this>
+   <this is='not'>a real XML doc</this>
+   <this is='not'>a real XML doc</this>
+</xml>"
+
+hl_grep(string, "html", ignore.case = TRUE)
+```
+
+```{r echo=FALSE}
+string <- 
+"<xml>
+   <this is='not'>a real XML doc</this>
+   <this is='not'>a real HTML doc</this>
+   <this is='not'>a real XML doc</this>
+   <this is='not'>a real XML doc</this>
+</xml>"
+
+string |> 
+  htmltools::htmlEscape() |>
+  hl_grep("html", ignore.case = TRUE) |>
+  as_svg(600, 100) |>
+  cat(file = "man/figures/grep-char1.svg")
+```
+
+
+<img src="man/figures/grep-char1.svg" />
+
+
+### Highlighting within a character vector
+
+```{r eval=FALSE}
+vals <- c('hello', 'there', '#rstats', 'on', 'mastodon')
+
+hl_grep(vals, "rstats")
+```
+
+```{r echo=FALSE}
+vals <- c('hello', 'there', '#rstats', 'on', 'mastodon')
+
+hl_grep(vals, "rstats") |>
+  as_svg(600, 50) |>
+  cat(file = "man/figures/grep-vec-deparse.svg")
+```
+
+<img src="man/figures/grep-vec-deparse.svg" />
+
+
+
+
+### Highlighting within a numeric vector
+
+```{r eval=FALSE}
+hl_grep_character(pi, "589")
+```
+
+```{r echo=FALSE}
+hl_grep_character(pi, "589")|>
+  as_svg(600, 50) |>
+  cat(file = "man/figures/grep-num-deparse.svg")
+```
+
+<img src="man/figures/grep-num-deparse.svg" />
 
 
 

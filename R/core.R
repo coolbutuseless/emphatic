@@ -78,6 +78,11 @@ get_legends <- function(.data) {
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 is_emphatic <- function(x) {
+
+  if (is.list(x) && inherits(x, 'emphatic')) {
+    return(TRUE);
+  }
+
   text <- get_colour_matrix(x, 'text')
   fill <- get_colour_matrix(x, 'fill')
 
@@ -137,6 +142,20 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   # Sanity check
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   stopifnot(is_emphatic(x))
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Lists of emphatic objects
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (is.list(x) && !is.data.frame(x)) {
+    strs <- vapply(x, as.character, character(1), ..., mode = mode)
+    if (mode == 'ansi') {
+      return (paste(strs, collapse = "\n"))
+    } else {
+      return (paste(strs, collapse = "<br/>"))
+    }
+  }
+
+
   stopifnot(mode %in% c('ansi', 'html'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -170,13 +189,17 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   if (is_atomic(x)) {
     fx <- x
     if ((!is.double(fx) && !is.integer(fx) && !is.raw(fx) && !is.complex(fx) && !is.logical(fx)) ||  inherits(fx, 'Date')) {
-      fx <- dQuote(fx, FALSE)
+      if (!inherits(x, 'compact')) {
+        fx <- dQuote(fx, FALSE)
+      }
     }
-    fx  <- format(fx)
+    if (!inherits(x, 'compact')) {
+      fx  <- format(fx)
+    }
     mat <- matrix(fx, nrow = 1)
     if (!is.null(names(x))) {
       colnames(mat) <- names(x)
-    } else {
+    } else if (!inherits(x, 'compact')) {
       mat[]  <- paste0(" ", mat) # need padding if no column names
     }
   } else {
@@ -229,7 +252,8 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
     dark_mode        = opt$dark_mode,
     underline_header = opt$underline_header,
     mode             = mode,
-    atomic           = is_atomic(x)
+    atomic           = is_atomic(x),
+    compact          = inherits(x, 'compact')
   )
 
   res
@@ -262,7 +286,8 @@ as_character_inner <- function(m,
                                dark_mode        = TRUE,
                                underline_header = TRUE,
                                mode             = 'ansi',
-                               atomic           = FALSE) {
+                               atomic           = FALSE,
+                               compact          = FALSE) {
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -274,7 +299,7 @@ as_character_inner <- function(m,
   stopifnot(mode %in% c('ansi', 'html'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Automatic constrasting text for foreground?
+  # Automatic contrasting text for foreground?
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (text_mode == 'contrast') {
     new_text <- calc_contrasting_text(fill, text_contrast = text_contrast, dark_mode = dark_mode)
@@ -389,7 +414,7 @@ as_character_inner <- function(m,
     if (has_col_names) {
       row_idx <- rep('', length(chunks))
     } else {
-      fmt     <- paste0("[%", max_row_idx_digits, 'i]')
+      fmt     <- paste0("[%", max_row_idx_digits, 'i] ')
       row_idx <- sprintf(fmt, (seq_along(chunks) - 1) * n_per_line + 1)
     }
 
@@ -403,10 +428,18 @@ as_character_inner <- function(m,
       }
 
       new_row   <- paste(ansi_mat[chunk_idx], collapse = '')
-      new_row   <- paste0(row_idx[i], new_row)
+      if (!compact) {
+        # Add '[1]' in front of row
+        new_row   <- paste0(row_idx[i], new_row)
+      }
       res       <- c(res, new_row)
     }
-    res <- paste(res, collapse = "\n")
+
+    if (!compact) {
+      res <- paste(res, collapse = "\n")
+    } else {
+      res <- paste0(res, collapse = '')
+    }
   } else {
 
 

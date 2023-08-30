@@ -50,7 +50,7 @@ Step 2: Use `{emphatic}`
 ------------------------------------------------------------------------------
 
 ```{r}
-mtcars %>%
+mtcars |>
   hl('skyblue')
 ```
 
@@ -58,7 +58,7 @@ Step 3: Highlight only rows where cylinder is 6 or 8
 ------------------------------------------------------------------------------
 
 ```{r}
-mtcars %>%
+mtcars |>
   hl('skyblue', rows = cyl %in% c(6, 8))
 ```
 
@@ -66,7 +66,7 @@ Step 4: Shade by `mpg` rating using `ggplot2::scale_colour_viridis_c()`
 ------------------------------------------------------------------------------
 
 ```{r}
-mtcars %>%
+mtcars |>
   hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), cols = mpg)
 ```
 
@@ -75,7 +75,7 @@ Step 5: Extend shading across all rows except `gear` and `carb`
 ------------------------------------------------------------------------------
 
 ```{r}
-mtcars %>%
+mtcars |>
   hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), cols = mpg, dest_cols = mpg:am)
 ```
 
@@ -84,9 +84,9 @@ Step 6: Highlight the maximum mpg
 ------------------------------------------------------------------------------
 
 ```{r}
-mtcars %>%
+mtcars |>
   hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), 
-     cols = mpg, dest_cols = mpg:am) %>%
+     cols = mpg, dest_cols = mpg:am) |>
   hl('hotpink', rows = mpg == max(mpg))
 ```
 
@@ -94,10 +94,10 @@ Step 7: De-emphasise the text
 ------------------------------------------------------------------------------
 
 ```{r}
-mtcars %>%
+mtcars |>
   hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), 
-     cols = mpg, dest_cols = mpg:am) %>%
-  hl('hotpink', rows = mpg == max(mpg)) %>%
+     cols = mpg, dest_cols = mpg:am) |>
+  hl('hotpink', rows = mpg == max(mpg)) |>
   hl_opt(text_contrast = 0.25)
 ```
 

@@ -1,0 +1,11 @@
+<svg fill="none" viewBox="0 0 600 100" width="600" height="100" xmlns="http://www.w3.org/2000/svg">
+      <foreignObject width="100%" height="100%">
+      <div xmlns="http://www.w3.org/1999/xhtml"><pre><span style='color:#000000;'><span>&lt;xml&gt;
+   &lt;this is='not'&gt;a real XML doc&lt;/this&gt;
+   &lt;this is='not'&gt;a real </span></span><span style='color:#000000;'><span style='background-color:#ffff00;'>HTML</span></span><span style='color:#000000;'><span> doc&lt;/this&gt;
+   &lt;this is='not'&gt;a real XML doc&lt;/this&gt;
+   &lt;this is='not'&gt;a real XML doc&lt;/this&gt;
+&lt;/xml&gt;</span></span></pre></div>
+    </foreignObject>
+    </svg>
+    

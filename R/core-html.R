@@ -10,8 +10,8 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 col2hex <- function(colours) {
 
-  colours <- col2rgb(colours)
-  colours <- as.character(as.hexmode(colours))
+  colours <- grDevices::col2rgb(colours)
+  colours <- structure(sprintf("%02x", colours), dim = dim(colours))
   colours <- apply(colours, 2, paste0, collapse = '')
 
   paste0('#', colours)

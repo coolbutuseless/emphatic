@@ -61,7 +61,7 @@ default_options <- list(
   # options(emphatic = new_options)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Enable knit_print compatability without requiring 'knitr' in 'Imports'
+  # Enable knit_print compatibility without requiring 'knitr' in 'Imports'
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   register_s3_method("knitr", "knit_print", "emphatic")
 
