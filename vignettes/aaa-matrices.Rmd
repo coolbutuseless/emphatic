@@ -12,17 +12,15 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 ```{r setup}
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 ```{r}
@@ -34,7 +32,7 @@ Demo data
 ------------------------------------------------------------------------------
 
 ```{r}
-mat <- volcano[50:59, 50:59]
+mat <- volcano[50:59, 45:59]
 mat
 ```
 
@@ -48,8 +46,8 @@ Highlight locations in a numeric vector which match an expression.
 
 
 ```{r eval=TRUE}
-mat %>%
-  hl_mat('green', .x < 105) %>%
+mat |>
+  hl_mat('green', .x < 105) |>
   hl_mat('blue', .x > 115)
 ```
 
@@ -63,7 +61,7 @@ Colour a numeric vector using a ggplot colour scale.
 
 
 ```{r eval=TRUE}
-mat %>%
+mat |>
   hl_mat(scale_colour_viridis_c(option = 'A'))
 ```
 
@@ -75,7 +73,7 @@ Highlighting a numeric vector with a colour scale and legend
 
 
 ```{r eval=TRUE}
-mat %>%
+mat |>
   hl_mat(scale_colour_viridis_c(option = 'A'), show_legend = TRUE)
 ```
 
@@ -87,7 +85,7 @@ Highlighting by location index
 
 
 ```{r eval=TRUE}
-mat %>%
+mat |>
   hl_mat('blue', seq(1, 30, 2))
 ```
 
@@ -100,12 +98,29 @@ Highlighting with alternating values
 
 
 ```{r eval=TRUE}
-mat %>%
-  hl_mat(rep(c('blue', 'green', 'red'), length.out = length(.)))
+mat |>
+  hl_mat(rep(c('blue', 'green', 'red')))
+```
+
+Highlighting with calculation
+------------------------------------------------------------------------------
+
+```{r}
+mat |>
+  hl_mat('red', selection = rowSums(.x) > 1720)
 ```
 
 
+```{r}
+mat |>
+  hl_mat('red', selection = colSums(.x) > 1120, byrow = TRUE)
+```
 
+
+```{r}
+mat |>
+  hl_mat('red', selection = .x > 125)
+```
 
 
 

@@ -12,16 +12,14 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(dplyr)
 library(ggplot2)
 library(emphatic)
 ```
 
 ```{r setup}
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 
@@ -53,7 +51,7 @@ Issue:  *everything* is now coloured - including
 locations with low correlation.
 
 ```{r}
-cor(mtcars) %>%
+cor(mtcars) |>
   hl_mat(scale_colour_gradient2()) 
 ```
 
@@ -71,7 +69,7 @@ Issue: the diagonal of the matrix is still highlighted,
 but it is totally uninformative.
 
 ```{r}
-cor(mtcars) %>%
+cor(mtcars) |>
   hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7) 
 ```
 
@@ -86,9 +84,9 @@ Also, the diagonals are now excluded from the colouring i.e. highlighting is
 now further limited to where`row(.x) != col(.x)`
 
 ```{r}
-cor(mtcars) %>%
-  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) %>%
-  hl_opt(text_contrast = 0.2)
+cor(mtcars) |>
+  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) |>
+  hl_adjust(text_contrast = 0.2)
 ```
 
 

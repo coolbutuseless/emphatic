@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
 )
 
 
-library(dplyr)
 library(ggplot2)
 library(emphatic)
 ```
@@ -22,10 +21,9 @@ library(emphatic)
 
 
 ```{r setup}
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 
@@ -38,9 +36,9 @@ First Iteration with `{emphatic}`
 ------------------------------------------------------------------------------
 
 ```{r}
-sea_ice_area %>%
-  hl_mat(colour = scale_color_viridis_c(option = 'A')) %>%
-  hl_opt(na = '', text_contrast = 0.4)
+sea_ice_area |>
+  hl_mat(colour = scale_color_viridis_c(option = 'A')) |>
+  hl_adjust(na = '', text_contrast = 0.4)
 ```
 
 
@@ -49,9 +47,9 @@ Second Iteration with `{emphatic}`
 ------------------------------------------------------------------------------
 
 ```{r}
-sea_ice_area %>%
-  hl_mat(colour = scale_color_viridis_c(option = 'D'), selection = row(.x) %in% c(5, 40)) %>%
-  hl_opt(na = '')
+sea_ice_area |>
+  hl_mat(colour = scale_color_viridis_c(option = 'D'), selection = row(.x) %in% c(5, 40)) |>
+  hl_adjust(na = '')
 ```
 
 

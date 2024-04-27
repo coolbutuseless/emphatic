@@ -17,5 +17,5 @@ as_svg(x, width = 1200, height = 900, ...)
 character string containing an SVG snippet.
 }
 \description{
-Idea borrowed from pointblank: \url{https://github.com/rich-iannone/pointblank/blob/master/scripts/generate_roadmap.R}
+Idea borrowed from pointblank
 }

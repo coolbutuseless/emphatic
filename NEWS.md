@@ -1,7 +1,16 @@
 
+# emphatic 0.1.6  2024-04-27
+
+* Consolidated `hl_grep()` variants into single function
+* `hl_diff()` now operates on any object
+* `hl_vec()` removed
+* Setting options has been totally overhauled
+* `hl_mat()` now has a `byrow()` argument
+
+
 # emphatic 0.1.5  2023-08-30
 
-* Added `hl_str_diff()` to highlight differences between two strings.
+* Added `hl_diff()` to highlight differences between two strings.
 * Added functions for highlighting the results of a `grep()`
     * `hl_grep()`
     * `hl_str()`

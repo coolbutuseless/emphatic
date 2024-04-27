@@ -10,34 +10,38 @@
 #' There are slightly different versions of the highlighting function depending
 #' upon which text version of the object you'd like to match against:
 #'
-#' \describe{
-#'   \item{hl_grep}{ - the given object \code{x} must already be a character string}
-#'   \item{hl_grep_character}{ - performs the matching after first calling
-#'           \code{as.character(x)}}
-#'   \item{hl_grep_print}{ - performs the matching against the default
-#'            \code{print(x)} output}
-#'   \item{hl_grep_deparse}{ - performs the matching after first calling
-#'           \code{deparse1(x)}}
-#'   \item{hl_grep_str}{ - performs the matching on the output of calling
-#'           \code{str(x)}}
-#' }
-#'
 #' @param x character string
 #' @param pattern regular expression string. Note: don't get too fancy here
-#' @param fg,bg any valid R colour specification e.g. 'hotpink', '#335588'
 #' @param ... extra args passed to \code{gsub}
 #' @param perl logical. use perl style regex. default: TRUE
+#' @inheritParams coerce_to_string
+#' @inheritParams hl_diff
+#' @param opts create options list
 #'
 #' @importFrom utils capture.output str
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_grep <- function(x, pattern, fg = 'black', bg = 'yellow', ..., perl = TRUE) {
+hl_grep <- function(x,
+                    pattern,
+                    coerce = "default",
+                    opts = hl_opts(),
+                    fg = NULL,
+                    bg = NULL,
+                    ..., perl = TRUE) {
 
-  stopifnot(is.character(x))
+  x <- coerce_to_string(x, coerce)
 
   if (length(x) > 1) {
     x <- deparse(x)
   }
+
+  if (is.null(fg)) {
+    fg <- ifelse(opts$dark_mode, "black", "yellow")
+  }
+  if (is.null(bg)) {
+    bg <- ifelse(opts$dark_mode, "yellow", "black")
+  }
+
 
   # matches <- gregexpr(pattern, x)[[1]]
   matches <- gregexpr(pattern, x, ..., perl = perl)[[1]]
@@ -100,51 +104,11 @@ hl_grep <- function(x, pattern, fg = 'black', bg = 'yellow', ..., perl = TRUE) {
     text = t(as.matrix(text)), fill = t(as.matrix(fill))
   )
 
+  attr(res, 'options') <- opts
+
+
   res
 }
 
 
 
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' @rdname hl_grep
-#' @export
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_grep_character <- function(x, pattern, fg = 'black', bg = 'yellow', ...) {
-  x <- capture.output(cat(as.character(x)))
-  x <- paste(x, collapse = "\n")
-  hl_grep(x, pattern, fg, bg, ...)
-}
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' @rdname hl_grep
-#' @export
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_grep_print <- function(x, pattern, fg = 'black', bg = 'yellow', ...) {
-  x <- capture.output(x)
-  x <- paste(x, collapse = "\n")
-  hl_grep(x, pattern, fg, bg, ...)
-}
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' @rdname hl_grep
-#' @export
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_grep_deparse <- function(x, pattern, fg = 'black', bg = 'yellow', ...) {
-  x <- deparse1(x)
-  hl_grep(x, pattern, fg, bg, ...)
-}
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' @rdname hl_grep
-#' @export
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_grep_str <- function(x, pattern, fg = 'black', bg = 'yellow', ...) {
-  x <- capture.output(str(x, vec.len = 200))
-  x <- paste(x, collapse = "\n")
-  hl_grep(x, pattern, fg, bg, ...)
-}

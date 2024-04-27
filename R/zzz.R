@@ -31,20 +31,34 @@ register_s3_method <- function(pkg, generic, class, fun = NULL) {
 }
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Get a logical value from the env variables
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+get_env_lgl <- function(nm, unset) {
+  res <- Sys.getenv(nm, unset = '')
+  if (res == '') {
+    unset
+  } else {
+    isTRUE(as.logical(res))
+  }
+}
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Get a mumeric value from the env variables
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+get_env_dbl <- function(nm, unset) {
+  res <- Sys.getenv(nm, unset = '')
+  if (res == '') {
+    res <- unset
+  } else {
+    res <- as.numeric(res)
+    if (is.na(res)) {
+      res <- unset
+    }
+  }
+  res
+}
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Technique for setting options if not already set
-# Code borrowed from: https://github.com/r-lib/devtools/blob/master/R/zzz.R
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-default_options <- list(
-  na               = 'NA',
-  dark_mode        = TRUE,
-  text_mode        = 'contrast',
-  full_colour      = FALSE,
-  text_contrast    = 1,
-  underline_header = TRUE
-)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -53,12 +67,12 @@ default_options <- list(
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .onLoad <- function(libname, pkgname) {
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Set default options
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # current_options <- getOption('emphatic', default = list())
-  # new_options     <- utils::modifyList(current_options, default_options)
-  # options(emphatic = new_options)
+  options(HL_NA            = Sys.getenv ("HL_NA"           , unset =       'NA'))
+  options(HL_DARK          = get_env_lgl("HL_DARK"         , unset =       TRUE))
+  options(HL_FULL_COLOUR   = get_env_lgl("HL_FULL_COLOUR"  , unset =      FALSE))
+  options(HL_TEXT_MODE     = Sys.getenv ("HL_TEXT_MODE"    , unset = 'contrast'))
+  options(HL_TEXT_CONTRAST = get_env_dbl("HL_TEXT_CONTRAST", unset =          1))
+  options(HL_UNDERLINE     = get_env_lgl("HL_UNDERLINE"    , unset =       TRUE))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Enable knit_print compatibility without requiring 'knitr' in 'Imports'

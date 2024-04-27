@@ -4,7 +4,7 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Highlight elements of a matrix or atomic vector
 #'
-#' \code{hl_mat()} and \code{hl_vec()} are identical functions which both work on
+#' \code{hl_mat()} and \code{hl_mat()} are identical functions which both work on
 #' matrices and atomic vectors.
 #'
 #' @inheritParams hl
@@ -21,11 +21,14 @@
 #'             using the variable \code{.x}
 #'             E.g. \code{abs(.x)> 0.5 & .x != 1}  or \code{row(.x) == 3}}
 #'        }
+#' @param byrow if replication of the selection is required, how should the data be replicated?
+#' @inheritParams hl_grep
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_mat <- function(.data, colour, selection = NULL, elem = 'fill',
-                      show_legend = FALSE) {
+                   byrow = FALSE,
+                      show_legend = FALSE, opts = hl_opts()) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Sanity check
@@ -46,6 +49,7 @@ hl_mat <- function(.data, colour, selection = NULL, elem = 'fill',
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   .x <- .data
   mat_ids <- eval(substitute(selection))
+  # print(mat_ids)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # If logical, then ensure it is off the correct length i.e. 1 or length(.data)
@@ -53,12 +57,18 @@ hl_mat <- function(.data, colour, selection = NULL, elem = 'fill',
   if (is.logical(mat_ids)) {
     if (length(mat_ids) == 1) {
       mat_ids <- rep(mat_ids, length(.data))
-    } else if (length(mat_ids) != length(.data)) {
-      stop("logical result must be length 1 or ", length(.data), ", not ", length(mat_ids))
+    } else {
+      mat_ids <- matrix(mat_ids, nrow = NROW(.data), ncol = NCOL(.data), byrow = byrow)
     }
     mat_ids <- which(mat_ids)
   } else if (is.null(mat_ids)) {
-    mat_ids <- seq_len(length(.data))
+    x <- matrix(seq_along(.data), nrow = NROW(.data), ncol = NCOL(.data), FALSE)
+    # print(x)
+    if (byrow) {
+      mat_ids <- as.vector(t(x))
+    } else {
+      mat_ids <- as.vector(x)
+    }
   } else if (!is.numeric(mat_ids)) {
     stop("hl_mat() `selection` must by a numeric vector or be an expression with evaluates to a logical vector")
   }
@@ -114,6 +124,10 @@ hl_mat <- function(.data, colour, selection = NULL, elem = 'fill',
     final_colour <- NA
   }
 
+  # print(final_colour)
+  # print(mat_ids)
+  final_colour <- rep_len(final_colour, length.out = length(mat_ids))
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Attach the updated colour attributes
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -121,16 +135,10 @@ hl_mat <- function(.data, colour, selection = NULL, elem = 'fill',
   mat[mat_ids] <- final_colour
   .data        <- set_colour_matrix(.data, elem, mat)
 
+  attr(.data, "options") <- opts
+
   .data
-
 }
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' @rdname hl_mat
-#' @export
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_vec <- hl_mat
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -151,33 +159,25 @@ if (FALSE) {
     hl_mat(colour = ggplot2::scale_color_viridis_c(), selection = .x > 0.5,
               show_legend = TRUE)
 
-}
+
+  .data <- matrix(1:24, 4, 6)
+  colour <- 'red'
+  elem = 'fill'
+  byrow = FALSE
+  show_legend = FALSE
+  opts = hl_opts()
+  hl_mat(.data, colour, selection = .x[,1] == .x[,2]/2)
+  hl_mat(.data, colour, selection = .x[1,] == .x[2,]/2, byrow = TRUE)
+
+  hl_mat(.data, c('red', 'blue'))
+  hl_mat(.data, c('red', 'blue'), byrow = TRUE)
 
 
-if (FALSE) {
-
-  v <- as.character(1:50)
-  v
-  v %>% hl_vec('blue')
-
-  v <- rep(Sys.Date(), 50)
-  v
-  v %>% hl_vec('blue')
-
-  v <- complex(50)
-  v
-  v %>% hl_vec('blue')
-
-  v <- logical(50)
-  v
-  v %>% hl_vec('blue')
+  sample(letters[1:5], 30, replace = TRUE, prob = 1:5) |>
+    hl_mat('red', .x == lag(.x))
 
 
 }
-
-
-
-
 
 
 

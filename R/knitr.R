@@ -40,7 +40,7 @@ knit_print.emphatic <- function(x, style = NULL, ...) {
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Wrap an emphatic object into an SVG for display in a github README.md
 #'
-#' Idea borrowed from pointblank: \url{https://github.com/rich-iannone/pointblank/blob/master/scripts/generate_roadmap.R}
+#' Idea borrowed from pointblank
 #'
 #' @inheritParams as_html
 #' @param width,height viewBox dimensions for SVG

@@ -1,16 +1,16 @@
 Package: emphatic
 Type: Package
-Title: ANSI Colouring of Data.Frames, Matrices and Atomic Vectors
-Version: 0.1.5
+Title: Exploration of Data.Frames, Matrices using ANSI Colouring
+Version: 0.1.6
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
 Description: Colour data.frame, matrix and vector output in the console.
-URL: https://coolbutuseless.github.io/package/emphatic, https://github.com/coolbutuseless/emphatic
+URL: https://coolbutuseless.github.io/package/emphatic/, https://github.com/coolbutuseless/emphatic
 BugReports: https://github.com/coolbutuseless/emphatic/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Depends: 
     R (>= 2.10)
 Suggests: 

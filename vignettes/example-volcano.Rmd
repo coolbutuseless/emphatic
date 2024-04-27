@@ -13,16 +13,14 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-library(dplyr)
 library(ggplot2)
 library(emphatic)
 ```
 
 ```{r setup}
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 Volcano!
@@ -42,15 +40,15 @@ head(volcano, 2)
 
 
 ```{r echo = TRUE, eval = FALSE}
-volcano %>%
+volcano |>
   hl_mat(colour = ggplot2::scale_color_viridis_c()) 
 ```
 
 
 
 ```{r echo=FALSE, eval=TRUE}
-volcano %>%
-  hl_mat(colour = ggplot2::scale_color_viridis_c())  %>%
+volcano |>
+  hl_mat(colour = ggplot2::scale_color_viridis_c())  |>
   knit_print.emphatic(style = 'font-size: 6px;')
 ```
 

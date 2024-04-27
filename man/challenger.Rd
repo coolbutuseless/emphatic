@@ -19,7 +19,7 @@ Other references:
 
 \itemize{
 \item{\url{http://williamwolff.org/wp-content/uploads/2013/01/tufte-challenger-1997.pdf}}
-\item{\url{https://archive.ics.uci.edu/ml/datasets/Challenger+USA+Space+Shuttle+O-Ring}}
+\item{\url{https://archive.ics.uci.edu/dataset/92/challenger+usa+space+shuttle+o+ring}}
 }
 }
 \source{

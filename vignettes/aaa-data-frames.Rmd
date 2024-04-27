@@ -12,17 +12,15 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 ```{r setup}
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 
@@ -98,7 +96,7 @@ mtcars |>
   hl(ggplot2::scale_colour_viridis_c(), rows = cyl %in% c(6, 8), 
      cols = mpg, dest_cols = mpg:am) |>
   hl('hotpink', rows = mpg == max(mpg)) |>
-  hl_opt(text_contrast = 0.25)
+  hl_adjust(text_contrast = 0.25)
 ```
 
 

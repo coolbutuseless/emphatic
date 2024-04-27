@@ -1,74 +1,9 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' A helper function to set global options
-#'
-#' Any global options set in this manner can be overridden by setting them
-#' as function arguments to the \code{primt()} methods defined for \code{emphatic}
-#' matrices and data.frames.
-#'
-#' @param na Character string to display for NA values. Default 'NA'
-#' @param full_colour Use 24bit ANSI escape codes?  default: FALSE - use 8bit colour.
-#'        Note: RStudio only supports 8 bit ANSI output (24bit ANSI is
-#'        rendered invisibly in Rstudio).  For 24bit colour output, try R in the terminal
-#'        e.g. 'iTerm' on OSX.
-#' @param text_mode How to handle textif no text colour has been
-#'        explicitly specified by the user.
-#'        \describe{
-#'        \item{contrast}{(default) automatically select a contrasting colour for enhanced readability.}
-#'        \item{asis}{render text in the default text
-#'             colour for the output device, unless the user has already specified
-#'             a text colour at this location}
-#'        \item{remove}{remove all text without a user-defined colour}
-#'        }
-#' @param text_contrast When \code{text_mode='contrast'} this numeric value in
-#'        range [0, 1] adjusts the visibility. Default: 1 (high contrast)
-#' @param dark_mode Output terminal is in 'dark mode'? default: TRUE means that
-#'        the terminal display is light coloured text on a dark background.
-#'        If your terminal displays dark text on a light background, set
-#'        \code{dark_mode = FALSE}
-#' @param underline_header Draw an underline separating the column header from
-#'        the data? Default: TRUE
-#'
-#' @export
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_opt_global <- function(na, dark_mode, full_colour, text_mode, text_contrast, underline_header) {
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Find any arguments that were actually set
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  new_options <- find_args()
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Sanity checks
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (!is.null(new_options$text_mode)) {
-    stopifnot(new_options$text_mode %in% c('asis', 'contrast', 'remove'))
-  }
-
-  if (!is.null(new_options$text_contrast)) {
-    stopifnot(
-      is.numeric(new_options$text_contrast),
-      new_options$text_contrast >= 0,
-      new_options$text_contrast <= 1
-    )
-  }
-
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Update the current global options with any new options the user specified
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  current_options <- getOption('emphatic', default = list())
-  new_options     <- modifyList(current_options, new_options)
-
-  options(emphatic = new_options)
-}
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Set options for printing on the emphatic matrix or data.frame
 #'
-#' @inheritParams hl_opt_global
+#' @inheritParams hl_opts
 #' @param .data emphatic matrix or data.frame
 #'
 #' @return emphatic object with updated options
@@ -76,7 +11,7 @@ hl_opt_global <- function(na, dark_mode, full_colour, text_mode, text_contrast, 
 #' @importFrom utils modifyList
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_opt <- function(.data, na, dark_mode, full_colour, text_mode, text_contrast, underline_header) {
+hl_adjust <- function(.data, na, dark_mode, full_colour, text_mode, text_contrast, underline_header) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Sanity check
@@ -117,8 +52,97 @@ find_args <- function () {
 }
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Create a set of options
+#'
+#' @param na Character string to display for NA values. Default 'NA'
+#' @param full_colour Use 24bit ANSI escape codes?  default: FALSE - use 8bit colour.
+#'        Note: RStudio only supports 8 bit ANSI output (24bit ANSI is
+#'        rendered invisibly in Rstudio).  For 24bit colour output, try R in the terminal
+#'        e.g. 'iTerm' on OSX.
+#' @param text_mode How to handle textif no text colour has been
+#'        explicitly specified by the user.
+#'        \describe{
+#'        \item{contrast}{(default) automatically select a contrasting colour for enhanced readability.}
+#'        \item{asis}{render text in the default text
+#'             colour for the output device, unless the user has already specified
+#'             a text colour at this location}
+#'        \item{remove}{remove all text without a user-defined colour}
+#'        }
+#' @param text_contrast When \code{text_mode='contrast'} this numeric value in
+#'        range [0, 1] adjusts the visibility. Default: 1 (high contrast)
+#' @param dark_mode Output terminal is in 'dark mode'? default: TRUE means that
+#'        the terminal display is light coloured text on a dark background.
+#'        If your terminal displays dark text on a light background, set
+#'        \code{dark_mode = FALSE}
+#' @param underline_header Draw an underline separating the column header from
+#'        the data? Default: TRUE
+#'
+#' @export
+#'
+#' @examples
+#' # Generate a standard set of options
+#' hl_opts()
+#'
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+hl_opts <- function(na               = getOption("HL_NA", "NA"),
+                    dark_mode        = getOption("HL_DARK", TRUE),
+                    full_colour      = getOption("HL_FULL_COLOUR", FALSE),
+                    text_mode        = getOption("HL_TEXT_MODE", "contrast"),
+                    text_contrast    = getOption("HL_TEXT_CONTRAST", 1),
+                    underline_header = getOption("HL_UNDERLINE", TRUE)) {
+
+  stopifnot(exprs = {
+    is.character(na)
+    length(na) == 1
+    !is.na(na)
+  })
+
+  stopifnot(exprs = {
+    is.logical(dark_mode)
+    length(dark_mode) == 1
+    !is.na(dark_mode)
+  })
+
+  stopifnot(exprs = {
+    is.logical(full_colour)
+    length(full_colour) == 1
+    !is.na(full_colour)
+  })
+
+  stopifnot(exprs = {
+    is.character(text_mode)
+    length(text_mode) == 1
+    !is.na(text_mode)
+    text_mode %in% c('contrast', 'asis', 'remove')
+  })
+
+  stopifnot(exprs = {
+    is.numeric(text_contrast)
+    length(text_contrast) == 1
+    !is.na(text_contrast)
+    text_contrast >= 0
+    text_contrast <= 1
+  })
+
+  stopifnot(exprs = {
+    is.logical(underline_header)
+    length(underline_header) == 1
+    !is.na(underline_header)
+  })
 
 
+
+  list(
+    na               = na,
+    dark_mode        = dark_mode,
+    full_colour      = full_colour,
+    text_mode        = text_mode,
+    text_contrast    = text_contrast,
+    underline_header = underline_header
+  )
+
+}
 
 
 

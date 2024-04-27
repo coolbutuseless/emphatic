@@ -106,7 +106,7 @@ is_emphatic <- function(x) {
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Print an \code{emphatic} data.frame, matrix or atomic vector
 #'
-#' @inheritParams hl_opt_global
+#' @inheritParams hl_opts
 #' @inheritParams as.character.emphatic
 #'
 #' @export
@@ -159,14 +159,14 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   stopifnot(mode %in% c('ansi', 'html'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Remove the 'emphatic' class here, so that if any subsequence operations
-  # rely on 'as.character()' for this base class, they don't infitiely
+  # Remove the 'emphatic' class here, so that if any subsequent operations
+  # rely on 'as.character()' for this base class, they don't infinitely
   # call 'as.character.emphatic'
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   class(x) <- setdiff(class(x), 'emphatic')
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Co-erce tibbles into data.frames.
+  # Coerce tibbles into data.frames.
   # tibble:::print.tibble() already does some ANSI markup, and in doing so,
   # the results of calling "format()" are not the same as calling format()
   # on a data.frame.
@@ -178,10 +178,8 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Build full options by combining global and local options
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  global_opt <- getOption('emphatic', default = list())
-  local_opt  <- attr(x, 'options', exact = TRUE) %||% list()
-  opt        <- modifyList(default_options, global_opt)
-  opt        <- modifyList(opt, local_opt)
+  opt <- attr(x, 'options', exact = TRUE) %||% list()
+  opt <- modifyList(hl_opts(), opt)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # format the data as character matrix
@@ -269,7 +267,7 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
 #' @param text,fill matrices of colours to apply to each given cell.
 #'        Dimensions must match that of \code{m}
 #' @param legends any strings for legends to print. default NULL
-#' @inheritParams hl_opt_global
+#' @inheritParams hl_opts
 #' @inheritParams as.character.emphatic
 #' @param atomic was this originally an atomic vector?  if so use a slightly
 #'        different printing method
@@ -519,7 +517,7 @@ as_character_inner <- function(m,
 #' There is a further call to 'interp_colour' in order to control the contrast.
 #'
 #' @param fill vector of background colours
-#' @inheritParams  hl_opt_global
+#' @inheritParams  hl_opts
 #'
 #' @return contrasting text colour for readable text
 #'
@@ -568,7 +566,10 @@ calc_contrasting_text <- function(fill, text_contrast, dark_mode) {
   # If there wasn't an actual fill colour set, then don't set a text colour.
   # i.e. this will use the default console colouring
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # text[fill_not_set] <- ''
+  if (text_contrast == 1) {
+    # retain original colours
+    contrast_colour[fill_not_set] <- ''
+  }
 
   contrast_colour
 }

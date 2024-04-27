@@ -12,17 +12,15 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 ```{r setup}
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 ```{r}
@@ -41,9 +39,9 @@ set.seed(1)
 ```
 
 ```{r eval=TRUE}
-sample(10, 30, replace = TRUE, prob = 1:10) %>%
-  hl_vec('green', .x < 3) %>%
-  hl_vec('blue', .x > 7)
+sample(10, 30, replace = TRUE, prob = 1:10) |>
+  hl_mat('green', .x < 3) |>
+  hl_mat('blue', .x > 7)
 ```
 
 
@@ -59,9 +57,9 @@ set.seed(1)
 ```
 
 ```{r eval=TRUE}
-sample(10, 30, replace = TRUE, prob = 1:10) %>%
-  sort() %>%
-  hl_vec(scale_colour_viridis_c(option = 'A'))
+sample(10, 30, replace = TRUE, prob = 1:10) |>
+  sort() |>
+  hl_mat(scale_colour_viridis_c(option = 'A'))
 ```
 
 
@@ -78,8 +76,8 @@ set.seed(1)
 ```
 
 ```{r eval=TRUE}
-sample(letters[1:5], 30, replace = TRUE, prob = 1:5) %>%
-  hl_vec('red', .x == lag(.x))
+sample(letters[1:5], 30, replace = TRUE, prob = 1:5) |>
+  hl_mat('red', .x == lag(.x))
 ```
 
 
@@ -94,8 +92,8 @@ set.seed(1)
 ```
 
 ```{r eval=TRUE}
-sample(letters[1:5], 30, replace = TRUE, prob = 1:5) %>%
-  hl_vec(scale_colour_viridis_d(), show_legend = TRUE)
+sample(letters[1:5], 30, replace = TRUE, prob = 1:5) |>
+  hl_mat(scale_colour_viridis_d(), show_legend = TRUE)
 ```
 
 
@@ -110,8 +108,8 @@ set.seed(1)
 
 
 ```{r eval=TRUE}
-sample(letters[1:5], 30, replace = TRUE, prob = 1:5) %>%
-  hl_vec('blue', seq(1, 30, 2))
+sample(letters[1:5], 30, replace = TRUE, prob = 1:5) |>
+  hl_mat('blue', seq(1, 30, 2))
 ```
 
 
@@ -126,8 +124,8 @@ set.seed(1)
 ```
 
 ```{r eval=TRUE}
-sample(letters[1:5], 30, replace = TRUE, prob = 1:5) %>%
-  hl_vec(c('blue', 'green'))
+sample(letters[1:5], 30, replace = TRUE, prob = 1:5) |>
+  hl_mat(c('blue', 'green'))
 ```
 
 

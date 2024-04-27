@@ -33,7 +33,7 @@ but it's difficult to see trends in this presentation.
 library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 
 challenger
 ```
@@ -112,7 +112,7 @@ challenger_expanded %>%
     show_legend = TRUE
   ) %>%
   hl('grey50', rows = temp == 31, cols = erosion:date) %>%
-  hl_opt(na = '')
+  hl_adjust(na = '')
 ```
 
 

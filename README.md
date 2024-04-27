@@ -6,54 +6,28 @@
 <!-- badges: start -->
 
 ![](https://img.shields.io/badge/cool-useless-green.svg)
-![](https://img.shields.io/badge/dependencies-zero-blue.svg)
 [![R-CMD-check](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-#### `{emphatic}` augments the output of data.frames, matrices and simple vectors in R by adding user-defined ANSI highlighting.
+#### `{emphatic}` adds programmatic highlighting to data.frames, matrices and other R output using ANSI colours in the R terminal.
 
-<img src="man/figures/examples.gif"/>
+<!-- <img src="man/figures/examples.gif"/> -->
 
 See the [online
 documentation](https://coolbutuseless.github.io/package/emphatic/index.html)
 for vignettes and more examples.
 
-## What’s in the box
-
-There are separate high-level functions for highlighting data.frames,
-matrices and simple vectors. There is also a low-level highlghting
-function which can be used on data.frames and matrices.
+### What’s in the box
 
 The `hl_` prefix can be read as `highlight`.
 
-- `hl()` for highlighting data.frames
-- `hl_mat()` for highlighting matrices
-- `hl_vec()` for highlighting simple atomic vectors
-- `hl_loc()` for low-level control of highlighting of both data.frames
-  and matrices
-- `hl_opt()` to set some local options on the current `emphatic` object
-  e.g. `full_colour` option sets 24-bit colour mode.  
-- `hl_opt_global()` sets global options for highlighting. These values
-  will be the default unless overridden with a call to `hl_opt()` for
-  the given `emphatic` object.
-- `hl_str_diff()` for highlighting string differences.
-- General highlighting for regular expressions.
-  - `hl_grep(x, pattern)` where `x` is a character string.
-  - `hl_grep_character()` where the general object `x` is converted to a
-    string using `as.character()`.
-  - `hl_grep_print()` as above, but converstion to character via
-    `print()`
-  - `hl_grep_deparse()` as above, but using `deparse1()` to create
-    string representation of object.
-  - `hl_grep_str()` as above, but using `str()` to create string
-    representation of object.
+- `hl()` for programmatically highlighting data.frames
+- `hl_mat()` for programmatically highlighting matrices
+- `hl_diff()` for highlighting differences between two objects
+- `hl_grep()` highlight regular expression matches in an object or
+  string
 
-|            | data.frame | matrix     | vector     |
-|------------|------------|------------|------------|
-| High Level | `hl()`     | `hl_mat()` | `hl_vec()` |
-| Low Level  | `hl_loc()` | `hl_loc()` | `NA`       |
-
-## Installation
+### Installation
 
 You can install from
 [GitHub](https://github.com/coolbutuseless/emphatic) with:
@@ -63,13 +37,7 @@ You can install from
 remotes::install_github('coolbutuseless/emphatic', ref = 'main')
 ```
 
-## Warning
-
-- This package calls `eval()` on user-supplied code and extreme caution
-  should be taken before exposing functions in this package to the
-  internet (e.g. via `shiny`)
-
-## Vignettes
+### Vignettes
 
 Intro
 
@@ -89,7 +57,7 @@ Specifying rows, columns and colours
 - [Specifying
   colours](https://coolbutuseless.github.io/package/emphatic/articles/specify-colours.html)
 
-Test cases on Real data
+### Test cases on real data
 
 - [Space Shuttle O-ring dataset - Challenger
   Disaster](https://coolbutuseless.github.io/package/emphatic/articles/challenger.html)
@@ -100,59 +68,68 @@ Test cases on Real data
 - [Correlation
   matrix](https://coolbutuseless.github.io/package/emphatic/articles/example-correlation.html)
 
-Advanced:
+## `hl()` - programatically highlight data.frames
 
-- [Low level highlighting with
-  `hl_loc()`](https://coolbutuseless.github.io/package/emphatic/articles/low-level-hl-loc.html)
+- specify rows and columns you want to highlight
+- specify a colour
+  - a single colour
+  - a vector of colours
+  - a `ggplot2` “Scale” object e.g. `scale_colour_continuous()`
 
-## Example: Highlighting a data.frame with alternating row colours
+#### `hl()` simple example of highlighting a data.frame
+
+By default, colouring will be applied to all rows and columns.
 
 ``` r
-library(emphatic)
-emphatic::hl_opt_global(dark_mode = FALSE)
-
 mtcars |>
-  hl(c('red', 'white')) 
+  head(15) |>
+  hl(c('red', 'white', 'blue')) 
 ```
 
 <img src="man/figures/example1.svg" width="100%">
 
-## Example of highlighting a data.frame and include a legend
+#### `hl()` complex example of highlighting a data.frame
 
-Use `{emphatic}` to highlight the `mtcars` dataset where:
+A more complex example showing how to highlight the `mtcars` dataset
+where:
 
 - colour each row to indicate the miles-per-gallon rating
 - do not colour the `gear` or `carb` columns
-- highlight the car with the maximum miles per gallon in `hotpink`
+- highlight the car with the minimum horsepower (`hp`) in `hotpink`
+
+Note also that `hl()` calls are cumulative, and you can build up the
+highlighting you need step by step
 
 ``` r
 mtcars |>
-  hl(ggplot2::scale_colour_viridis_c(),
-     cols = mpg, dest_cols = mpg:am, show_legend = TRUE) |>
-  hl('hotpink', rows = mpg == max(mpg)) |>
-  hl_opt(text_contrast = 0.25)
+  head(15) %>%
+  hl(
+    colour      = ggplot2::scale_colour_viridis_c(),
+    cols        = mpg,      # Where the colour scale is calculated
+    dest_cols   = mpg:disp, # Where the colour scale is applied
+    show_legend = TRUE
+  ) |>
+  hl('hotpink', rows = hp == min(hp), cols = hp:carb) 
 ```
 
 <img src="man/figures/example2.svg" width="100%">
 
-## Example: Highlighting a data.frame with rainbows!
+## `hl_mat()` highlight cells of a matrix
 
-``` r
-mtcars |> 
-  hl(rainbow(32)) |>
-  hl_opt(text_contrast = 0.5)
-```
+The following highlights a correlation matrix of some of the variables
+in `mtcars`.
 
-<img src="man/figures/example3.svg" width="100%">
+- Use `ggplot2::scale_colour_gradient2()` with its default colours to
+  have `red` for negative correlations and `blue` for positive
+  correlations
+- Cells are only coloured if they satisfy
+  - The value is above 0.7
+  - The value is not long the diagonal.
 
-## Example: Highlighting a matrix - Correlation matrix
+Note:
 
-Create a correlation matrix of some of the variables in `mtcars`.
-
-Colour the values using red for negative correlations and blue for
-positive correlations. Values in-between are coloured using a gradient
-between red and blue. This colouring is applied using
-`ggplot2::scale_colour_gradient2()`.
+- The `selection` variable uses `.x` as the placeholder representing the
+  matrix input
 
 ``` r
 mtcars |>
@@ -163,112 +140,88 @@ mtcars |>
 
 <img src="man/figures/example4.svg" width="100%">
 
-## Example: Highlighting a numeric vector
+## `hl_diff()` highlight difference between two objects
 
-Highlight locations in a numeric vector which match an expression.
+Default colouring:
 
-``` r
-sample(10, 30, replace = TRUE, prob = 1:10) |>
-  hl_vec('green', .x < 3) |>
-  hl_vec('blue', .x > 7)
-```
-
-<img src="man/figures/example5.svg" width="100%">
-
-## Example: Highlighting the difference between strings
-
-``` r
-x <- 'hell there!'
-y <- 'hello there?'
-hl_str_diff(x, y)
-```
-
-<img src="man/figures/example-strdiff-1.svg" width="100%">
-
-``` r
-x <- 'hello there?'
-y <- 'hell there!'
-hl_str_diff(x, y)
-```
-
-<img src="man/figures/example-strdiff-2.svg" width="100%">
+- `green` for addition
+- `blue` for substitution
+- `red` for deletion
 
 ``` r
 x <- "Paris in the the spring?"
 y <- "Not Paris in the spring!"
-hl_str_diff(x, y)
+hl_diff(x, y)
 ```
 
 <img src="man/figures/example-strdiff-3.svg" width="100%">
 
-# Highlighting `grep()` matches in character representations of objects
-
-## Example: Highlight a string in a data.frame
-
 ``` r
-mtcars |> 
-  head(20) |>
-  hl_grep_print("Merc")
+x <- c('apple', 'horse', 'battery', 'stapler')
+y <- c('apple', 'horse', 'butter' , 'stable' , "widget")
+hl_diff(x, y, coerce = 'deparse')
 ```
 
-<img src="man/figures/grep-df1.svg" />
+<pre><span><span>c("apple", "horse", "b</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>a</span></span><span><span>tter</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'>y</span></span><span><span>", "sta</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>p</span></span><span><span>le</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>r</span></span><span style='color:#000000;'><span style='background-color:#006400;'>         </span></span><span><span>")</span></span><br/><span><span>c("apple", "horse", "b</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>u</span></span><span><span>tter</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'> </span></span><span><span>", "sta</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>b</span></span><span><span>le</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>"</span></span><span style='color:#000000;'><span style='background-color:#006400;'>, "widget</span></span><span><span>")</span></span></pre>
 
-### Highlight a row in a data.frame which matches a word
+## `hl_grep()` highlight regular expression matches in objects
 
-``` r
-mtcars |> 
-  head(20) |>
-  hl_grep_print("(?m)^.*wood.*?$", fg = 'blue', bg = 'hotpink')
-```
-
-<img src="man/figures/grep-df2.svg" />
-
-### Highlight text in a string
+#### Highlight regular expression matches in a character string
 
 ``` r
-string <- 
-"<xml>
-   <this is='not'>a real XML doc</this>
-   <this is='not'>a real HTML doc</this>
-   <this is='not'>a real XML doc</this>
-   <this is='not'>a real XML doc</this>
-</xml>"
+gettysburg <- c("Four score and seven years ago our fathers brought forth on",
+"this continent, a new nation, conceived in Liberty, and dedicated to the", 
+"proposition that all men are created equal.")
 
-hl_grep(string, "html", ignore.case = TRUE)
+
+hl_grep(gettysburg, "men.*equal")
 ```
 
 <img src="man/figures/grep-char1.svg" />
 
-### Highlighting within a character vector
+#### Highlighting regular expression matches within R objects
+
+`hl_grep()` can coerce R objects to character and then to regular
+expression matching on that output.
+
+- `coerce = "default"` - use the output from `print()`
+- `coerce = "character"` - use the output from `as.character()`
+- `coerce = "print"` - use the output from `print()`
+- `coerce = "deparse"` - use the output from `deparse1()`
+- `coerce = "str"` - use the output from `str()`
 
 ``` r
-vals <- c('hello', 'there', '#rstats', 'on', 'mastodon')
-
-hl_grep(vals, "rstats")
+ll <- as.list(setNames(sample(7), LETTERS[1:7]))
+hl_grep(ll, "e", ignore.case = TRUE)
 ```
 
 <img src="man/figures/grep-vec-deparse.svg" />
 
-### Highlighting within a numeric vector
+#### Highlighting regular expression matches within a numeric vector
 
 ``` r
-hl_grep_character(pi, "589")
+values <- runif(20)
+hl_grep(values, "123.*?4", coerce = 'deparse')
 ```
 
 <img src="man/figures/grep-num-deparse.svg" />
 
-## Related Software
+## Options
 
-- [crayon](https://cran.r-project.org/package=crayon) Colored terminal
-  output on terminals that support ‘ANSI’ color and highlight codes. It
-  also works in ‘Emacs’ ‘ESS’. ‘ANSI’ color support is automatically
-  detected.
-- [fansi](https://cran.r-project.org/package=fansi) Counterparts to R
-  string manipulation functions that account for the effects of ANSI
-  text formatting control sequences.
-
-## Acknowledgements
-
-- R Core for developing and maintaining the language.
-- CRAN maintainers, for patiently shepherding packages onto CRAN and
-  maintaining the repository
+- `hl_opts()` create a named list of default options accepted by the
+  functions in this package
+- `hl_adjust()` to adjust options after creation.
+- Set the following options to control global behaviour within a
+  session.
+  - `HL_NA`
+  - `HL_DARK`
+  - `HL_FULL_COLOUR`
+  - `HL_TEXT_MODE`
+  - `HL_TEXT_CONTRAST`
+  - `HL_UNDERLINE_HEADER`
+- The above R options are initialised using `Sys.getenv()` during
+  package start, and otherwise use a default value. Set these values as
+  environment variables in your `.Rprofile` to save your preferred
+  settings across different sessions. e.g.
+  - `Sys.setenv(HL_DARK = FALSE)` prior to loading package
+  - `options(HL_DARK = FALSE)` at any time

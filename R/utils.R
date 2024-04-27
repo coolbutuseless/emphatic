@@ -53,6 +53,53 @@ chunked_indices <- function(total_len, chunk_len) {
 }
 
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Convert an arbitrary R object to a string
+#'
+#' @param x object
+#' @param coerce How should non-character arguments be coerced to character strings?
+#' \describe{
+#'   \item{default}{ - the given object \code{x} must already be a character string}
+#'   \item{character}{ - performs the matching after first calling
+#'           \code{as.character(x)}}
+#'   \item{print}{ - performs the matching against the default
+#'            \code{print(x)} output}
+#'   \item{deparse}{ - performs the matching after first calling
+#'           \code{deparse1(x)}}
+#'   \item{str}{ - performs the matching on the output of calling
+#'           \code{str(x)}}
+#' }
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+coerce_to_string <- function(x, coerce) {
+  switch(
+    coerce,
+    character = {
+      x <- capture.output(cat(as.character(x)))
+      x <- paste(x, collapse = "\n")
+    },
+    print = {
+      x <- capture.output(x)
+      x <- paste(x, collapse = "\n")
+    },
+    deparse = {
+      x <- deparse1(x)
+    },
+    str = {
+      x <- capture.output(str(x, vec.len = 200))
+      x <- paste(x, collapse = "\n")
+    },
+    {
+      x <- capture.output(x)
+      x <- paste(x, collapse = "\n")
+    }
+  )
+
+  x
+}
+
+
+
 if (FALSE) {
   chunked_indices(4, 6)
 }

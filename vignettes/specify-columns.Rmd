@@ -12,17 +12,15 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 ```{r setup}
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 ```{r}
@@ -35,17 +33,17 @@ Select all cols
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue')
 ```
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = NULL)
 ```
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = .all)
 ```
 
@@ -54,7 +52,7 @@ Select cols by index
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = 2:5)
 ```
 
@@ -62,7 +60,7 @@ Select cols by name
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = c('mpg', 'gear'))
 ```
 
@@ -70,12 +68,12 @@ Select cols by rowname symbol
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = drat)
 ```
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = drat:am)
 ```
 
@@ -84,7 +82,7 @@ Select cols using `col_number()`
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = col_number() < 4)
 ```
 
@@ -92,18 +90,18 @@ Select cols using selectors like `tidyselect`
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = contains('a'))
 ```
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = ends_with('t'))
 ```
 
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue', cols = any_of(c('mpg', 'wt', 'age')))
 ```
 

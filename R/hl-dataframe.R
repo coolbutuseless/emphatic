@@ -17,8 +17,6 @@
 #'        combinations of the specified rows and columns will be highlighted.
 #'        Otherwise the locations are
 #'        created using a simpler call to \code{cbind()}.
-#'
-#' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_loc <- function(.data, colour, row_ids, col_ids, elem = 'fill', major = 'row', expand_grid = TRUE) {
 
@@ -233,6 +231,7 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_le
 #' @param show_legend if a scale object is used for colour, and \code{show_legend = TRUE},
 #'        then a colourbar legend will be added to the bottom of the output.
 #'        Default: FALSE
+#' @inheritParams hl_grep
 #'
 #' @examples
 #' \dontrun{
@@ -242,8 +241,13 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_le
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl <- function(.data, colour, rows = NULL, cols = NULL, dest_cols, calc_scale = 'first', elem = 'fill',
-               show_legend = FALSE) {
+hl <- function(.data, colour,
+               rows = NULL, cols = NULL,
+               dest_cols,
+               calc_scale = 'first',
+               elem = 'fill',
+               show_legend = FALSE,
+               opts = hl_opts()) {
 
   stopifnot(is.data.frame(.data))
   stopifnot(elem %in% c('text', 'fill'))
@@ -259,7 +263,7 @@ hl <- function(.data, colour, rows = NULL, cols = NULL, dest_cols, calc_scale = 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Unpack which rows/columns are being highlighted
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  .x             <- .data
+  .x      <- .data  # used for lookup within loc_expr_to_ids()
   col_ids <- loc_expr_to_ids(.data, expr = substitute(cols), axis = 'column')
   row_ids <- loc_expr_to_ids(.data, expr = substitute(rows), axis = 'row'   )
 
@@ -322,6 +326,7 @@ hl <- function(.data, colour, rows = NULL, cols = NULL, dest_cols, calc_scale = 
     stop("colour not understood: ", deparse(colour))
   }
 
+  attr(.data, "options") <- opts
 
   .data
 }

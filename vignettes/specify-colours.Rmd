@@ -12,17 +12,15 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 ```{r setup}
-library(dplyr)
 library(ggplot2)
 library(emphatic)
-hl_opt_global(dark_mode = FALSE)
+options(HL_DARK = FALSE)
 ```
 
 ```{r}
@@ -35,7 +33,7 @@ Specify a single colour
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl('skyblue')
 ```
 
@@ -43,7 +41,7 @@ Specify a vector of colours
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl(c('skyblue', 'hotpink', '#445566'))
 ```
 
@@ -51,7 +49,7 @@ Specify a colour scale to apply to a variable
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl(ggplot2::scale_colour_viridis_c(), cols = disp)
 ```
 
@@ -60,7 +58,7 @@ Specify a colour scale to apply to a variable, and apply the colouring to multip
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl(ggplot2::scale_colour_viridis_c(), cols = disp, dest_cols = mpg:drat)
 ```
 
@@ -69,7 +67,7 @@ Specify a colour scale to apply to multiple variables independently
 ------------------------------------------------------------------------------
 
 ```{r}
-test_df %>%
+test_df |>
   hl(ggplot2::scale_colour_viridis_c(), cols = mpg:disp, calc_scale = 'each')
 ```
 
