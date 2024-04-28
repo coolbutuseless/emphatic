@@ -1,0 +1,18 @@
+<svg fill="none" viewBox="0 0 600 250" width="600" height="250" xmlns="http://www.w3.org/2000/svg">
+      <foreignObject width="100%" height="100%">
+      <div xmlns="http://www.w3.org/1999/xhtml"><pre><span><span>function (x) 
+{
+    if (is.expression(x)) 
+        return("expression")
+    if (is.call(x)) 
+        return(</span></span><span style='color:#ffffff;'><span style='background-color:#0f19f0;'>switch</span></span><span><span>(deparse(x[[1L]])[1L], `(` = "(", "call"))
+    if (is.name(x)) 
+        "name"
+    else </span></span><span style='color:#ffffff;'><span style='background-color:#0f19f0;'>switch</span></span><span><span>(tx <- typeof(x), double = , integer = "numeric", 
+        closure = , builtin = , special = "function", tx)
+}
+<bytecode: 0x12412e008>
+<environment: namespace:base></span></span></pre></div>
+    </foreignObject>
+    </svg>
+    

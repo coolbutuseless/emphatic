@@ -9,8 +9,8 @@ hl_grep(
   pattern,
   coerce = "default",
   opts = hl_opts(),
-  fg = NULL,
-  bg = NULL,
+  fill = NULL,
+  text = NULL,
   ...,
   perl = TRUE
 )
@@ -35,10 +35,11 @@ hl_grep(
 
 \item{opts}{create options list}
 
-\item{bg, fg}{named list of colours for substitutions, insertions and
-deletions with names 'sub', 'ins' and 'del'.  If set to NULL (the
-default) then colours will be chosen automatically depending on the
-\code{dark_mode} argument}
+\item{fill}{solid colour for background.  If \code{NULL} (the default),
+then a colour will be selected based upon \code{opts$dark_mode}}
+
+\item{text}{text colour. If \code{NULL} (the default), then a colour
+will be seleted which contrasts with the \code{fill} colour.}
 
 \item{...}{extra args passed to \code{gsub}}
 

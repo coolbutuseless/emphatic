@@ -1,6 +1,4 @@
 
-
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Colour the differences between character representations of objects
 #'
@@ -13,13 +11,15 @@
 #'
 #' @param x,y each argument is a single string. vectors of strings not currently
 #'        supported.
-#' @param bg,fg named list of colours for substitutions, insertions and
+#' @param fill named list of colours for substitutions, insertions and
 #'        deletions with names 'sub', 'ins' and 'del'.  If set to NULL (the
-#'        default) then colours will be chosen automatically depending on the
-#'        \code{dark_mode} argument
+#'        default) then default colours will be used.
+#' @param text named list of colours for the text for 'sub', 'ins' and 'del'
+#'        operations. If \code{NULL}, then colours which contrast with \code{fill} will
+#'        be chosen automatically
 #' @param ... further arguments passed to \code{adist()}
 #' @inheritParams coerce_to_string
-#' @param sep what to output on the line separating the two objects. Default: NULL
+#' @param sep character string of the  line separating the two objects. Default: \code{NULL}
 #'        for no separation. Use the empty string to insert an empty line.
 #' @inheritParams hl_grep
 #'
@@ -32,43 +32,51 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_diff <- function(x, y,
                     coerce = "default",
-                    bg = NULL, fg = NULL,
-                    opts = hl_opts(),
-                    sep = NULL,
+                    fill   = NULL,
+                    text   = NULL,
+                    opts   = hl_opts(),
+                    sep   = NULL,
                     ...) {
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Default colours
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  fill_default_dark  <- list(sub = 'dodgerblue' , ins = 'darkgreen', del = 'firebrick' )
+  fill_default_light <- list(sub = 'dodgerblue1', ins = 'darkgreen', del = 'firebrick3')
 
-  if (is.null(bg)) {
-    if (opts$dark_mode) {
-      bg <- list(sub = 'dodgerblue', ins = 'darkgreen', del = 'firebrick')
-    } else {
-      bg <- list(sub = 'dodgerblue1', ins = 'darkgreen', del = 'firebrick3')
-    }
+  text_default_dark  <- list(sub = 'white', ins = 'white', del = 'white')
+  text_default_light <- list(sub = 'black', ins = 'black', del = 'black')
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Work hard to ensure we have a full complement of colours for both
+  # 'fill' and 'text'.  and 'text' colours are chosen as contrasting if
+  # they are not specified
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (opts$dark_mode) {
+    fill <- modify_list(fill_default_dark, fill)
+  } else {
+    fill <- modify_list(fill_default_light, fill)
   }
-  if (is.null(fg)) {
-    if (opts$dark_mode) {
-      fg <- list(sub = 'white', ins = 'white', del = 'white')
-    } else {
-      fg <- list(sub = 'black', ins = 'black', del = 'black')
-    }
+
+  if (is.null(text)) {
+    text <- list(
+      sub = calc_contrasting_text(fill$sub, text_contrast = opts$text_contrast, dark_mode = opts$dark_mode),
+      ins = calc_contrasting_text(fill$ins, text_contrast = opts$text_contrast, dark_mode = opts$dark_mode),
+      del = calc_contrasting_text(fill$del, text_contrast = opts$text_contrast, dark_mode = opts$dark_mode)
+    )
+  }
+
+  if (opts$dark_mode) {
+    text <- modify_list(text_default_dark, text)
+  } else {
+    text <- modify_list(text_default_light, text)
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Coerce
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # if (!is.character(x)) {
-    x <- coerce_to_string(x, coerce)
-  # } else {
-  #   x <- capture.output(x)
-  #   x <- paste(x, collapse = "\n")
-  # }
-
-  # if (!is.character(y)) {
-    y <- coerce_to_string(y, coerce)
-  # } else {
-  #   y <- capture.output(y)
-  #   y <- paste(y, collapse = "\n")
-  # }
+  x <- coerce_to_string(x, coerce)
+  y <- coerce_to_string(y, coerce)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Sanity check
@@ -89,7 +97,6 @@ hl_diff <- function(x, y,
   lev <- utils::adist(x, y, counts = TRUE, ...)
   lev <- attr(lev, 'trafos')[1]
   lev <- strsplit(lev, '')[[1]]
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Adjust input strings to account for deletions and insertions
@@ -134,12 +141,17 @@ hl_diff <- function(x, y,
   ybits <- ifelse(xcr2, paste0(ybits, "\n"), ybits)
 
 
-
-  rl <- base::rle(lev)
-  N  <- length(rl$values)
-  end <- cumsum(rl$lengths)
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Find the beginning and end of each run of the same edit
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  rl    <- base::rle(lev)
+  N     <- length(rl$values)
+  end   <- cumsum(rl$lengths)
   begin <- c(0, head(end, -1) + 1)
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Break apart string into these "same edit operation" chunks
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   xv <- character(N)
   yv <- character(N)
   for (i in seq(N)) {
@@ -147,12 +159,17 @@ hl_diff <- function(x, y,
     yv[i] <- paste(ybits[begin[i]:end[i]], collapse = "")
   }
 
-  xtext <- c(S = fg$sub, I = fg$ins, D = fg$del, M = NA)[rl$values]
-  xfill <- c(S = bg$sub, I = bg$ins, D = bg$del, M = NA)[rl$values]
-  ytext <- c(S = fg$sub, I = fg$ins, D = fg$del, M = NA)[rl$values]
-  yfill <- c(S = bg$sub, I = bg$ins, D = bg$del, M = NA)[rl$values]
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Construct a vector of colours for each chunk
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  xtext <- c(S = text$sub, I = text$ins, D = text$del, M = NA)[rl$values]
+  xfill <- c(S = fill$sub, I = fill$ins, D = fill$del, M = NA)[rl$values]
+  ytext <- c(S = text$sub, I = text$ins, D = text$del, M = NA)[rl$values]
+  yfill <- c(S = fill$sub, I = fill$ins, D = fill$del, M = NA)[rl$values]
 
-
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Create the 'emphatic' object
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (is.null(sep)) {
     structure(
       list(
@@ -175,27 +192,4 @@ hl_diff <- function(x, y,
   }
 
 }
-
-
-if (FALSE) {
-  x <- "abcdx"
-  y <- "abcd\nef"
-  lev <- utils::adist(x, y, counts = TRUE)
-  hl_diff(x, y)
-
-  coerce = "default"
-  bg = NULL
-  fg = NULL
-  opts = hl_opts()
-
-  hl_diff(head(mtcars, 2), head(mtcars, 3), sep = " ")
-
-
-  x <- "hi\nhi aa"
-  y <- "hi\nhi bb"
-  lev <- utils::adist(x, y, counts = TRUE)
-  hl_diff(x, y, sep = "----------------")
-}
-
-
 

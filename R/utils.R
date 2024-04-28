@@ -99,6 +99,23 @@ coerce_to_string <- function(x, coerce) {
 }
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Update a list
+#'
+#' @param current,new current list and new list. 'new' may be NULL
+#'
+#' @return updated list
+#' @noRd
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+modify_list <- function (current, new) {
+
+  for (i in names(new)) {
+    current[[i]] <- new[[i]]
+  }
+
+  current
+}
+
 
 if (FALSE) {
   chunked_indices(4, 6)

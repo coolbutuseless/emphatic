@@ -8,8 +8,8 @@ hl_diff(
   x,
   y,
   coerce = "default",
-  bg = NULL,
-  fg = NULL,
+  fill = NULL,
+  text = NULL,
   opts = hl_opts(),
   sep = NULL,
   ...
@@ -32,14 +32,17 @@ supported.}
           \code{str(x)}}
 }}
 
-\item{bg, fg}{named list of colours for substitutions, insertions and
+\item{fill}{named list of colours for substitutions, insertions and
 deletions with names 'sub', 'ins' and 'del'.  If set to NULL (the
-default) then colours will be chosen automatically depending on the
-\code{dark_mode} argument}
+default) then default colours will be used.}
+
+\item{text}{named list of colours for the text for 'sub', 'ins' and 'del'
+operations. If \code{NULL}, then colours which contrast with \code{fill} will
+be chosen automatically}
 
 \item{opts}{create options list}
 
-\item{sep}{what to output on the line separating the two objects. Default: NULL
+\item{sep}{character string of the  line separating the two objects. Default: \code{NULL}
 for no separation. Use the empty string to insert an empty line.}
 
 \item{...}{further arguments passed to \code{adist()}}

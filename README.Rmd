@@ -110,7 +110,7 @@ mtcars |>
 mtcars |>
   head(15) |>
   hl(c('red', 'white', 'blue')) |>
-  as_svg(600, 400) |>
+  as_svg(650, 350) |>
   cat(file = "man/figures/example1.svg")
 ```
 
@@ -152,7 +152,7 @@ mtcars |>
     show_legend = TRUE
   ) |>
   hl('hotpink', rows = hp == min(hp), cols = hp:carb) |>
-  as_svg(600, 400) |>
+  as_svg(650, 380) |>
   cat(file = "man/figures/example2.svg")
 ```
 
@@ -163,8 +163,8 @@ mtcars |>
 ## `hl_diff()` highlight difference between two objects
 
 The Levenshtein edit distance is calculated between the string representation
-of two objects and these edits are then coloured for <code style="color:green">insert</code>,
-<code style="color:red">delete</code> and <code style="color:blue">substitute</code>.
+of two objects and these edits are then coloured 🟢 = insert, 🔴 = delete, 
+🔵 = substitute.
 
 
 ```{r eval = FALSE}
@@ -191,10 +191,17 @@ to a string representation.  Coercion to a string is controlled by the
 In this example, the difference between the `mean()` and `median()` function
 definitions is highlighted.
 
-```{r}
+```{r eval=FALSE}
 hl_diff(mean, median, coerce = 'print', sep = " ")
 ```
 
+```{r echo=FALSE}
+hl_diff(mean, median, coerce = 'print', sep = " ") |>
+  as_svg(600, 200) |>
+  cat(file = "man/figures/example-strdiff-4.svg")
+```
+
+<img src="man/figures/example-strdiff-4.svg" width="100%">
 
 ## `hl_grep()` highlight regular expression matches in objects
 
@@ -204,7 +211,7 @@ objects coerced into a string representation.
 #### Highlight regular expression matches in a character string
 
 
-```{r}
+```{r eval = FALSE} 
 gettysburg <- c(
   "Four score and seven years ago our fathers brought forth on",
   "this continent, a new nation, conceived in Liberty, and dedicated to the", 
@@ -212,6 +219,19 @@ gettysburg <- c(
 )
 hl_grep(gettysburg, "men.*equal")
 ```
+
+```{r echo = FALSE}
+gettysburg <- c(
+  "Four score and seven years ago our fathers brought forth on",
+  "this continent, a new nation, conceived in Liberty, and dedicated to the", 
+  "proposition that all men are created equal."
+)
+hl_grep(gettysburg, "men.*equal") |>
+  as_svg(600, 80) |>
+  cat(file = "man/figures/example-hlgrep-1.svg")
+```
+
+<img src="man/figures/example-hlgrep-1.svg" width="100%">
 
 #### Highlight regular expression matches within an object
 
@@ -221,10 +241,17 @@ controlled by the `coerce` argument.
 
 In this example, the function body for `mode()` is searched for the word `switch`:
 
-```{r}
+```{r eval = FALSE}
 hl_grep(mode, 'switch')
 ```
 
+```{r echo = FALSE}
+hl_grep(mode, 'switch') |>
+  as_svg(600, 250) |>
+  cat(file = "man/figures/example-hlgrep-2.svg")
+```
+
+<img src="man/figures/example-hlgrep-2.svg" width="100%">
 
 ## Options
 

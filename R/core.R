@@ -179,7 +179,7 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   # Build full options by combining global and local options
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   opt <- attr(x, 'options', exact = TRUE) %||% list()
-  opt <- modifyList(hl_opts(), opt)
+  opt <- modify_list(hl_opts(), opt)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # format the data as character matrix
@@ -567,7 +567,6 @@ calc_contrasting_text <- function(fill, text_contrast, dark_mode) {
   # i.e. this will use the default console colouring
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (text_contrast == 1) {
-    # retain original colours
     contrast_colour[fill_not_set] <- ''
   }
 

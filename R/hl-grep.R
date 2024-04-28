@@ -12,6 +12,10 @@
 #'
 #' @param x character string
 #' @param pattern regular expression string. Note: don't get too fancy here
+#' @param fill solid colour for background.  If \code{NULL} (the default),
+#'        then a colour will be selected based upon \code{opts$dark_mode}
+#' @param text text colour. If \code{NULL} (the default), then a colour
+#'        will be seleted which contrasts with the \code{fill} colour.
 #' @param ... extra args passed to \code{gsub}
 #' @param perl logical. use perl style regex. default: TRUE
 #' @inheritParams coerce_to_string
@@ -25,36 +29,50 @@ hl_grep <- function(x,
                     pattern,
                     coerce = "default",
                     opts = hl_opts(),
-                    fg = NULL,
-                    bg = NULL,
+                    fill = NULL,
+                    text = NULL,
                     ..., perl = TRUE) {
 
-  x <- coerce_to_string(x, coerce)
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Choose colours
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (is.null(fill)) {
+    fill <- ifelse(opts$dark_mode, "#f0e60f", "#0F19F0")
+  }
+  if (is.null(text)) {
+    text <- calc_contrasting_text(
+      fill,
+      text_contrast = opts$text_contrast,
+      dark_mode = opts$dark_mode
+    )
+  }
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Coerge to string
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  x <- coerce_to_string(x, coerce)
   if (length(x) > 1) {
     x <- deparse(x)
   }
 
-  if (is.null(fg)) {
-    fg <- ifelse(opts$dark_mode, "black", "yellow")
-  }
-  if (is.null(bg)) {
-    bg <- ifelse(opts$dark_mode, "yellow", "black")
-  }
-
-
-  # matches <- gregexpr(pattern, x)[[1]]
-  matches <- gregexpr(pattern, x, ..., perl = perl)[[1]]
-  matches
-
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Where are the matches? Where do they start and finish?
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  matches      <- gregexpr(pattern, x, ..., perl = perl)[[1]]
   match_starts <- matches; attributes(match_starts) <- NULL
   match_ends   <- match_starts + attr(matches, "match.length") - 1
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Early exit if there are no matches for this string
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (match_starts[1] == -1) {
     return(x) # no matches found
   }
 
-  # add some fake matches outside the string.
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # add some dummy matches outside the string to make the logic for
+  # colouring easier
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   match_starts <- c(-Inf, match_starts, nchar(x) + 1)
   match_ends   <- c(   0, match_ends  , Inf)
 
@@ -71,8 +89,8 @@ hl_grep <- function(x,
   }
 
   # Drop the first segment which is known to be out of bounds
-  starts <- starts[-1] # tail(starts, -1)
-  ends   <- ends  [-1] # tail(ends  , -1)
+  starts <- starts[-1]
+  ends   <- ends  [-1]
 
   # Drop any redundant segments
   keep   <- ends >= starts
@@ -92,8 +110,8 @@ hl_grep <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Determine text colour and fill for each segment
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  text <- ifelse(is_match, fg, NA_character_)
-  fill <- ifelse(is_match, bg, NA_character_)
+  text_grep <- ifelse(is_match, text, NA_character_)
+  fill_grep <- ifelse(is_match, fill, NA_character_)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Build emphatic structure:  raw vector + text + fill
@@ -101,7 +119,7 @@ hl_grep <- function(x,
   res <- structure(
     bits,
     class = c('emphatic', 'compact'),
-    text = t(as.matrix(text)), fill = t(as.matrix(fill))
+    text = t(as.matrix(text_grep)), fill = t(as.matrix(fill_grep))
   )
 
   attr(res, 'options') <- opts

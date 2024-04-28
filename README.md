@@ -83,10 +83,8 @@ mtcars |>
 ## `hl_diff()` highlight difference between two objects
 
 The Levenshtein edit distance is calculated between the string
-representation of two objects and these edits are then coloured for
-<code style="color:green">insert</code>,
-<code style="color:red">delete</code> and
-<code style="color:blue">substitute</code>.
+representation of two objects and these edits are then coloured 🟢 =
+insert, 🔴 = delete, 🔵 = substitute.
 
 ``` r
 x <- "Paris in the the spring?"
@@ -109,13 +107,7 @@ function definitions is highlighted.
 hl_diff(mean, median, coerce = 'print', sep = " ")
 ```
 
-<pre><span><span>function (x</span></span><span style='color:#000000;'><span style='background-color:#006400;'>               </span></span><span><span>, ...) 
-UseMethod("me</span></span><span style='color:#000000;'><span style='background-color:#006400;'>  </span></span><span><span>an")
-<bytecode: 0x15</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>1</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'>6</span></span><span><span>a</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>b498</span></span><span style='color:#000000;'><span style='background-color:#006400;'> </span></span><span><span>>
-<environment: namespace:</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>b</span></span><span style='color:#000000;'><span style='background-color:#006400;'> </span></span><span><span>a</span></span><span style='color:#000000;'><span style='background-color:#006400;'> </span></span><span><span>s</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'>e</span></span><span><span>></span></span><br/><span><span> </span></span><br/><span><span>function (x</span></span><span style='color:#000000;'><span style='background-color:#006400;'>, na.rm = FALSE</span></span><span><span>, ...) 
-UseMethod("me</span></span><span style='color:#000000;'><span style='background-color:#006400;'>di</span></span><span><span>an")
-<bytecode: 0x15</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>0</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'> </span></span><span><span>a</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>97c4</span></span><span style='color:#000000;'><span style='background-color:#006400;'>0</span></span><span><span>>
-<environment: namespace:</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>s</span></span><span style='color:#000000;'><span style='background-color:#006400;'>t</span></span><span><span>a</span></span><span style='color:#000000;'><span style='background-color:#006400;'>t</span></span><span><span>s</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'> </span></span><span><span>></span></span></pre>
+<img src="man/figures/example-strdiff-4.svg" width="100%">
 
 ## `hl_grep()` highlight regular expression matches in objects
 
@@ -133,13 +125,11 @@ gettysburg <- c(
 hl_grep(gettysburg, "men.*equal")
 ```
 
-<pre><span><span>[1] "Four score and seven years ago our fathers brought forth on"             
-[2] "this continent, a new nation, conceived in Liberty, and dedicated to the"
-[3] "proposition that all </span></span><span style='color:#ffff00;'><span style='background-color:#000000;'>men are created equal</span></span><span><span>."                             </span></span></pre>
+<img src="man/figures/example-hlgrep-1.svg" width="100%">
 
 #### Highlight regular expression matches within an object
 
-Objects such as functions, lists, data.frames and lists can also be
+Other R objects (functions, lists, data.frames, etc) can also be
 highlighted with regular expressions. How an object is coerced into
 string representation is controlled by the `coerce` argument.
 
@@ -150,19 +140,7 @@ In this example, the function body for `mode()` is searched for the word
 hl_grep(mode, 'switch')
 ```
 
-<pre><span><span>function (x) 
-{
-    if (is.expression(x)) 
-        return("expression")
-    if (is.call(x)) 
-        return(</span></span><span style='color:#ffff00;'><span style='background-color:#000000;'>switch</span></span><span><span>(deparse(x[[1L]])[1L], `(` = "(", "call"))
-    if (is.name(x)) 
-        "name"
-    else </span></span><span style='color:#ffff00;'><span style='background-color:#000000;'>switch</span></span><span><span>(tx <- typeof(x), double = , integer = "numeric", 
-        closure = , builtin = , special = "function", tx)
-}
-<bytecode: 0x1501e31d8>
-<environment: namespace:base></span></span></pre>
+<img src="man/figures/example-hlgrep-2.svg" width="100%">
 
 ## Options
 
