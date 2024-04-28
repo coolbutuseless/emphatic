@@ -369,6 +369,14 @@ as_character_inner <- function(m,
     }
   }
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Escape html
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (mode == 'html') {
+    att <- attributes(m)
+    m <- htmltools::htmlEscape(m)
+    attributes(m) <- att
+  }
 
   ansi_mat <- paste0(text, fill, m, end)
   ansi_mat <- matrix(ansi_mat, nrow = nrow(text), ncol = ncol(text))

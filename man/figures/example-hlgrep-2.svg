@@ -8,11 +8,11 @@
         return(</span></span><span style='color:#ffffff;'><span style='background-color:#0f19f0;'>switch</span></span><span><span>(deparse(x[[1L]])[1L], `(` = "(", "call"))
     if (is.name(x)) 
         "name"
-    else </span></span><span style='color:#ffffff;'><span style='background-color:#0f19f0;'>switch</span></span><span><span>(tx <- typeof(x), double = , integer = "numeric", 
+    else </span></span><span style='color:#ffffff;'><span style='background-color:#0f19f0;'>switch</span></span><span><span>(tx &lt;- typeof(x), double = , integer = "numeric", 
         closure = , builtin = , special = "function", tx)
 }
-<bytecode: 0x1438f6bb8>
-<environment: namespace:base></span></span></pre></div>
+&lt;bytecode: 0x1239769b8&gt;
+&lt;environment: namespace:base&gt;</span></span></pre></div>
     </foreignObject>
     </svg>
     
