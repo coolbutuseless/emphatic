@@ -6,7 +6,7 @@
 \usage{
 hl_loc(
   .data,
-  colour,
+  palette,
   row_ids,
   col_ids,
   elem = "fill",
@@ -17,7 +17,7 @@ hl_loc(
 \arguments{
 \item{.data}{\code{emphatic} data.frame or matrix.}
 
-\item{colour}{colour to use for highlighting.  This may be an R colour,
+\item{palette}{colours to use for highlighting.  This may be a single R colour,
 a vector of R colours, or
 a \code{ggplot2} style "Scale" object e.g. \code{scale_colour_continuous()}.}
 

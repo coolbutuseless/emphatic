@@ -47,7 +47,7 @@ codes <- c(
   "mtcars %>% hl('limegreen', rows = cyl == 6)",
   "mtcars %>% hl(scale_colour_viridis_c(), cols = mpg)",
   "mtcars %>% hl(scale_colour_viridis_c(), rows = cyl != 4, cols = mpg)",
-  "mtcars %>% hl(scale_colour_viridis_c(), cols = mpg, dest_cols = mpg:qsec)",
+  "mtcars %>% hl(scale_colour_viridis_c(), cols = mpg, scale_apply = mpg:qsec)",
   "mtcars %>% hl(scale_colour_viridis_c(), cols = mpg) %>%\n   hl(scale_colour_distiller(), cols = wt)"
 )
 

@@ -59,7 +59,7 @@ Specify a colour scale to apply to a variable, and apply the colouring to multip
 
 ```{r}
 test_df |>
-  hl(ggplot2::scale_colour_viridis_c(), cols = disp, dest_cols = mpg:drat)
+  hl(ggplot2::scale_colour_viridis_c(), cols = disp, scale_apply = mpg:drat)
 ```
 
 
@@ -68,7 +68,7 @@ Specify a colour scale to apply to multiple variables independently
 
 ```{r}
 test_df |>
-  hl(ggplot2::scale_colour_viridis_c(), cols = mpg:disp, calc_scale = 'each')
+  hl(ggplot2::scale_colour_viridis_c(), cols = mpg:disp, scale_mode = 'each')
 ```
 
 

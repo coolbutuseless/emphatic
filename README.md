@@ -70,9 +70,9 @@ highlighting you need step by step
 mtcars |>
   head(15) %>%
   hl(
-    colour      = ggplot2::scale_colour_viridis_c(),
+    palette     = ggplot2::scale_colour_viridis_c(),
     cols        = mpg,      # Where the colour scale is calculated
-    dest_cols   = mpg:disp, # Where the colour scale is applied
+    scale_apply = mpg:disp, # Where the colour scale is applied
     show_legend = TRUE
   ) |>
   hl('hotpink', rows = hp == min(hp), cols = hp:carb) 

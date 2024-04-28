@@ -1,6 +1,4 @@
 
-
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Highlight elements by location within an \code{emphatic} data.frame or matrix.
 #'
@@ -18,7 +16,7 @@
 #'        Otherwise the locations are
 #'        created using a simpler call to \code{cbind()}.
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_loc <- function(.data, colour, row_ids, col_ids, elem = 'fill', major = 'row', expand_grid = TRUE) {
+hl_loc <- function(.data, palette, row_ids, col_ids, elem = 'fill', major = 'row', expand_grid = TRUE) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Sanity Check
@@ -52,22 +50,22 @@ hl_loc <- function(.data, colour, row_ids, col_ids, elem = 'fill', major = 'row'
     #    - fill colour across the columns first, and then duplicate to the rows
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ids <- as.matrix(expand.grid(row_ids, col_ids))
-    if (nrow(ids) != length(colour)) {
+    if (nrow(ids) != length(palette)) {
       if (major == 'row') {
-        colour <- rep(colour, length.out = length(row_ids))
-        colour <- rep(colour, length.out = nrow(ids))
+        palette <- rep(palette, length.out = length(row_ids))
+        palette <- rep(palette, length.out = nrow(ids))
       } else if (major == 'column') {
-        colour <- rep(colour, length.out = length(col_ids))
-        colour <- rep(colour, each       = length(row_ids))
+        palette <- rep(palette, length.out = length(col_ids))
+        palette <- rep(palette, each       = length(row_ids))
       } else {
         stop("no such 'major': ", major)
       }
     } else {
       # user supplied enough colours to completely fill grid
       if (major == 'column') {
-        colour <- matrix(colour, nrow = nrow(.data), ncol = ncol(.data),
+        palette <- matrix(palette, nrow = nrow(.data), ncol = ncol(.data),
                          byrow = TRUE)
-        colour <- as.vector(colour)
+        palette <- as.vector(palette)
       }
     }
   }
@@ -76,14 +74,12 @@ hl_loc <- function(.data, colour, row_ids, col_ids, elem = 'fill', major = 'row'
   # Assign colour
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   mat      <- get_colour_matrix(.data, elem)
-  mat[ids] <- colour
+  mat[ids] <- palette
   .data    <- set_colour_matrix(.data, elem, mat)
 
 
   .data
 }
-
-
 
 
 
@@ -100,11 +96,11 @@ hl_loc <- function(.data, colour, row_ids, col_ids, elem = 'fill', major = 'row'
 #'
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_legend) {
+hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_legend) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # This inner function only accpt a single source column.
-  # but results can be applied to multiple 'dest_cols' columns
+  # but results can be applied to multiple 'scale_apply' columns
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   stopifnot(length(column) == 1)
   stopifnot(is.numeric(column))
@@ -119,15 +115,15 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_le
   #  - Anything NA is treated as resetting the particular location
   #  - Anything else is also treated as resetting the particular location.
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (inherits(colour, 'ScaleContinuous')) {
-    stopifnot(all(colour$aesthetics %in% c('colour', 'color', 'fill')))
+  if (inherits(palette, 'ScaleContinuous')) {
+    stopifnot(all(palette$aesthetics %in% c('colour', 'color', 'fill')))
     vals         <- .data[[column]][row_ids]
-    colour$train(vals)
-    final_colour <- colour$map(vals)
+    palette$train(vals)
+    final_colour <- palette$map(vals)
 
     if (isTRUE(show_legend)) {
       legend <- list(
-        scale  = colour,
+        scale  = palette,
         values = vals,
         label  = colnames(.data)[column]
       )
@@ -135,29 +131,28 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_le
     }
 
 
-  } else if (inherits(colour, 'ScaleDiscrete')) {
-    stopifnot(all(colour$aesthetics %in% c('colour', 'color', 'fill')))
+  } else if (inherits(palette, 'ScaleDiscrete')) {
+    stopifnot(all(palette$aesthetics %in% c('colour', 'color', 'fill')))
     vals <- .data[[column]][row_ids]
-    colour$train(vals)
-    final_colour <- colour$map(vals)
+    palette$train(vals)
+    final_colour <- palette$map(vals)
 
     if (isTRUE(show_legend)) {
       legend <- list(
-        scale  = colour,
+        scale  = palette,
         values = vals,
         label  = colnames(.data)[column]
       )
       .data <- add_legend(.data, legend)
     }
-  } else if (is.character(colour)) {
-    final_colour <- colour
+  } else if (is.character(palette)) {
+    final_colour <- palette
   } else {
     final_colour <- NA_character_
   }
 
-  hl_loc(.data, colour = final_colour, row_ids = row_ids, col_ids = dest_col_ids, elem = elem)
+  hl_loc(.data, palette = final_colour, row_ids = row_ids, col_ids = dest_col_ids, elem = elem)
 }
-
 
 
 
@@ -203,28 +198,28 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_le
 #'
 #'
 #' @param .data \code{emphatic} data.frame
-#' @param colour colour to use for highlighting.  This may be an R colour,
+#' @param palette colours to use for highlighting.  This may be a single R colour,
 #'        a vector of R colours, or
 #'        a \code{ggplot2} style "Scale" object e.g. \code{scale_colour_continuous()}.
 #' @param rows,cols specification for rows and columns to target.  Default is NULL
 #'        for both rows and columns,
 #'        which will target all columns/rows. See documentation for \code{hl()}
 #'        for the valid types of row/column specifcations.
-#' @param dest_cols specification of destination columns to colour. If
+#' @param scale_apply specification of destination columns to colour. If
 #'        missing (the default), this function
 #'        will only colour the columns specified in the \code{cols} argument.
 #'        Use NULL to colour all columns.  See documentation for \code{hl()}
 #'        for the valid types of column specifcations.
-#' @param calc_scale If \code{colour} is a \code{ggplot2} "Scale" object, this
+#' @param scale_mode If \code{palette} is a \code{ggplot2} "Scale" object, this
 #'        option defines how the scale should be applied.
 #'        \describe{
 #'          \item{first}{(default)the colours to use are calculated using the scale applied
 #'          to the first specified column in \code{cols}.  The colours calculated
 #'          on this first column are then copied to the other columns specified
-#'          in \code{dest_cols}}.
+#'          in \code{scale_apply}}.
 #'          \item{each}{the colour scale is applied individually to each column
-#'          in turn. \code{calc_scale = 'each'} can only be applied if
-#'          \code{dest_cols} is identical to \code{cols}}.
+#'          in turn. \code{scale_mode = 'each'} can only be applied if
+#'          \code{scale_apply} is identical to \code{cols}}.
 #'        }
 #' @param elem Apply the highlighting to the 'fill' (the background) or the 'text'.
 #'        Default: 'fill'
@@ -235,23 +230,24 @@ hl_inner <- function(.data, colour, row_ids, column, dest_col_ids, elem, show_le
 #'
 #' @examples
 #' \dontrun{
-#' hl(mtcars, ggplot2::scale_colour_viridis_c(), rows = cyl == 6, cols = mpg, dest_cols = c(mpg, cyl))
+#' hl(mtcars, ggplot2::scale_colour_viridis_c(), rows = cyl == 6, cols = mpg,
+#'    scale_apply = c(mpg, cyl))
 #' }
 #'
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl <- function(.data, colour,
+hl <- function(.data, palette,
                rows = NULL, cols = NULL,
-               dest_cols,
-               calc_scale = 'first',
+               scale_apply,
+               scale_mode = 'first',
                elem = 'fill',
                show_legend = FALSE,
                opts = hl_opts()) {
 
   stopifnot(is.data.frame(.data))
   stopifnot(elem %in% c('text', 'fill'))
-  stopifnot(calc_scale %in% c('first', 'each'))
+  stopifnot(scale_mode %in% c('first', 'each'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Promote to 'emphatic' object if necessary
@@ -280,41 +276,41 @@ hl <- function(.data, colour,
   # If the user has not specified any (i.e. missing()) then consider the
   # destination indices to be the same as \code{cols}
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (missing(dest_cols)) {
+  if (missing(scale_apply)) {
     dest_col_ids <- col_ids
   } else {
-    dest_col_ids <- loc_expr_to_ids(.data, expr = substitute(dest_cols), axis = 'column')
+    dest_col_ids <- loc_expr_to_ids(.data, expr = substitute(scale_apply), axis = 'column')
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # For each column spec, run the internal function to highlight a single column
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (is.character(colour) || (length(colour) == 1 && is.na(colour))) {
+  if (is.character(palette) || (length(palette) == 1 && is.na(palette))) {
     .data <- hl_loc(
       .data,
-      colour  = colour,
-      row_ids = row_ids,
-      col_ids = col_ids,
-      elem    = elem
+      palette  = palette,
+      row_ids  = row_ids,
+      col_ids  = col_ids,
+      elem     = elem
     )
-  } else if (inherits(colour, "Scale") && calc_scale == 'first') {
+  } else if (inherits(palette, "Scale") && scale_mode == 'first') {
     .data <- hl_inner(
       .data,
-      colour       = colour,
+      palette      = palette,
       row_ids      = row_ids,
       column       = col_ids[1],
       dest_col_ids = dest_col_ids,
       elem         = elem,
       show_legend  = show_legend
     )
-  } else if (inherits(colour, "Scale") && calc_scale == 'each') {
+  } else if (inherits(palette, "Scale") && scale_mode == 'each') {
     if (!identical(col_ids, dest_col_ids)) {
-      stop("calc_scale = 'each' can only be used if 'dest_cols' is identical to 'columns'")
+      stop("scale_mode = 'each' can only be used if 'scale_apply' is identical to 'columns'")
     }
     for (col_id in col_ids) {
       .data <- hl_inner(
         .data,
-        colour       = colour,
+        palette      = palette,
         row_ids      = row_ids,
         column       = col_id,
         dest_col_ids = col_id,
@@ -323,7 +319,7 @@ hl <- function(.data, colour,
       )
     }
   } else {
-    stop("colour not understood: ", deparse(colour))
+    stop("'palette' not understood: ", deparse1(palette))
   }
 
   attr(.data, "options") <- opts
@@ -332,48 +328,12 @@ hl <- function(.data, colour,
 }
 
 
-
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if (FALSE) {
-
-  library(dplyr)
-  library(emphatic)
-
-  head(mtcars) %>%
-    hl('red', rows = cyl == 6, cols = mpg) %>%
-    hl('pink', cols = seq(2, 8, 2)) %>%
-    hl('limegreen', rows = matches('hornet'), cols = ends_with('t')) %>%
-    hl_loc('skyblue', row_ids = 1:3, col_ids = 4:6, expand_grid = FALSE)
+  mtcars |>
+    hl(ggplot2::scale_color_continuous(), cols = hp, show_legend = TRUE) |>
+    hl(ggplot2::scale_color_continuous(type = 'viridis'), cols = am, show_legend = TRUE) |>
+    hl(ggplot2::scale_color_gradient(low = 'hotpink', high = 'yellow'), cols = mpg, show_legend = TRUE)
 }
-
-
-
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-if (FALSE) {
-  mtcars %>%
-    hl(rainbow(nrow(.))) %>%
-    hl(NA, rows = seq(2, 10, 2)) %>%
-    hl(NA, cols = 'drat')
-
-
-  # This example seems to not colour some thing
-  mtcars %>%
-    hl(ggplot2::scale_fill_viridis_c(), cols = mpg, dest_cols = NULL, show_legend = TRUE)
-
-
-  mtcars %>%
-    hl(ggplot2::scale_fill_viridis_c(), cols = mpg, dest_cols = NULL, rows = row_number() > n()/2)
-
-}
-
-
-
 
 
 

@@ -11,7 +11,7 @@
     else </span></span><span style='color:#ffffff;'><span style='background-color:#0f19f0;'>switch</span></span><span><span>(tx <- typeof(x), double = , integer = "numeric", 
         closure = , builtin = , special = "function", tx)
 }
-<bytecode: 0x12412e008>
+<bytecode: 0x1438f6bb8>
 <environment: namespace:base></span></span></pre></div>
     </foreignObject>
     </svg>

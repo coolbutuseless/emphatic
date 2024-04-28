@@ -67,12 +67,12 @@ The cluster of damage at lower temperatures is now much more visually apparent.
 
 challenger %>%
   arrange(desc(temp)) %>%
-  hl(colour  = scale_color_viridis_c(option = 'B'), cols = 'temp') %>%
+  hl(palette = scale_color_viridis_c(option = 'B'), cols = 'temp') %>%
   hl(
     scale_color_gradient(low = 'pink', high = 'red'),
     rows = damage > 0,
     cols = damage,
-    dest_cols = erosion:date
+    scale_apply = erosion:date
   ) 
 ```
 
@@ -108,7 +108,7 @@ challenger_expanded %>%
     scale_color_gradient(low = 'pink', high = 'red'),
     rows = damage > 0,
     cols = damage,
-    dest_cols = erosion:date,
+    scale_apply = erosion:date,
     show_legend = TRUE
   ) %>%
   hl('grey50', rows = temp == 31, cols = erosion:date) %>%

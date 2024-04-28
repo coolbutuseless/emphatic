@@ -6,11 +6,11 @@
 \usage{
 hl(
   .data,
-  colour,
+  palette,
   rows = NULL,
   cols = NULL,
-  dest_cols,
-  calc_scale = "first",
+  scale_apply,
+  scale_mode = "first",
   elem = "fill",
   show_legend = FALSE,
   opts = hl_opts()
@@ -19,7 +19,7 @@ hl(
 \arguments{
 \item{.data}{\code{emphatic} data.frame}
 
-\item{colour}{colour to use for highlighting.  This may be an R colour,
+\item{palette}{colours to use for highlighting.  This may be a single R colour,
 a vector of R colours, or
 a \code{ggplot2} style "Scale" object e.g. \code{scale_colour_continuous()}.}
 
@@ -28,22 +28,22 @@ for both rows and columns,
 which will target all columns/rows. See documentation for \code{hl()}
 for the valid types of row/column specifcations.}
 
-\item{dest_cols}{specification of destination columns to colour. If
+\item{scale_apply}{specification of destination columns to colour. If
 missing (the default), this function
 will only colour the columns specified in the \code{cols} argument.
 Use NULL to colour all columns.  See documentation for \code{hl()}
 for the valid types of column specifcations.}
 
-\item{calc_scale}{If \code{colour} is a \code{ggplot2} "Scale" object, this
+\item{scale_mode}{If \code{palette} is a \code{ggplot2} "Scale" object, this
 option defines how the scale should be applied.
 \describe{
   \item{first}{(default)the colours to use are calculated using the scale applied
   to the first specified column in \code{cols}.  The colours calculated
   on this first column are then copied to the other columns specified
-  in \code{dest_cols}}.
+  in \code{scale_apply}}.
   \item{each}{the colour scale is applied individually to each column
-  in turn. \code{calc_scale = 'each'} can only be applied if
-  \code{dest_cols} is identical to \code{cols}}.
+  in turn. \code{scale_mode = 'each'} can only be applied if
+  \code{scale_apply} is identical to \code{cols}}.
 }}
 
 \item{elem}{Apply the highlighting to the 'fill' (the background) or the 'text'.
@@ -97,7 +97,8 @@ as \code{filter()} and \code{select()}
 
 \examples{
 \dontrun{
-hl(mtcars, ggplot2::scale_colour_viridis_c(), rows = cyl == 6, cols = mpg, dest_cols = c(mpg, cyl))
+hl(mtcars, ggplot2::scale_colour_viridis_c(), rows = cyl == 6, cols = mpg,
+   scale_apply = c(mpg, cyl))
 }
 
 

@@ -48,14 +48,14 @@ codes <- c(
     hl(scale_color_gradient(low='pink', high='red'), cols = damage)",
   "challenger %>%
     arrange(desc(temp)) %>%
-    hl(scale_color_gradient(low='pink', high='red'), cols = damage, dest_cols = erosion:date)",
+    hl(scale_color_gradient(low='pink', high='red'), cols = damage, scale_apply = erosion:date)",
   "challenger %>%
     arrange(desc(temp)) %>%
-    hl(scale_color_gradient(low='#ffeeee', high='red'), cols = damage, dest_cols = erosion:date,
+    hl(scale_color_gradient(low='#ffeeee', high='red'), cols = damage, scale_apply = erosion:date,
        rows = damage > 0)",
   "challenger %>%
     arrange(desc(temp)) %>%
-    hl(scale_color_gradient(low='#ffeeee', high='red'), cols = damage, dest_cols = erosion:date,
+    hl(scale_color_gradient(low='#ffeeee', high='red'), cols = damage, scale_apply = erosion:date,
        rows = damage > 0) %>%
     hl(scale_color_viridis_c(), cols = temp)"
 )
