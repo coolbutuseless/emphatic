@@ -1,11 +1,18 @@
 
+# emphatic 0.1.6.9000  2024-04-28
+
+* Removed `hl_mat()` and associated vignettes.
+    * function is not exported for now as the selection process is too 
+      difficult to describe well. Needs a rethink
+
 # emphatic 0.1.6  2024-04-27
 
 * Consolidated `hl_grep()` variants into single function
 * `hl_diff()` now operates on any object
 * `hl_vec()` removed
+* `hl_mat()`    
+    * now has a `byrow()` argument
 * Setting options has been totally overhauled
-* `hl_mat()` now has a `byrow()` argument
 
 
 # emphatic 0.1.5  2023-08-30

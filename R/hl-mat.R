@@ -24,7 +24,7 @@
 #' @param byrow if replication of the selection is required, how should the data be replicated?
 #' @inheritParams hl_grep
 #'
-#' @export
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_mat <- function(.data, colour, selection = NULL, elem = 'fill',
                    byrow = FALSE,

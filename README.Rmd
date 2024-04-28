@@ -63,24 +63,20 @@ image_read("man/figures/logo.png")
 [![R-CMD-check](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-#### `{emphatic}` adds programmatic highlighting to data.frames, matrices and other R output using ANSI colours in the R terminal.
+`{emphatic}` uses ANSI colouring in the terminal to add user-controlled highlighting to data.frames and other R output.
 
 <!-- <img src="man/figures/examples.gif"/> -->
 
-See the [online documentation](https://coolbutuseless.github.io/package/emphatic/index.html) for
-vignettes and more examples.
+#### What's in the box
 
-### What's in the box
-
-The `hl_` prefix can be read as `highlight`.
-
-* `hl()` for programmatically highlighting data.frames
-* `hl_mat()` for programmatically highlighting matrices
+* `hl()` for user-controlled highlighting of data.frames
 * `hl_diff()` for highlighting differences between two objects 
 * `hl_grep()` highlight regular expression matches in an object or string
     
 
-### Installation
+<span style="font-size:smaller">`hl_` prefix can be read as `highlight`</span>
+
+#### Installation
 
 You can install from [GitHub](https://github.com/coolbutuseless/emphatic) with:
 
@@ -89,31 +85,9 @@ You can install from [GitHub](https://github.com/coolbutuseless/emphatic) with:
 remotes::install_github('coolbutuseless/emphatic', ref = 'main')
 ```
 
-### Vignettes
-
-Intro
-
-* [Highlighting data.frames](https://coolbutuseless.github.io/package/emphatic/articles/aaa-data-frames.html)
-* [Highlighting matrices](https://coolbutuseless.github.io/package/emphatic/articles/aaa--matrices.html)
-* [Highlighting vectors](https://coolbutuseless.github.io/package/emphatic/articles/aaa-vectors.html)
-
-Specifying rows, columns and colours
-
-* [Specifying rows](https://coolbutuseless.github.io/package/emphatic/articles/specify-rows.html)
-* [Specifying columns](https://coolbutuseless.github.io/package/emphatic/articles/specify-columns.html)
-* [Specifying colours](https://coolbutuseless.github.io/package/emphatic/articles/specify-colours.html)
 
 
-
-### Test cases on real data
-
-* [Space Shuttle O-ring dataset - Challenger Disaster](https://coolbutuseless.github.io/package/emphatic/articles/challenger.html)
-* [Southern Sea Ice Area](https://coolbutuseless.github.io/package/emphatic/articles/example-sea-ice.html)
-* [`volcano` dataset](https://coolbutuseless.github.io/package/emphatic/articles/example-volcano.html)
-* [Correlation matrix](https://coolbutuseless.github.io/package/emphatic/articles/example-correlation.html)
-
-
-## `hl()` - programatically highlight data.frames 
+## `hl()` - user-controlled highlighting of data.frames 
 
 * specify rows and columns you want to highlight
 * specify a colour
@@ -186,49 +160,11 @@ mtcars |>
 
 
 
-
-## `hl_mat()` highlight cells of a matrix 
-
-The following highlights a correlation matrix of some of the variables in `mtcars`.
-
-* Use `ggplot2::scale_colour_gradient2()` with its default colours to 
-  have `red` for negative correlations and `blue` for positive correlations
-* Cells are only coloured if they satisfy
-    * The value is above 0.7
-    * The value is not long the diagonal.
-
-Note:
-
-* The `selection` variable uses `.x` as the placeholder representing the matrix input
-
-```{r eval=FALSE}
-mtcars |>
-  select(cyl, mpg, hp, disp, vs) |>
-  cor() |>
-  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) 
-```
-
-
-```{r echo=FALSE}
-mtcars |>
-  select(cyl, mpg, hp, disp, vs) |>
-  cor() |>
-  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) |>
-  as_svg(600, 200) |>
-  cat(file = "man/figures/example4.svg")
-```
-
-<img src="man/figures/example4.svg" width="100%">
-
-
-
 ## `hl_diff()` highlight difference between two objects
 
-Default colouring:
-
-* `green` for addition
-* `blue` for substitution
-* `red` for deletion
+The Levenshtein edit distance is calculated between the string representation
+of two objects and these edits are then coloured for <code style="color:green">insert</code>,
+<code style="color:red">delete</code> and <code style="color:blue">substitute</code>.
 
 
 ```{r eval = FALSE}
@@ -247,99 +183,47 @@ hl_diff(x, y) |>
 
 <img src="man/figures/example-strdiff-3.svg" width="100%">
 
+Levenshtein's edit distance naturally applies to strings, but `hl_diff()` can 
+visualise the difference between arbitrary objects by first converting them
+to a string representation.  Coercion to a string is controlled by the 
+`coerce` argument, and defaults to the output if the objects were `print()`ed.
+
+In this example, the difference between the `mean()` and `median()` function
+definitions is highlighted.
+
 ```{r}
-x <- c('apple', 'horse', 'battery', 'stapler')
-y <- c('apple', 'horse', 'butter' , 'stable' , "widget")
-hl_diff(x, y, coerce = 'deparse')
+hl_diff(mean, median, coerce = 'print', sep = " ")
 ```
-
-
-
 
 
 ## `hl_grep()` highlight regular expression matches in objects
 
+`hl_grep()` highlights the regular expression matches within a string or
+objects coerced into a string representation.
 
 #### Highlight regular expression matches in a character string
 
 
-```{r eval=FALSE}
-gettysburg <- c("Four score and seven years ago our fathers brought forth on",
-"this continent, a new nation, conceived in Liberty, and dedicated to the", 
-"proposition that all men are created equal.")
-
-
+```{r}
+gettysburg <- c(
+  "Four score and seven years ago our fathers brought forth on",
+  "this continent, a new nation, conceived in Liberty, and dedicated to the", 
+  "proposition that all men are created equal."
+)
 hl_grep(gettysburg, "men.*equal")
 ```
 
-```{r echo=FALSE}
-gettysburg <- c("Four score and seven years ago our fathers brought forth on",
-"this continent, a new nation, conceived in Liberty, and dedicated to the", 
-"proposition that all men are created equal.")
+#### Highlight regular expression matches within an object
 
+Other R objects (functions, lists, data.frames, etc) can also be highlighted
+with regular expressions.  How an object is coerced into string representation is
+controlled by the `coerce` argument.
 
-hl_grep(gettysburg, "men.*equal") |>
-  as_svg(600, 100) |>
-  cat(file = "man/figures/grep-char1.svg")
+In this example, the function body for `mode()` is searched for the word `switch`:
+
+```{r}
+hl_grep(mode, 'switch')
 ```
-
-
-<img src="man/figures/grep-char1.svg" />
-
-
-#### Highlighting regular expression matches within R objects
-
-`hl_grep()` can coerce R objects to character and then to regular expression
-matching on that output.
-
-* `coerce = "default"` - use the output from `print()`
-* `coerce = "character"` - use the output from `as.character()`
-* `coerce = "print"` - use the output from `print()`
-* `coerce = "deparse"` - use the output from `deparse1()`
-* `coerce = "str"` - use the output from `str()`
-
-```{r echo = FALSE}
-set.seed(1)
-```
-
-
-```{r eval=FALSE}
-ll <- as.list(setNames(sample(7), LETTERS[1:7]))
-hl_grep(ll, "c", bg = 'hotpink', ignore.case = TRUE)
-```
-
-```{r echo=FALSE}
-ll <- as.list(setNames(sample(5), LETTERS[1:5]))
-hl_grep(ll, "c", bg = 'hotpink', ignore.case = TRUE) |>
-  as_svg(600, 300) |>
-  cat(file = "man/figures/grep-vec-deparse.svg")
-```
-
-<img src="man/figures/grep-vec-deparse.svg" />
-
-
-#### Highlighting regular expression matches within a numeric vector
-
-```{r echo = FALSE}
-set.seed(1)
-```
-
-
-```{r eval=FALSE}
-values <- runif(20)
-hl_grep(values, "123.*?4", coerce = 'deparse')
-```
-
-
-```{r echo=FALSE}
-values <- runif(20)
-hl_grep(values, "123.*?0", coerce = 'deparse') |>
-  as_svg(600, 50) |> 
-  cat(file = "man/figures/grep-num-deparse.svg")
-```
-
-
-<img src="man/figures/grep-num-deparse.svg" />
 
 
 ## Options
@@ -363,3 +247,17 @@ hl_grep(values, "123.*?0", coerce = 'deparse') |>
     * `options(HL_DARK = FALSE)` at any time
 
 
+
+## Vignettes
+
+
+See the [online documentation](https://coolbutuseless.github.io/package/emphatic/index.html) for
+vignettes and more examples.
+
+* [Highlighting data.frames](https://coolbutuseless.github.io/package/emphatic/articles/aaa-data-frames.html)
+* Specifying rows, columns and colours
+    * [Specifying rows](https://coolbutuseless.github.io/package/emphatic/articles/specify-rows.html)
+    * [Specifying columns](https://coolbutuseless.github.io/package/emphatic/articles/specify-columns.html)
+    * [Specifying colours](https://coolbutuseless.github.io/package/emphatic/articles/specify-colours.html)
+* Worked Examples
+    * [Space Shuttle O-ring dataset - Challenger Disaster](https://coolbutuseless.github.io/package/emphatic/articles/challenger.html)

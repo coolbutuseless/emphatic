@@ -9,25 +9,22 @@
 [![R-CMD-check](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-#### `{emphatic}` adds programmatic highlighting to data.frames, matrices and other R output using ANSI colours in the R terminal.
+`{emphatic}` uses ANSI colouring in the terminal to add user-controlled
+highlighting to data.frames and other R output.
 
 <!-- <img src="man/figures/examples.gif"/> -->
 
-See the [online
-documentation](https://coolbutuseless.github.io/package/emphatic/index.html)
-for vignettes and more examples.
+#### What’s in the box
 
-### What’s in the box
-
-The `hl_` prefix can be read as `highlight`.
-
-- `hl()` for programmatically highlighting data.frames
-- `hl_mat()` for programmatically highlighting matrices
+- `hl()` for user-controlled highlighting of data.frames
 - `hl_diff()` for highlighting differences between two objects
 - `hl_grep()` highlight regular expression matches in an object or
   string
 
-### Installation
+<span style="font-size:smaller">`hl_` prefix can be read as
+`highlight`</span>
+
+#### Installation
 
 You can install from
 [GitHub](https://github.com/coolbutuseless/emphatic) with:
@@ -37,38 +34,7 @@ You can install from
 remotes::install_github('coolbutuseless/emphatic', ref = 'main')
 ```
 
-### Vignettes
-
-Intro
-
-- [Highlighting
-  data.frames](https://coolbutuseless.github.io/package/emphatic/articles/aaa-data-frames.html)
-- [Highlighting
-  matrices](https://coolbutuseless.github.io/package/emphatic/articles/aaa--matrices.html)
-- [Highlighting
-  vectors](https://coolbutuseless.github.io/package/emphatic/articles/aaa-vectors.html)
-
-Specifying rows, columns and colours
-
-- [Specifying
-  rows](https://coolbutuseless.github.io/package/emphatic/articles/specify-rows.html)
-- [Specifying
-  columns](https://coolbutuseless.github.io/package/emphatic/articles/specify-columns.html)
-- [Specifying
-  colours](https://coolbutuseless.github.io/package/emphatic/articles/specify-colours.html)
-
-### Test cases on real data
-
-- [Space Shuttle O-ring dataset - Challenger
-  Disaster](https://coolbutuseless.github.io/package/emphatic/articles/challenger.html)
-- [Southern Sea Ice
-  Area](https://coolbutuseless.github.io/package/emphatic/articles/example-sea-ice.html)
-- [`volcano`
-  dataset](https://coolbutuseless.github.io/package/emphatic/articles/example-volcano.html)
-- [Correlation
-  matrix](https://coolbutuseless.github.io/package/emphatic/articles/example-correlation.html)
-
-## `hl()` - programatically highlight data.frames
+## `hl()` - user-controlled highlighting of data.frames
 
 - specify rows and columns you want to highlight
 - specify a colour
@@ -114,39 +80,13 @@ mtcars |>
 
 <img src="man/figures/example2.svg" width="100%">
 
-## `hl_mat()` highlight cells of a matrix
-
-The following highlights a correlation matrix of some of the variables
-in `mtcars`.
-
-- Use `ggplot2::scale_colour_gradient2()` with its default colours to
-  have `red` for negative correlations and `blue` for positive
-  correlations
-- Cells are only coloured if they satisfy
-  - The value is above 0.7
-  - The value is not long the diagonal.
-
-Note:
-
-- The `selection` variable uses `.x` as the placeholder representing the
-  matrix input
-
-``` r
-mtcars |>
-  select(cyl, mpg, hp, disp, vs) |>
-  cor() |>
-  hl_mat(scale_colour_gradient2(), selection = abs(.x) > 0.7 & row(.x) != col(.x)) 
-```
-
-<img src="man/figures/example4.svg" width="100%">
-
 ## `hl_diff()` highlight difference between two objects
 
-Default colouring:
-
-- `green` for addition
-- `blue` for substitution
-- `red` for deletion
+The Levenshtein edit distance is calculated between the string
+representation of two objects and these edits are then coloured for
+<code style="color:green">insert</code>,
+<code style="color:red">delete</code> and
+<code style="color:blue">substitute</code>.
 
 ``` r
 x <- "Paris in the the spring?"
@@ -156,55 +96,73 @@ hl_diff(x, y)
 
 <img src="man/figures/example-strdiff-3.svg" width="100%">
 
+Levenshtein’s edit distance naturally applies to strings, but
+`hl_diff()` can visualise the difference between arbitrary objects by
+first converting them to a string representation. Coercion to a string
+is controlled by the `coerce` argument, and defaults to the output if
+the objects were `print()`ed.
+
+In this example, the difference between the `mean()` and `median()`
+function definitions is highlighted.
+
 ``` r
-x <- c('apple', 'horse', 'battery', 'stapler')
-y <- c('apple', 'horse', 'butter' , 'stable' , "widget")
-hl_diff(x, y, coerce = 'deparse')
+hl_diff(mean, median, coerce = 'print', sep = " ")
 ```
 
-<pre><span><span>c("apple", "horse", "b</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>a</span></span><span><span>tter</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'>y</span></span><span><span>", "sta</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>p</span></span><span><span>le</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>r</span></span><span style='color:#000000;'><span style='background-color:#006400;'>         </span></span><span><span>")</span></span><br/><span><span>c("apple", "horse", "b</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>u</span></span><span><span>tter</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'> </span></span><span><span>", "sta</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>b</span></span><span><span>le</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>"</span></span><span style='color:#000000;'><span style='background-color:#006400;'>, "widget</span></span><span><span>")</span></span></pre>
+<pre><span><span>function (x</span></span><span style='color:#000000;'><span style='background-color:#006400;'>               </span></span><span><span>, ...) 
+UseMethod("me</span></span><span style='color:#000000;'><span style='background-color:#006400;'>  </span></span><span><span>an")
+<bytecode: 0x15</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>1</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'>6</span></span><span><span>a</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>b498</span></span><span style='color:#000000;'><span style='background-color:#006400;'> </span></span><span><span>>
+<environment: namespace:</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>b</span></span><span style='color:#000000;'><span style='background-color:#006400;'> </span></span><span><span>a</span></span><span style='color:#000000;'><span style='background-color:#006400;'> </span></span><span><span>s</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'>e</span></span><span><span>></span></span><br/><span><span> </span></span><br/><span><span>function (x</span></span><span style='color:#000000;'><span style='background-color:#006400;'>, na.rm = FALSE</span></span><span><span>, ...) 
+UseMethod("me</span></span><span style='color:#000000;'><span style='background-color:#006400;'>di</span></span><span><span>an")
+<bytecode: 0x15</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>0</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'> </span></span><span><span>a</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>97c4</span></span><span style='color:#000000;'><span style='background-color:#006400;'>0</span></span><span><span>>
+<environment: namespace:</span></span><span style='color:#000000;'><span style='background-color:#1e90ff;'>s</span></span><span style='color:#000000;'><span style='background-color:#006400;'>t</span></span><span><span>a</span></span><span style='color:#000000;'><span style='background-color:#006400;'>t</span></span><span><span>s</span></span><span style='color:#000000;'><span style='background-color:#cd2626;'> </span></span><span><span>></span></span></pre>
 
 ## `hl_grep()` highlight regular expression matches in objects
+
+`hl_grep()` highlights the regular expression matches within a string or
+objects coerced into a string representation.
 
 #### Highlight regular expression matches in a character string
 
 ``` r
-gettysburg <- c("Four score and seven years ago our fathers brought forth on",
-"this continent, a new nation, conceived in Liberty, and dedicated to the", 
-"proposition that all men are created equal.")
-
-
+gettysburg <- c(
+  "Four score and seven years ago our fathers brought forth on",
+  "this continent, a new nation, conceived in Liberty, and dedicated to the", 
+  "proposition that all men are created equal."
+)
 hl_grep(gettysburg, "men.*equal")
 ```
 
-<img src="man/figures/grep-char1.svg" />
+<pre><span><span>[1] "Four score and seven years ago our fathers brought forth on"             
+[2] "this continent, a new nation, conceived in Liberty, and dedicated to the"
+[3] "proposition that all </span></span><span style='color:#ffff00;'><span style='background-color:#000000;'>men are created equal</span></span><span><span>."                             </span></span></pre>
 
-#### Highlighting regular expression matches within R objects
+#### Highlight regular expression matches within an object
 
-`hl_grep()` can coerce R objects to character and then to regular
-expression matching on that output.
+Objects such as functions, lists, data.frames and lists can also be
+highlighted with regular expressions. How an object is coerced into
+string representation is controlled by the `coerce` argument.
 
-- `coerce = "default"` - use the output from `print()`
-- `coerce = "character"` - use the output from `as.character()`
-- `coerce = "print"` - use the output from `print()`
-- `coerce = "deparse"` - use the output from `deparse1()`
-- `coerce = "str"` - use the output from `str()`
-
-``` r
-ll <- as.list(setNames(sample(7), LETTERS[1:7]))
-hl_grep(ll, "e", ignore.case = TRUE)
-```
-
-<img src="man/figures/grep-vec-deparse.svg" />
-
-#### Highlighting regular expression matches within a numeric vector
+In this example, the function body for `mode()` is searched for the word
+`switch`:
 
 ``` r
-values <- runif(20)
-hl_grep(values, "123.*?4", coerce = 'deparse')
+hl_grep(mode, 'switch')
 ```
 
-<img src="man/figures/grep-num-deparse.svg" />
+<pre><span><span>function (x) 
+{
+    if (is.expression(x)) 
+        return("expression")
+    if (is.call(x)) 
+        return(</span></span><span style='color:#ffff00;'><span style='background-color:#000000;'>switch</span></span><span><span>(deparse(x[[1L]])[1L], `(` = "(", "call"))
+    if (is.name(x)) 
+        "name"
+    else </span></span><span style='color:#ffff00;'><span style='background-color:#000000;'>switch</span></span><span><span>(tx <- typeof(x), double = , integer = "numeric", 
+        closure = , builtin = , special = "function", tx)
+}
+<bytecode: 0x1501e31d8>
+<environment: namespace:base></span></span></pre>
 
 ## Options
 
@@ -225,3 +183,22 @@ hl_grep(values, "123.*?4", coerce = 'deparse')
   settings across different sessions. e.g.
   - `Sys.setenv(HL_DARK = FALSE)` prior to loading package
   - `options(HL_DARK = FALSE)` at any time
+
+## Vignettes
+
+See the [online
+documentation](https://coolbutuseless.github.io/package/emphatic/index.html)
+for vignettes and more examples.
+
+- [Highlighting
+  data.frames](https://coolbutuseless.github.io/package/emphatic/articles/aaa-data-frames.html)
+- Specifying rows, columns and colours
+  - [Specifying
+    rows](https://coolbutuseless.github.io/package/emphatic/articles/specify-rows.html)
+  - [Specifying
+    columns](https://coolbutuseless.github.io/package/emphatic/articles/specify-columns.html)
+  - [Specifying
+    colours](https://coolbutuseless.github.io/package/emphatic/articles/specify-colours.html)
+- Worked Examples
+  - [Space Shuttle O-ring dataset - Challenger
+    Disaster](https://coolbutuseless.github.io/package/emphatic/articles/challenger.html)
