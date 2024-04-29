@@ -18,7 +18,6 @@ create_legend_string <- function(
   values,
   label       = NULL,
   full_colour = FALSE,
-  dark_mode   = TRUE,
   mode        = 'ansi'
 ) {
 
@@ -69,7 +68,7 @@ create_legend_string <- function(
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Always use contrasting text for the legend
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  text <- calc_contrasting_text(fill, text_contrast = 1, dark_mode = dark_mode)
+  text <- calc_contrasting_text(fill, text_contrast = 1)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # After each cell we will add the ansi RESET code to revert

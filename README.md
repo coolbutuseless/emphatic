@@ -150,7 +150,6 @@ hl_grep(mode, 'switch')
 - Set the following options to control global behaviour within a
   session.
   - `HL_NA`
-  - `HL_DARK`
   - `HL_FULL_COLOUR`
   - `HL_TEXT_MODE`
   - `HL_TEXT_CONTRAST`
@@ -159,8 +158,8 @@ hl_grep(mode, 'switch')
   package start, and otherwise use a default value. Set these values as
   environment variables in your `.Rprofile` to save your preferred
   settings across different sessions. e.g.
-  - `Sys.setenv(HL_DARK = FALSE)` prior to loading package
-  - `options(HL_DARK = FALSE)` at any time
+  - `Sys.setenv(HL_NA = FALSE)` prior to loading package
+  - `options(HL_NA = FALSE)` at any time
 
 ## Vignettes
 

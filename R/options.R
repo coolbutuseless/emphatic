@@ -11,7 +11,7 @@
 #' @importFrom utils modifyList
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_adjust <- function(.data, na, dark_mode, full_colour, text_mode, text_contrast, underline_header) {
+hl_adjust <- function(.data, na, full_colour, text_mode, text_contrast, underline_header) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Sanity check
@@ -71,10 +71,6 @@ find_args <- function () {
 #'        }
 #' @param text_contrast When \code{text_mode='contrast'} this numeric value in
 #'        range [0, 1] adjusts the visibility. Default: 1 (high contrast)
-#' @param dark_mode Output terminal is in 'dark mode'? default: TRUE means that
-#'        the terminal display is light coloured text on a dark background.
-#'        If your terminal displays dark text on a light background, set
-#'        \code{dark_mode = FALSE}
 #' @param underline_header Draw an underline separating the column header from
 #'        the data? Default: TRUE
 #'
@@ -86,7 +82,6 @@ find_args <- function () {
 #'
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_opts <- function(na               = getOption("HL_NA", "NA"),
-                    dark_mode        = getOption("HL_DARK", TRUE),
                     full_colour      = getOption("HL_FULL_COLOUR", FALSE),
                     text_mode        = getOption("HL_TEXT_MODE", "contrast"),
                     text_contrast    = getOption("HL_TEXT_CONTRAST", 1),
@@ -96,12 +91,6 @@ hl_opts <- function(na               = getOption("HL_NA", "NA"),
     is.character(na)
     length(na) == 1
     !is.na(na)
-  })
-
-  stopifnot(exprs = {
-    is.logical(dark_mode)
-    length(dark_mode) == 1
-    !is.na(dark_mode)
   })
 
   stopifnot(exprs = {
@@ -135,7 +124,6 @@ hl_opts <- function(na               = getOption("HL_NA", "NA"),
 
   list(
     na               = na,
-    dark_mode        = dark_mode,
     full_colour      = full_colour,
     text_mode        = text_mode,
     text_contrast    = text_contrast,

@@ -42,34 +42,20 @@ hl_diff <- function(x, y,
   # Default colours
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   fill_default_dark  <- list(sub = 'dodgerblue' , ins = 'darkgreen', del = 'firebrick' )
-  fill_default_light <- list(sub = 'dodgerblue1', ins = 'darkgreen', del = 'firebrick3')
-
-  text_default_dark  <- list(sub = 'white', ins = 'white', del = 'white')
-  text_default_light <- list(sub = 'black', ins = 'black', del = 'black')
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Work hard to ensure we have a full complement of colours for both
   # 'fill' and 'text'.  and 'text' colours are chosen as contrasting if
   # they are not specified
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (opts$dark_mode) {
-    fill <- modify_list(fill_default_dark, fill)
-  } else {
-    fill <- modify_list(fill_default_light, fill)
-  }
+  fill <- modify_list(fill_default_dark, fill)
 
   if (is.null(text)) {
     text <- list(
-      sub = calc_contrasting_text(fill$sub, text_contrast = opts$text_contrast, dark_mode = opts$dark_mode),
-      ins = calc_contrasting_text(fill$ins, text_contrast = opts$text_contrast, dark_mode = opts$dark_mode),
-      del = calc_contrasting_text(fill$del, text_contrast = opts$text_contrast, dark_mode = opts$dark_mode)
+      sub = calc_contrasting_text(fill$sub, text_contrast = opts$text_contrast),
+      ins = calc_contrasting_text(fill$ins, text_contrast = opts$text_contrast),
+      del = calc_contrasting_text(fill$del, text_contrast = opts$text_contrast)
     )
-  }
-
-  if (opts$dark_mode) {
-    text <- modify_list(text_default_dark, text)
-  } else {
-    text <- modify_list(text_default_light, text)
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -6,7 +6,6 @@
 \usage{
 hl_opts(
   na = getOption("HL_NA", "NA"),
-  dark_mode = getOption("HL_DARK", TRUE),
   full_colour = getOption("HL_FULL_COLOUR", FALSE),
   text_mode = getOption("HL_TEXT_MODE", "contrast"),
   text_contrast = getOption("HL_TEXT_CONTRAST", 1),
@@ -15,11 +14,6 @@ hl_opts(
 }
 \arguments{
 \item{na}{Character string to display for NA values. Default 'NA'}
-
-\item{dark_mode}{Output terminal is in 'dark mode'? default: TRUE means that
-the terminal display is light coloured text on a dark background.
-If your terminal displays dark text on a light background, set
-\code{dark_mode = FALSE}}
 
 \item{full_colour}{Use 24bit ANSI escape codes?  default: FALSE - use 8bit colour.
 Note: RStudio only supports 8 bit ANSI output (24bit ANSI is

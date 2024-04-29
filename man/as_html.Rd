@@ -4,7 +4,7 @@
 \alias{as_html}
 \title{Render an emphatic object to HTML}
 \usage{
-as_html(x, style = NULL, ...)
+as_html(x, style = NULL, ..., complete = FALSE)
 }
 \arguments{
 \item{x}{emphatic object}
@@ -13,6 +13,10 @@ as_html(x, style = NULL, ...)
 returned HTML}
 
 \item{...}{other arguments passed to \code{as.character.emphatic}}
+
+\item{complete}{logical. Default: FALSE.  If TRUE, then add DOCTYPE and
+the tags for 'html', 'body' and 'head' to make a complete standalone
+html file.}
 }
 \description{
 Render an emphatic object to HTML

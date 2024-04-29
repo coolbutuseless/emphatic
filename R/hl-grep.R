@@ -13,7 +13,7 @@
 #' @param x character string
 #' @param pattern regular expression string. Note: don't get too fancy here
 #' @param fill solid colour for background.  If \code{NULL} (the default),
-#'        then a colour will be selected based upon \code{opts$dark_mode}
+#'        then the default colour will be selected
 #' @param text text colour. If \code{NULL} (the default), then a colour
 #'        will be seleted which contrasts with the \code{fill} colour.
 #' @param ... extra args passed to \code{gsub}
@@ -37,13 +37,12 @@ hl_grep <- function(x,
   # Choose colours
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (is.null(fill)) {
-    fill <- ifelse(opts$dark_mode, "#f0e60f", "#0F19F0")
+    fill <- "#0F19F0"
   }
   if (is.null(text)) {
     text <- calc_contrasting_text(
       fill,
-      text_contrast = opts$text_contrast,
-      dark_mode = opts$dark_mode
+      text_contrast = opts$text_contrast
     )
   }
 

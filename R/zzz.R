@@ -1,7 +1,7 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Method stolen from: https://github.com/rstudio/htmltools/pull/108/files
+# Idea borrowed from https://github.com/rstudio/htmltools/pull/108/files
 # (as mentioned in the) knitr::knit_print vignette)
 # This is how to have a knit_print method for 'emphatic' objects
 # without having knitr as a dependency for this package
@@ -68,7 +68,6 @@ get_env_dbl <- function(nm, unset) {
 .onLoad <- function(libname, pkgname) {
 
   options(HL_NA            = Sys.getenv ("HL_NA"           , unset =       'NA'))
-  options(HL_DARK          = get_env_lgl("HL_DARK"         , unset =       TRUE))
   options(HL_FULL_COLOUR   = get_env_lgl("HL_FULL_COLOUR"  , unset =      FALSE))
   options(HL_TEXT_MODE     = Sys.getenv ("HL_TEXT_MODE"    , unset = 'contrast'))
   options(HL_TEXT_CONTRAST = get_env_dbl("HL_TEXT_CONTRAST", unset =          1))

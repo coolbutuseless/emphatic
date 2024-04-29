@@ -14,13 +14,11 @@ knitr::opts_chunk$set(
 )
 library(ggplot2)
 library(emphatic)
-options(HL_DARK = FALSE)
 ```
 
 ```{r setup}
 library(ggplot2)
 library(emphatic)
-options(HL_DARK = FALSE)
 ```
 
 

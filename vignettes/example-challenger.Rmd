@@ -33,7 +33,6 @@ but it's difficult to see trends in this presentation.
 library(dplyr)
 library(ggplot2)
 library(emphatic)
-options(HL_DARK = FALSE)
 
 challenger
 ```

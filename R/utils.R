@@ -117,6 +117,24 @@ modify_list <- function (current, new) {
 }
 
 
-if (FALSE) {
-  chunked_indices(4, 6)
+
+
+html_replacement <- c(
+  `&` = "&amp;",
+  `<` = "&lt;",
+  `>` = "&gt;",
+  `"` = "&quot;",
+  `'` = "&#39;"
+)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Escape HTML by replacing special characters
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+escape_html <- function(x) {
+  x <- enc2utf8(x)
+  for (orig in names(html_replacement)) {
+    x <- gsub(orig, html_replacement[[orig]], x, fixed = TRUE, useBytes = TRUE)
+  }
+  Encoding(x) <- 'UTF-8'
+  x
 }

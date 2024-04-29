@@ -7,10 +7,13 @@
 #' @param style html tag styling to apply to the \code{<pre>} wrapper for the
 #'        returned HTML
 #' @param ... other arguments passed to \code{as.character.emphatic}
+#' @param complete logical. Default: FALSE.  If TRUE, then add DOCTYPE and
+#'        the tags for 'html', 'body' and 'head' to make a complete standalone
+#'        html file.
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_html <- function(x, style = NULL, ...) {
+as_html <- function(x, style = NULL, ..., complete = FALSE) {
 
   if (!is.null(style)) {
     pre <- paste0("<pre style='", style, "'>")
@@ -19,6 +22,12 @@ as_html <- function(x, style = NULL, ...) {
   }
 
   res <- paste0(pre, as.character(x, ..., mode = 'html'), "</pre>")
+
+  if (isTRUE(complete)) {
+    res <- paste0("<!DOCTYPE html>\n<html>\n<head></head>\n<body>", res, "\n</body>\n</html>")
+  }
+
+
   class(res) <- unique(c('knit_asis', class(res)))
 
   res
@@ -49,7 +58,7 @@ knit_print.emphatic <- function(x, style = NULL, ...) {
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_svg <- function(x, width = 1200, height = 900,...) {
+as_svg <- function(x, width = 1200, height = 900, ...) {
 
   res <- as_html(x, ...)
 

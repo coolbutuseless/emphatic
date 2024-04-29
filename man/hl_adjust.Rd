@@ -4,25 +4,12 @@
 \alias{hl_adjust}
 \title{Set options for printing on the emphatic matrix or data.frame}
 \usage{
-hl_adjust(
-  .data,
-  na,
-  dark_mode,
-  full_colour,
-  text_mode,
-  text_contrast,
-  underline_header
-)
+hl_adjust(.data, na, full_colour, text_mode, text_contrast, underline_header)
 }
 \arguments{
 \item{.data}{emphatic matrix or data.frame}
 
 \item{na}{Character string to display for NA values. Default 'NA'}
-
-\item{dark_mode}{Output terminal is in 'dark mode'? default: TRUE means that
-the terminal display is light coloured text on a dark background.
-If your terminal displays dark text on a light background, set
-\code{dark_mode = FALSE}}
 
 \item{full_colour}{Use 24bit ANSI escape codes?  default: FALSE - use 8bit colour.
 Note: RStudio only supports 8 bit ANSI output (24bit ANSI is

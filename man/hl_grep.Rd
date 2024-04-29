@@ -36,7 +36,7 @@ hl_grep(
 \item{opts}{create options list}
 
 \item{fill}{solid colour for background.  If \code{NULL} (the default),
-then a colour will be selected based upon \code{opts$dark_mode}}
+then the default colour will be selected}
 
 \item{text}{text colour. If \code{NULL} (the default), then a colour
 will be seleted which contrasts with the \code{fill} colour.}

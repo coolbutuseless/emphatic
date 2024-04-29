@@ -247,7 +247,6 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
     text_mode        = opt$text_mode,
     text_contrast    = opt$text_contrast,
     full_colour      = opt$full_colour,
-    dark_mode        = opt$dark_mode,
     underline_header = opt$underline_header,
     mode             = mode,
     atomic           = is_atomic(x),
@@ -281,7 +280,6 @@ as_character_inner <- function(m,
                                text_mode        = 'contrast',
                                text_contrast    = 1,
                                full_colour      = FALSE,
-                               dark_mode        = TRUE,
                                underline_header = TRUE,
                                mode             = 'ansi',
                                atomic           = FALSE,
@@ -300,7 +298,7 @@ as_character_inner <- function(m,
   # Automatic contrasting text for foreground?
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (text_mode == 'contrast') {
-    new_text <- calc_contrasting_text(fill, text_contrast = text_contrast, dark_mode = dark_mode)
+    new_text <- calc_contrasting_text(fill, text_contrast = text_contrast)
     text[] <- ifelse(is.na(text) | text == '', new_text, text)
   } else if (text_mode == 'asis') {
     # do nothing. use the default text colour for the output
@@ -374,7 +372,7 @@ as_character_inner <- function(m,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (mode == 'html') {
     att <- attributes(m)
-    m <- htmltools::htmlEscape(m)
+    m <- escape_html(m)
     attributes(m) <- att
   }
 
@@ -453,6 +451,9 @@ as_character_inner <- function(m,
       this_rownames <- rownames(m)
       max_nchar     <- max(nchar(this_rownames))
       fmt           <- paste0("%-", max_nchar + 1, "s ")
+      if (mode == 'html') {
+        this_rownames <- escape_html(this_rownames)
+      }
       this_rownames <- sprintf(fmt, this_rownames)
       ansi_mat      <- cbind(this_rownames, ansi_mat)
       col_names     <- c(sprintf(fmt, ''), col_names)
@@ -472,6 +473,7 @@ as_character_inner <- function(m,
         if (mode == 'ansi') {
           header <- paste0(underline_on_ansi, header, underline_off_ansi)
         } else if (mode == 'html') {
+          header <- escape_html(header)
           header <- paste0(underline_on_html, header, underline_off_html)
         }
       }
@@ -487,7 +489,7 @@ as_character_inner <- function(m,
   # Legends down the bottom.
   # Generate legend from the legend specifications.
   # They need to be rendered here rather than at time of calling hl() as
-  # options such as 'full_colour' and 'dark_mode' need to be respected
+  # options such as 'full_colour' need to be respected
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (!is.null(legends)) {
     legend_texts <- vapply(legends, function(spec) {
@@ -496,7 +498,6 @@ as_character_inner <- function(m,
         values      = spec$values,
         label       = spec$label,
         full_colour = full_colour,
-        dark_mode   = dark_mode,
         mode        = mode
       )},
       character(1)
@@ -533,19 +534,13 @@ as_character_inner <- function(m,
 #'
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-calc_contrasting_text <- function(fill, text_contrast, dark_mode) {
+calc_contrasting_text <- function(fill, text_contrast) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # There will be elements where the user has not set a fill colour.
   # Keep track of them
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   fill_not_set <- is.na(fill) | fill == ''
-
-  if (dark_mode) {
-    fill[fill_not_set]  <- 'black'
-  } else {
-    fill[fill_not_set]  <- 'white'
-  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Convert fill colour to matrix representation
