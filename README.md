@@ -31,7 +31,7 @@ You can install from
 [GitHub](https://github.com/coolbutuseless/emphatic) with:
 
 ``` r
-# install.package('remotes')
+# install.packages('remotes')
 remotes::install_github('coolbutuseless/emphatic', ref = 'main')
 ```
 
