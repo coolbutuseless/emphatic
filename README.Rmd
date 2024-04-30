@@ -263,7 +263,6 @@ hl_grep(mode, 'switch') |>
     * `HL_FULL_COLOUR`
     * `HL_TEXT_MODE`
     * `HL_TEXT_CONTRAST`
-    * `HL_UNDERLINE_HEADER`
 * The above R options are initialised using `Sys.getenv()` during package start,
   and otherwise use a default value.
   Set these values as environment variables in your `.Rprofile` to save 

@@ -4,7 +4,7 @@
 \alias{hl_adjust}
 \title{Set options for printing on the emphatic matrix or data.frame}
 \usage{
-hl_adjust(.data, na, full_colour, text_mode, text_contrast, underline_header)
+hl_adjust(.data, na, full_colour, text_mode, text_contrast)
 }
 \arguments{
 \item{.data}{emphatic matrix or data.frame}
@@ -28,9 +28,6 @@ explicitly specified by the user.
 
 \item{text_contrast}{When \code{text_mode='contrast'} this numeric value in
 range [0, 1] adjusts the visibility. Default: 1 (high contrast)}
-
-\item{underline_header}{Draw an underline separating the column header from
-the data? Default: TRUE}
 }
 \value{
 emphatic object with updated options

@@ -8,8 +8,7 @@ hl_opts(
   na = getOption("HL_NA", "NA"),
   full_colour = getOption("HL_FULL_COLOUR", FALSE),
   text_mode = getOption("HL_TEXT_MODE", "contrast"),
-  text_contrast = getOption("HL_TEXT_CONTRAST", 1),
-  underline_header = getOption("HL_UNDERLINE", TRUE)
+  text_contrast = getOption("HL_TEXT_CONTRAST", 1)
 )
 }
 \arguments{
@@ -32,9 +31,6 @@ explicitly specified by the user.
 
 \item{text_contrast}{When \code{text_mode='contrast'} this numeric value in
 range [0, 1] adjusts the visibility. Default: 1 (high contrast)}
-
-\item{underline_header}{Draw an underline separating the column header from
-the data? Default: TRUE}
 }
 \description{
 Create a set of options

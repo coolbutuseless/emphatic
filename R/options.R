@@ -11,7 +11,7 @@
 #' @importFrom utils modifyList
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-hl_adjust <- function(.data, na, full_colour, text_mode, text_contrast, underline_header) {
+hl_adjust <- function(.data, na, full_colour, text_mode, text_contrast) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Sanity check
@@ -71,8 +71,6 @@ find_args <- function () {
 #'        }
 #' @param text_contrast When \code{text_mode='contrast'} this numeric value in
 #'        range [0, 1] adjusts the visibility. Default: 1 (high contrast)
-#' @param underline_header Draw an underline separating the column header from
-#'        the data? Default: TRUE
 #'
 #' @export
 #'
@@ -84,8 +82,7 @@ find_args <- function () {
 hl_opts <- function(na               = getOption("HL_NA", "NA"),
                     full_colour      = getOption("HL_FULL_COLOUR", FALSE),
                     text_mode        = getOption("HL_TEXT_MODE", "contrast"),
-                    text_contrast    = getOption("HL_TEXT_CONTRAST", 1),
-                    underline_header = getOption("HL_UNDERLINE", TRUE)) {
+                    text_contrast    = getOption("HL_TEXT_CONTRAST", 1)) {
 
   stopifnot(exprs = {
     is.character(na)
@@ -114,20 +111,13 @@ hl_opts <- function(na               = getOption("HL_NA", "NA"),
     text_contrast <= 1
   })
 
-  stopifnot(exprs = {
-    is.logical(underline_header)
-    length(underline_header) == 1
-    !is.na(underline_header)
-  })
-
 
 
   list(
     na               = na,
     full_colour      = full_colour,
     text_mode        = text_mode,
-    text_contrast    = text_contrast,
-    underline_header = underline_header
+    text_contrast    = text_contrast
   )
 
 }

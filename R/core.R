@@ -249,7 +249,6 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
     text_mode        = opt$text_mode,
     text_contrast    = opt$text_contrast,
     full_colour      = opt$full_colour,
-    underline_header = opt$underline_header,
     mode             = mode,
     atomic           = is_atomic(x),
     compact          = inherits(x, 'compact')
@@ -282,7 +281,6 @@ as_character_inner <- function(m,
                                text_mode        = 'contrast',
                                text_contrast    = 1,
                                full_colour      = FALSE,
-                               underline_header = TRUE,
                                mode             = 'ansi',
                                atomic           = FALSE,
                                compact          = FALSE) {
@@ -487,7 +485,6 @@ as_character_inner <- function(m,
       header <- NULL
     } else {
       header <- paste(col_names, collapse = " ")
-      if (isTRUE(underline_header)) {
         if (mode == 'ansi') {
           header <- paste0(underline_on_ansi, header, underline_off_ansi)
         } else if (mode == 'html') {
@@ -497,7 +494,6 @@ as_character_inner <- function(m,
           header <- escape_latex(header)
           header <- paste0(underline_on_latex, header, underline_off_latex)
         }
-      }
     }
 
     body   <- apply(ansi_mat, 1, paste, collapse = '')
