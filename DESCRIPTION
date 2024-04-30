@@ -1,7 +1,7 @@
 Package: emphatic
 Type: Package
 Title: Exploration of Data.Frames, Matrices using ANSI Colouring
-Version: 0.1.6.9002
+Version: 0.1.6.9003
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
 Description: Colour data.frame, matrix and vector output in the console.

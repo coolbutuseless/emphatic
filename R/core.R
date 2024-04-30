@@ -150,13 +150,15 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
     strs <- vapply(x, as.character, character(1), ..., mode = mode)
     if (mode == 'ansi') {
       return (paste(strs, collapse = "\n"))
-    } else {
+    } else if (mode == 'html') {
       return (paste(strs, collapse = "<br/>"))
+    } else if (mode == 'latex') {
+      return (paste(strs, collapse = "\\\\\n"))
     }
   }
 
 
-  stopifnot(mode %in% c('ansi', 'html'))
+  stopifnot(mode %in% c('ansi', 'html', 'latex'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Remove the 'emphatic' class here, so that if any subsequent operations
@@ -292,7 +294,10 @@ as_character_inner <- function(m,
   stopifnot(is.character(m))
   stopifnot((is_atomic(m) && length(m) == length(text)) || identical(dim(m), dim(text)))
   stopifnot((is_atomic(m) && length(m) == length(fill)) || identical(dim(m), dim(fill)))
-  stopifnot(mode %in% c('ansi', 'html'))
+  stopifnot(mode %in% c('ansi', 'html', 'latex'))
+
+  collapser <- "\n"
+  if (mode == 'latex') collapser <- '\\\\\n'
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Automatic contrasting text for foreground?
@@ -315,9 +320,11 @@ as_character_inner <- function(m,
   # text and fill attributes to the terminal default
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (mode == 'ansi') {
-    end <- matrix(reset_ansi, nrow = nrow(m), ncol = ncol(m))
+    end <- matrix(reset_ansi , nrow = nrow(m), ncol = ncol(m))
   } else if (mode == 'html') {
-    end <- matrix(reset_html, nrow = nrow(m), ncol = ncol(m))
+    end <- matrix(reset_html , nrow = nrow(m), ncol = ncol(m))
+  } else if (mode == 'latex') {
+    end <- matrix(reset_latex, nrow = nrow(m), ncol = ncol(m))
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -334,6 +341,9 @@ as_character_inner <- function(m,
   } else if (mode == 'html') {
     text[] <- col2text_html(text)
     fill[] <- col2fill_html(fill)
+  } else if (mode == 'latex') {
+    text[] <- col2text_latex(text)
+    fill[] <- col2fill_latex(fill)
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -360,6 +370,7 @@ as_character_inner <- function(m,
   if (has_col_names) {
     for (i in seq_along(col_widths)) {
       width <- col_widths[i]
+      # if (mode == 'latex') width <- width - 1
       fmt   <- sprintf(" %%%is", width)
       m[,i] <- sprintf(fmt, m[,i])
       fmt   <- sprintf("%%%is", width)
@@ -373,6 +384,10 @@ as_character_inner <- function(m,
   if (mode == 'html') {
     att <- attributes(m)
     m <- escape_html(m)
+    attributes(m) <- att
+  } else if (mode == 'latex') {
+    att <- attributes(m)
+    m <- escape_latex(m)
     attributes(m) <- att
   }
 
@@ -440,27 +455,30 @@ as_character_inner <- function(m,
     }
 
     if (!compact) {
-      res <- paste(res, collapse = "\n")
+      res <- paste(res, collapse = collapser)
     } else {
       res <- paste0(res, collapse = '')
     }
   } else {
 
-
     if (!is.null(rownames(m)) && !is.null(colnames(m))) {
       this_rownames <- rownames(m)
       max_nchar     <- max(nchar(this_rownames))
       fmt           <- paste0("%-", max_nchar + 1, "s ")
+      this_rownames <- sprintf(fmt, this_rownames)
       if (mode == 'html') {
         this_rownames <- escape_html(this_rownames)
+      } else if (mode == 'latex') {
+        this_rownames <- escape_latex(this_rownames)
       }
-      this_rownames <- sprintf(fmt, this_rownames)
       ansi_mat      <- cbind(this_rownames, ansi_mat)
       col_names     <- c(sprintf(fmt, ''), col_names)
     } else {
+      if (mode == 'latex') {
+        rownames(m) <- escape_latex(rownames(m))
+      }
       col_names <- c('', col_names)
     }
-
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Assemble single text string
@@ -475,13 +493,16 @@ as_character_inner <- function(m,
         } else if (mode == 'html') {
           header <- escape_html(header)
           header <- paste0(underline_on_html, header, underline_off_html)
+        } else if (mode == 'latex') {
+          header <- escape_latex(header)
+          header <- paste0(underline_on_latex, header, underline_off_latex)
         }
       }
     }
 
     body   <- apply(ansi_mat, 1, paste, collapse = '')
-    res    <- paste(c(header, body), collapse = "\n")
-    res    <- paste0(res, "\n")
+    res    <- paste(c(header, body), collapse = collapser)
+    res    <- paste0(res, collapser)
   }
 
 
@@ -507,7 +528,7 @@ as_character_inner <- function(m,
       legend_texts <- c('', legend_texts)
     }
 
-    res <- paste(c(res, legend_texts), collapse = "\n")
+    res <- paste(c(res, legend_texts), collapse = collapser)
   }
 
 

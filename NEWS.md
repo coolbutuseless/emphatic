@@ -1,5 +1,5 @@
 
-# emphatic 0.1.6.9002  2024-04-28
+# emphatic 0.1.6.9003  2024-04-28
 
 * Removed `hl_mat()` and associated vignettes.
     * function is not exported for now as the selection process is too 
@@ -7,6 +7,8 @@
 * Refactored colour handling for `hl_grep()` and `hl_diff()`
 * Settled on `text`/`fill` nomenclature
 * Refactored arguments to `hl()` for more clarity
+* Added latex output so Quarto/Rmd will show emphatic objects when 
+  rendered to PDF
 
 # emphatic 0.1.6  2024-04-27
 

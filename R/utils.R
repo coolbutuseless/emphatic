@@ -138,3 +138,20 @@ escape_html <- function(x) {
   Encoding(x) <- 'UTF-8'
   x
 }
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Escape latex
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
+  x = gsub("\\\\", "\\\\textbackslash", x)
+  x = gsub("([#$%&_{}])", "\\\\\\1", x)
+  x = gsub("\\\\textbackslash", "\\\\textbackslash{}", x)
+  x = gsub("~", "\\\\textasciitilde{}", x)
+  x = gsub("\\^", "\\\\textasciicircum{}", x)
+  if (newlines)
+    x = gsub("(?<!\n)\n(?!\n)", "\\\\\\\\", x, perl = TRUE)
+  if (spaces)
+    x = gsub("(?<= ) ", "\\\\ ", x, perl = TRUE)
+  x
+}

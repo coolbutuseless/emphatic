@@ -68,7 +68,7 @@ highlighting you need step by step
 
 ``` r
 mtcars |>
-  head(15) %>%
+  head(15) |>
   hl(
     palette     = ggplot2::scale_colour_viridis_c(),
     cols        = mpg,      # Where the colour scale is calculated
