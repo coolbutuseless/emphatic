@@ -102,7 +102,6 @@ hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_l
   # This inner function only accpt a single source column.
   # but results can be applied to multiple 'scale_apply' columns
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  stopifnot(length(column) == 1)
   stopifnot(is.numeric(column))
   stopifnot(is.numeric(row_ids))
 
@@ -117,7 +116,7 @@ hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_l
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (inherits(palette, 'ScaleContinuous')) {
     stopifnot(all(palette$aesthetics %in% c('colour', 'color', 'fill')))
-    vals         <- .data[[column]][row_ids]
+    vals <- unlist(.data[row_ids, column])
     palette$train(vals)
     final_colour <- palette$map(vals)
 
@@ -133,7 +132,7 @@ hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_l
 
   } else if (inherits(palette, 'ScaleDiscrete')) {
     stopifnot(all(palette$aesthetics %in% c('colour', 'color', 'fill')))
-    vals <- .data[[column]][row_ids]
+    vals <- unlist(.data[row_ids, column])
     palette$train(vals)
     final_colour <- palette$map(vals)
 
@@ -202,25 +201,14 @@ hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_l
 #'        a vector of R colours, or
 #'        a \code{ggplot2} style "Scale" object e.g. \code{scale_colour_continuous()}.
 #' @param rows,cols specification for rows and columns to target.  Default is NULL
-#'        for both rows and columns,
-#'        which will target all columns/rows. See documentation for \code{hl()}
-#'        for the valid types of row/column specifcations.
-#' @param scale_apply specification of destination columns to colour. If
-#'        missing (the default), this function
-#'        will only colour the columns specified in the \code{cols} argument.
-#'        Use NULL to colour all columns.  See documentation for \code{hl()}
-#'        for the valid types of column specifcations.
-#' @param scale_mode If \code{palette} is a \code{ggplot2} "Scale" object, this
-#'        option defines how the scale should be applied.
-#'        \describe{
-#'          \item{first}{(default)the colours to use are calculated using the scale applied
-#'          to the first specified column in \code{cols}.  The colours calculated
-#'          on this first column are then copied to the other columns specified
-#'          in \code{scale_apply}}.
-#'          \item{each}{the colour scale is applied individually to each column
-#'          in turn. \code{scale_mode = 'each'} can only be applied if
-#'          \code{scale_apply} is identical to \code{cols}}.
-#'        }
+#'        for both rows and columns, which will target all columns/rows.
+#'        When \code{palette} argument is a \code{scale} object, then \code{cols}
+#'        indicates the columns which will be used to calculate the extents of
+#'        the scale.
+#' @param scale_apply Only valid when palette is a \code{scale} object, specify
+#'        the target columns to colour. If missing (the default), this function
+#'        will only colour the column specified in the \code{cols} argument.
+#'        Use NULL to colour all columns.
 #' @param elem Apply the highlighting to the 'fill' (the background) or the 'text'.
 #'        Default: 'fill'
 #' @param show_legend if a scale object is used for colour, and \code{show_legend = TRUE},
@@ -229,10 +217,8 @@ hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_l
 #' @inheritParams hl_grep
 #'
 #' @examples
-#' \dontrun{
 #' hl(mtcars, ggplot2::scale_colour_viridis_c(), rows = cyl == 6, cols = mpg,
 #'    scale_apply = c(mpg, cyl))
-#' }
 #'
 #'
 #' @export
@@ -240,14 +226,12 @@ hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_l
 hl <- function(.data, palette,
                rows = NULL, cols = NULL,
                scale_apply,
-               scale_mode = 'first',
                elem = 'fill',
                show_legend = FALSE,
                opts = hl_opts()) {
 
   stopifnot(is.data.frame(.data))
   stopifnot(elem %in% c('text', 'fill'))
-  stopifnot(scale_mode %in% c('first', 'each'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Promote to 'emphatic' object if necessary
@@ -293,31 +277,21 @@ hl <- function(.data, palette,
       col_ids  = col_ids,
       elem     = elem
     )
-  } else if (inherits(palette, "Scale") && scale_mode == 'first') {
+  } else if (inherits(palette, "Scale")) {
+    if (length(col_ids) > 1) {
+      if (!identical(dest_col_ids, col_ids)) {
+        stop("Can't specify 'scale_apply' when 'palette' is a scale applied to more than 1 column")
+      }
+    }
     .data <- hl_inner(
       .data,
       palette      = palette,
       row_ids      = row_ids,
-      column       = col_ids[1],
+      column       = col_ids,
       dest_col_ids = dest_col_ids,
       elem         = elem,
       show_legend  = show_legend
     )
-  } else if (inherits(palette, "Scale") && scale_mode == 'each') {
-    if (!identical(col_ids, dest_col_ids)) {
-      stop("scale_mode = 'each' can only be used if 'scale_apply' is identical to 'columns'")
-    }
-    for (col_id in col_ids) {
-      .data <- hl_inner(
-        .data,
-        palette      = palette,
-        row_ids      = row_ids,
-        column       = col_id,
-        dest_col_ids = col_id,
-        elem         = elem,
-        show_legend  = show_legend
-      )
-    }
   } else {
     stop("'palette' not understood: ", deparse1(palette))
   }

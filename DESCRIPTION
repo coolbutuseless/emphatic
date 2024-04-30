@@ -1,10 +1,10 @@
 Package: emphatic
 Type: Package
-Title: Exploration of Data.Frames, Matrices using ANSI Colouring
-Version: 0.1.6.9003
+Title: Highlight R Output using Colouring
+Version: 0.1.6.9004
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
-Description: Colour data.frame, matrix and vector output in the console.
+Description: User-defined colouring of data.frames and other R output. 
 URL: https://coolbutuseless.github.io/package/emphatic/, https://github.com/coolbutuseless/emphatic
 BugReports: https://github.com/coolbutuseless/emphatic/issues
 License: MIT + file LICENSE

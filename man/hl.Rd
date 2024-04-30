@@ -10,7 +10,6 @@ hl(
   rows = NULL,
   cols = NULL,
   scale_apply,
-  scale_mode = "first",
   elem = "fill",
   show_legend = FALSE,
   opts = hl_opts()
@@ -24,27 +23,15 @@ a vector of R colours, or
 a \code{ggplot2} style "Scale" object e.g. \code{scale_colour_continuous()}.}
 
 \item{rows, cols}{specification for rows and columns to target.  Default is NULL
-for both rows and columns,
-which will target all columns/rows. See documentation for \code{hl()}
-for the valid types of row/column specifcations.}
+for both rows and columns, which will target all columns/rows.
+When \code{palette} argument is a \code{scale} object, then \code{cols}
+indicates the columns which will be used to calculate the extents of
+the scale.}
 
-\item{scale_apply}{specification of destination columns to colour. If
-missing (the default), this function
-will only colour the columns specified in the \code{cols} argument.
-Use NULL to colour all columns.  See documentation for \code{hl()}
-for the valid types of column specifcations.}
-
-\item{scale_mode}{If \code{palette} is a \code{ggplot2} "Scale" object, this
-option defines how the scale should be applied.
-\describe{
-  \item{first}{(default)the colours to use are calculated using the scale applied
-  to the first specified column in \code{cols}.  The colours calculated
-  on this first column are then copied to the other columns specified
-  in \code{scale_apply}}.
-  \item{each}{the colour scale is applied individually to each column
-  in turn. \code{scale_mode = 'each'} can only be applied if
-  \code{scale_apply} is identical to \code{cols}}.
-}}
+\item{scale_apply}{Only valid when palette is a \code{scale} object, specify
+the target columns to colour. If missing (the default), this function
+will only colour the column specified in the \code{cols} argument.
+Use NULL to colour all columns.}
 
 \item{elem}{Apply the highlighting to the 'fill' (the background) or the 'text'.
 Default: 'fill'}
@@ -96,10 +83,8 @@ as \code{filter()} and \code{select()}
 }
 
 \examples{
-\dontrun{
 hl(mtcars, ggplot2::scale_colour_viridis_c(), rows = cyl == 6, cols = mpg,
    scale_apply = c(mpg, cyl))
-}
 
 
 }

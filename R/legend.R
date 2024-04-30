@@ -58,8 +58,12 @@ create_legend_string <- function(
   # Insert label at front if provided
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (!is.null(label)) {
-    stopifnot(length(label) == 1)
-    label <- sprintf("%s: ", label)
+    # stopifnot(length(label) == 1)
+    if (length(label) > 1) {
+      label <- "   "
+    } else {
+      label <- sprintf("%s: ", label)
+    }
     key_vals <- c(label, key_vals)
     text <- c(NA, text)
     fill <- c(NA, key_cols)

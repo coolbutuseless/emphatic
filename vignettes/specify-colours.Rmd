@@ -66,7 +66,8 @@ Specify a colour scale to apply to multiple variables independently
 
 ```{r}
 test_df |>
-  hl(ggplot2::scale_colour_viridis_c(), cols = mpg:disp, scale_mode = 'each')
+  hl(ggplot2::scale_colour_viridis_c(), cols = mpg, show_legend = TRUE) |>
+  hl(ggplot2::scale_colour_viridis_c(), cols = disp, show_legend = TRUE)
 ```
 
 
