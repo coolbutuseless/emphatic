@@ -76,7 +76,7 @@ as_typst <- function(x, ..., font = 'Courier New', font_size = 10) {
   res <- paste(
     "\n```{=typst}\n",
     "#[",
-    paste0('#set text(font: "', font, '", size: ', font_size, 'pt)'),
+    paste0('#set text(font: "', font, '", size: ', font_size, 'pt, hyphenate: false)'),
     res,
     "]",
     "\n```\n",
