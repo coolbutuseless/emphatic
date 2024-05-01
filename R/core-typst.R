@@ -72,6 +72,7 @@ escape_typst <- function(x) {
   x <- gsub("~"  , "\\\\~", x, useBytes = TRUE)
   x <- gsub("~"  , '\\\\"', x, useBytes = TRUE)
   x <- gsub("@"  , "\\\\@", x, useBytes = TRUE)
+  x <- gsub("`"  , "\\\\`", x, useBytes = TRUE)
   x <- gsub("\\*"  , "\\\\*", x, useBytes = TRUE)
   x <- gsub("\\["  , "\\\\[", x, useBytes = TRUE)
   x <- gsub("\\]"  , "\\\\]", x, useBytes = TRUE)
