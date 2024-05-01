@@ -70,3 +70,23 @@ underline_off_html <- "</span>"
 
 
 
+
+html_replacement <- c(
+  `&` = "&amp;",
+  `<` = "&lt;",
+  `>` = "&gt;",
+  `"` = "&quot;",
+  `'` = "&#39;"
+)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Escape HTML by replacing special characters
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+escape_html <- function(x) {
+  x <- enc2utf8(x)
+  for (orig in names(html_replacement)) {
+    x <- gsub(orig, html_replacement[[orig]], x, fixed = TRUE, useBytes = TRUE)
+  }
+  Encoding(x) <- 'UTF-8'
+  x
+}

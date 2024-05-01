@@ -119,39 +119,4 @@ modify_list <- function (current, new) {
 
 
 
-html_replacement <- c(
-  `&` = "&amp;",
-  `<` = "&lt;",
-  `>` = "&gt;",
-  `"` = "&quot;",
-  `'` = "&#39;"
-)
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Escape HTML by replacing special characters
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-escape_html <- function(x) {
-  x <- enc2utf8(x)
-  for (orig in names(html_replacement)) {
-    x <- gsub(orig, html_replacement[[orig]], x, fixed = TRUE, useBytes = TRUE)
-  }
-  Encoding(x) <- 'UTF-8'
-  x
-}
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Escape latex
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
-  x = gsub("\\\\", "\\\\textbackslash", x)
-  x = gsub("([#$%&_{}])", "\\\\\\1", x)
-  x = gsub("\\\\textbackslash", "\\\\textbackslash{}", x)
-  x = gsub("~", "\\\\textasciitilde{}", x)
-  x = gsub("\\^", "\\\\textasciicircum{}", x)
-  if (newlines)
-    x = gsub("(?<!\n)\n(?!\n)", "\\\\\\\\", x, perl = TRUE)
-  if (spaces)
-    x = gsub("(?<= ) ", "\\\\ ", x, perl = TRUE)
-  x
-}
