@@ -154,11 +154,13 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
       return (paste(strs, collapse = "<br/>"))
     } else if (mode == 'latex') {
       return (paste(strs, collapse = "\\\\\n"))
+    } else if (mode == 'typst') {
+      return (paste(strs, collapse = "\\\n"))
     }
   }
 
 
-  stopifnot(mode %in% c('ansi', 'html', 'latex'))
+  stopifnot(mode %in% c('ansi', 'html', 'latex', 'typst'))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Remove the 'emphatic' class here, so that if any subsequent operations
@@ -292,10 +294,11 @@ as_character_inner <- function(m,
   stopifnot(is.character(m))
   stopifnot((is_atomic(m) && length(m) == length(text)) || identical(dim(m), dim(text)))
   stopifnot((is_atomic(m) && length(m) == length(fill)) || identical(dim(m), dim(fill)))
-  stopifnot(mode %in% c('ansi', 'html', 'latex'))
+  stopifnot(mode %in% c('ansi', 'html', 'latex', 'typst'))
 
   collapser <- "\n"
   if (mode == 'latex') collapser <- '\\\\\n'
+  if (mode == 'typst') collapser <- '\\\n'
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Automatic contrasting text for foreground?
@@ -323,6 +326,8 @@ as_character_inner <- function(m,
     end <- matrix(reset_html , nrow = nrow(m), ncol = ncol(m))
   } else if (mode == 'latex') {
     end <- matrix(reset_latex, nrow = nrow(m), ncol = ncol(m))
+  } else if (mode == 'typst') {
+    end <- matrix(reset_typst, nrow = nrow(m), ncol = ncol(m))
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -342,6 +347,9 @@ as_character_inner <- function(m,
   } else if (mode == 'latex') {
     text[] <- col2text_latex(text)
     fill[] <- col2fill_latex(fill)
+  } else if (mode == 'typst') {
+    text[] <- col2text_typst(text)
+    fill[] <- col2fill_typst(fill)
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -368,7 +376,6 @@ as_character_inner <- function(m,
   if (has_col_names) {
     for (i in seq_along(col_widths)) {
       width <- col_widths[i]
-      # if (mode == 'latex') width <- width - 1
       fmt   <- sprintf(" %%%is", width)
       m[,i] <- sprintf(fmt, m[,i])
       fmt   <- sprintf("%%%is", width)
@@ -386,6 +393,10 @@ as_character_inner <- function(m,
   } else if (mode == 'latex') {
     att <- attributes(m)
     m <- escape_latex(m)
+    attributes(m) <- att
+  } else if (mode == 'typst') {
+    att <- attributes(m)
+    m <- escape_typst(m)
     attributes(m) <- att
   }
 
@@ -468,12 +479,16 @@ as_character_inner <- function(m,
         this_rownames <- escape_html(this_rownames)
       } else if (mode == 'latex') {
         this_rownames <- escape_latex(this_rownames)
+      } else if (mode == 'typst') {
+        this_rownames <- escape_typst(this_rownames)
       }
       ansi_mat      <- cbind(this_rownames, ansi_mat)
       col_names     <- c(sprintf(fmt, ''), col_names)
     } else {
       if (mode == 'latex') {
         rownames(m) <- escape_latex(rownames(m))
+      } else if (mode == 'typst') {
+        rownames(m) <- escape_typst(rownames(m))
       }
       col_names <- c('', col_names)
     }
@@ -493,6 +508,9 @@ as_character_inner <- function(m,
         } else if (mode == 'latex') {
           header <- escape_latex(header)
           header <- paste0(underline_on_latex, header, underline_off_latex)
+        } else if (mode == 'typst') {
+          header <- escape_typst(header)
+          header <- paste0(underline_on_typst, header, underline_off_typst)
         }
     }
 

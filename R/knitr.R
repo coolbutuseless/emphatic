@@ -57,6 +57,38 @@ as_latex <- function(x, ...) {
 }
 
 
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Render an emphatic object to typst
+#'
+#' @param x emphatic object
+#' @param ... other arguments passed to \code{as.character.emphatic}
+#' @param font name of font. Default: 'Courier New'
+#' @param font_size font size in points. default: 10
+#'
+#' @export
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+as_typst <- function(x, ..., font = 'Courier New', font_size = 10) {
+
+  res <- as.character(x, ..., mode = 'typst')
+
+  res <- paste(
+    "\n```{=typst}\n",
+    "#[",
+    paste0('#set text(font: "', font, '", size: ', font_size, 'pt)'),
+    res,
+    "]",
+    "\n```\n",
+    sep = "\n"
+  )
+
+  class(res) <- unique(c('knit_asis', class(res)))
+  attr(res, 'knit_cacheable') <- NA
+  res
+}
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Automatically output emphatic objects to HTML knitted documents.
 #'
@@ -68,6 +100,8 @@ knit_print.emphatic <- function(x, style = NULL, ...) {
 
   if (requireNamespace('knitr', quietly = TRUE) && knitr::is_latex_output()) {
     as_latex(x, ...)
+  } else if (requireNamespace('knitr', quietly = TRUE) && knitr::pandoc_to() == 'typst') {
+    as_typst(x, ...)
   } else {
     as_html(x, style = style, ...)
   }
