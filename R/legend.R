@@ -82,6 +82,10 @@ create_legend_string <- function(
     end <- rep(reset_ansi, length(key_vals))
   } else if (mode == 'html') {
     end <- rep(reset_html, length(key_vals))
+  } else if (mode == 'latex') {
+    end <- rep(reset_latex, length(key_vals))
+  } else if (mode == 'typst') {
+    end <- rep(reset_typst, length(key_vals))
   }
 
 
