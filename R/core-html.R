@@ -139,22 +139,67 @@ as_html <- function(x, style = NULL, ..., complete = FALSE) {
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_svg <- function(x, width = 1200, height = 900, ...) {
 
-  res <- as_html(x, ...)
+  # res <- as_html(x, ...)
 
 
   svg_text <- paste0(
     "<svg fill=\"none\" viewBox=\"0 0 ", width, " ", height,
-    "\" width=\"", width, "\" height=\"", height, "\" xmlns=\"http://www.w3.org/2000/svg\">
-      <foreignObject width=\"100%\" height=\"100%\">
-      <div xmlns=\"http://www.w3.org/1999/xhtml\">",
-    res,
-    "</div>
-    </foreignObject>
-    </svg>
-    ")
+    "\" width=\"", width, "\" height=\"", height, "\" xmlns=\"http://www.w3.org/2000/svg\">",
+    as_svg_group(x, width = width, height = height, ...),
+    '</svg>'
+  )
 
 
   svg_text <- gsub("style>", ">", svg_text, fixed = TRUE)
 
+
+  class(svg_text) <- unique(c('knit_asis', class(svg_text)))
+
   svg_text
 }
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Wrap an emphatic object into an SVG for display in a github README.md
+#'
+#' Idea borrowed from pointblank
+#'
+#' @inheritParams as_html
+#' @param width,height viewBox dimensions for SVG
+#'
+#' @return character string containing an SVG snippet.
+#'
+#' @export
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+as_svg_group <- function(x, width = 1200, height = 900, ...) {
+
+  res <- as_html(x, ...)
+
+
+  svg_text <- paste(
+    "",
+    "<g>",
+    '<foreignObject width=\"100%\" height=\"100%\">',
+    '<div xmlns=\"http://www.w3.org/1999/xhtml\">',
+    res,
+    "</div>",
+    "</foreignObject>",
+    "</g>",
+    "",
+    sep = "\n"
+  )
+
+
+  svg_text <- gsub("style>", ">", svg_text, fixed = TRUE)
+
+  class(svg_text) <- unique(c('knit_asis', class(svg_text)))
+
+  svg_text
+}
+
+
+
+
+
