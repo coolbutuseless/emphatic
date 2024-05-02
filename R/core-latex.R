@@ -85,7 +85,8 @@ escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
   # if (newlines)
   #   x = gsub("(?<!\n)\n(?!\n)", "\\\\\\\\", x, perl = TRUE)
   x = gsub("\n", "\\\\\\\\\n", x, perl = TRUE)
-  x = gsub(" ", "\\\\hspace*{1ex}", x, perl = TRUE)
+  x = gsub(" ", "\\\\hspace*{0.5em}", x, perl = TRUE)
+  # x = gsub(" ", "~", x, perl = TRUE)
   # if (spaces)
     # x = gsub("(?<= ) ", "\\\\ ", x, perl = TRUE)
   x
