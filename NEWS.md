@@ -1,5 +1,5 @@
 
-# emphatic 0.1.6.9009  2024-05-02
+# emphatic 0.1.6.9010  2024-05-02
 
 * Removed `hl_mat()` and associated vignettes.
     * function is not exported for now as the selection process is too 
@@ -13,6 +13,7 @@
 * Support for output to `typst` in quarto docs
     * Output to raw blocks in typst
     * only character to be escaped is the backtick
+* latex rendering now has better whitespace at start of line
 
 # emphatic 0.1.6  2024-04-27
 

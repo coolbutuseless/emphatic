@@ -1,7 +1,7 @@
 Package: emphatic
 Type: Package
 Title: Highlight R Output using Colour
-Version: 0.1.6.9009
+Version: 0.1.6.9010
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
 Description: User-defined colour of data.frames and other R output. 
