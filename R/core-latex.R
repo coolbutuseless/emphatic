@@ -82,9 +82,36 @@ escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
   x = gsub("\\\\textbackslash", "\\\\textbackslash{}", x)
   x = gsub("~", "\\\\textasciitilde{}", x)
   x = gsub("\\^", "\\\\textasciicircum{}", x)
-  if (newlines)
-    x = gsub("(?<!\n)\n(?!\n)", "\\\\\\\\", x, perl = TRUE)
-  if (spaces)
-    x = gsub("(?<= ) ", "\\\\ ", x, perl = TRUE)
+  # if (newlines)
+  #   x = gsub("(?<!\n)\n(?!\n)", "\\\\\\\\", x, perl = TRUE)
+  x = gsub("\n", "\\\\\\\\\n", x, perl = TRUE)
+  x = gsub(" ", "\\\\hspace*{1ex}", x, perl = TRUE)
+  # if (spaces)
+    # x = gsub("(?<= ) ", "\\\\ ", x, perl = TRUE)
   x
+}
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Render an emphatic object to Latex
+#'
+#' @param x emphatic object
+#' @param ... other arguments passed to \code{as.character.emphatic}
+#'
+#' @export
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+as_latex <- function(x, ...) {
+
+  res <- paste0(
+    "\\setlength{\\fboxsep}{0pt}\n",
+    "\\texttt{",
+    as.character(x, ..., mode = 'latex'),
+    "}"
+  )
+
+  class(res) <- unique(c('knit_asis', class(res)))
+
+  res
 }

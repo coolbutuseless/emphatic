@@ -103,6 +103,12 @@ create_legend_string <- function(
   } else if (mode == 'html') {
     text[] <- col2text_html(text)
     fill[] <- col2fill_html(fill)
+  } else if (mode == 'latex') {
+    text[] <- col2text_latex(text)
+    fill[] <- col2fill_latex(fill)
+  } else if (mode == 'typst') {
+    text[] <- col2text_typst(text)
+    fill[] <- col2fill_typst(fill)
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
