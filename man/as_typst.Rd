@@ -4,16 +4,18 @@
 \alias{as_typst}
 \title{Render an emphatic object to typst}
 \usage{
-as_typst(x, ..., font = "Courier New", font_size = 10)
+as_typst(x, ..., font_size = 10, font = NA, line_spacing = 0.3)
 }
 \arguments{
 \item{x}{emphatic object}
 
 \item{...}{other arguments passed to \code{as.character.emphatic}}
 
+\item{font_size}{font size in points. default: 10}
+
 \item{font}{name of font. Default: 'Courier New'}
 
-\item{font_size}{font size in points. default: 10}
+\item{line_spacing}{line spacing in \code{em} units. Default: 0.3}
 }
 \description{
 Render an emphatic object to typst

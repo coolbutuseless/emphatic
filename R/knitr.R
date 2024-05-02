@@ -66,17 +66,20 @@ as_latex <- function(x, ...) {
 #' @param ... other arguments passed to \code{as.character.emphatic}
 #' @param font name of font. Default: 'Courier New'
 #' @param font_size font size in points. default: 10
+#' @param line_spacing line spacing in \code{em} units. Default: 0.3
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_typst <- function(x, ..., font = 'Courier New', font_size = 10) {
+as_typst <- function(x, ..., font_size = 10, font = NA, line_spacing = 0.3) {
 
   res <- as.character(x, ..., mode = 'typst')
 
   res <- paste(
     "\n```{=typst}\n",
     "#[",
-    paste0('#set text(font: "', font, '", size: ', font_size, 'pt, hyphenate: false)'),
+    paste0('#set text(size: ', font_size, 'pt, hyphenate: false)'),
+    paste0('#set par(leading: ', line_spacing, 'em)'),
+    ifelse(is.na(font), '', paste0('#show raw: set text(font: "', font, '")')),
     res,
     "]",
     "\n```\n",

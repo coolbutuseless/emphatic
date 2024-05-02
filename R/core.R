@@ -481,6 +481,7 @@ as_character_inner <- function(m,
         this_rownames <- escape_latex(this_rownames)
       } else if (mode == 'typst') {
         this_rownames <- escape_typst(this_rownames)
+        this_rownames <- paste0("`", this_rownames, "`")
       }
       ansi_mat      <- cbind(this_rownames, ansi_mat)
       col_names     <- c(sprintf(fmt, ''), col_names)
@@ -489,6 +490,7 @@ as_character_inner <- function(m,
         rownames(m) <- escape_latex(rownames(m))
       } else if (mode == 'typst') {
         rownames(m) <- escape_typst(rownames(m))
+        rownames(m) <- paste0("`", rownames(m), "`")
       }
       col_names <- c('', col_names)
     }
@@ -500,18 +502,18 @@ as_character_inner <- function(m,
       header <- NULL
     } else {
       header <- paste(col_names, collapse = " ")
-        if (mode == 'ansi') {
-          header <- paste0(underline_on_ansi, header, underline_off_ansi)
-        } else if (mode == 'html') {
-          header <- escape_html(header)
-          header <- paste0(underline_on_html, header, underline_off_html)
-        } else if (mode == 'latex') {
-          header <- escape_latex(header)
-          header <- paste0(underline_on_latex, header, underline_off_latex)
-        } else if (mode == 'typst') {
-          header <- escape_typst(header)
-          header <- paste0(underline_on_typst, header, underline_off_typst)
-        }
+      if (mode == 'ansi') {
+        header <- paste0(underline_on_ansi, header, underline_off_ansi)
+      } else if (mode == 'html') {
+        header <- escape_html(header)
+        header <- paste0(underline_on_html, header, underline_off_html)
+      } else if (mode == 'latex') {
+        header <- escape_latex(header)
+        header <- paste0(underline_on_latex, header, underline_off_latex)
+      } else if (mode == 'typst') {
+        header <- escape_typst(header)
+        header <- paste0(underline_on_typst, '`', header, '`', underline_off_typst)
+      }
     }
 
     body   <- apply(ansi_mat, 1, paste, collapse = '')

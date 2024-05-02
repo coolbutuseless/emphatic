@@ -17,8 +17,8 @@ col2fill_typst <- function(colours) {
 
   ifelse(
     no_colour,
-    '#[',  # do nothing
-    paste0('#highlight(fill: rgb("', colours, '"))[')
+    '#[`',  # do nothing
+    paste0('#highlight(fill: rgb("', colours, '"))[`')
   )
 
 }
@@ -47,7 +47,7 @@ col2text_typst <- function(colours) {
 
 }
 
-reset_typst         <- "]]"
+reset_typst         <- "`]]"
 underline_on_typst  <- "#underline["
 underline_off_typst <- "]"
 
@@ -60,23 +60,24 @@ underline_off_typst <- "]"
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Escape HTML by replacing special characters
+# Escape typst by replacing special characters
+# Now that export is using 'raw' blocks, don't need to escape anything!
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 escape_typst <- function(x) {
   x <- enc2utf8(x)
   # x = gsub("([#$%&_{}])", "\\\\\\1", x)
-  x <- gsub(" ", "\\\\u{00a0}", x, useBytes = TRUE)
-  x <- gsub("<"  , "\\\\<", x, useBytes = TRUE)
-  x <- gsub("#"  , "\\\\#", x, useBytes = TRUE)
-  x <- gsub("_"  , "\\\\_", x, useBytes = TRUE)
-  x <- gsub("~"  , "\\\\~", x, useBytes = TRUE)
-  x <- gsub("~"  , '\\\\"', x, useBytes = TRUE)
-  x <- gsub("@"  , "\\\\@", x, useBytes = TRUE)
-  x <- gsub("`"  , "\\\\`", x, useBytes = TRUE)
-  x <- gsub("\\*"  , "\\\\*", x, useBytes = TRUE)
-  x <- gsub("\\["  , "\\\\[", x, useBytes = TRUE)
-  x <- gsub("\\]"  , "\\\\]", x, useBytes = TRUE)
-  x <- gsub("\\$"  , "\\\\$", x, useBytes = TRUE)
+  # x <- gsub(" ", "\\\\u{00a0}", x, useBytes = TRUE)
+  # x <- gsub("<"  , "\\\\<", x, useBytes = TRUE)
+  # x <- gsub("#"  , "\\\\#", x, useBytes = TRUE)
+  # x <- gsub("_"  , "\\\\_", x, useBytes = TRUE)
+  # x <- gsub("~"  , "\\\\~", x, useBytes = TRUE)
+  # x <- gsub("~"  , '\\\\"', x, useBytes = TRUE)
+  # x <- gsub("@"  , "\\\\@", x, useBytes = TRUE)
+  # x <- gsub("`"  , "\\\\`", x, useBytes = TRUE)
+  # x <- gsub("\\*"  , "\\\\*", x, useBytes = TRUE)
+  # x <- gsub("\\["  , "\\\\[", x, useBytes = TRUE)
+  # x <- gsub("\\]"  , "\\\\]", x, useBytes = TRUE)
+  # x <- gsub("\\$"  , "\\\\$", x, useBytes = TRUE)
   x <- gsub("\n"  , "\\\\\n", x, useBytes = TRUE)
   Encoding(x) <- 'UTF-8'
   x

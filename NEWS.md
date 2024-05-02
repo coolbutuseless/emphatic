@@ -12,6 +12,8 @@
 * Remove `scale_mode` argument to `hl()`
 * Support for output to `typst` in quarto docs
     * Updated the list of characters to escape for typst
+    * Switched to `raw` text blocks for output as they have better overflow
+      behaviour.  Still not perfect, but better!
 
 # emphatic 0.1.6  2024-04-27
 
