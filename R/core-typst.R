@@ -78,7 +78,7 @@ escape_typst <- function(x) {
   # x <- gsub("\\["  , "\\\\[", x, useBytes = TRUE)
   # x <- gsub("\\]"  , "\\\\]", x, useBytes = TRUE)
   # x <- gsub("\\$"  , "\\\\$", x, useBytes = TRUE)
-  x <- gsub("\n"  , "\\\\\n", x, useBytes = TRUE)
+  # x <- gsub("\n"  , "\\\\\n", x, useBytes = TRUE)
   Encoding(x) <- 'UTF-8'
   x
 }
