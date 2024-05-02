@@ -65,20 +65,7 @@ underline_off_typst <- "]"
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 escape_typst <- function(x) {
   x <- enc2utf8(x)
-  # x = gsub("([#$%&_{}])", "\\\\\\1", x)
-  # x <- gsub(" ", "\\\\u{00a0}", x, useBytes = TRUE)
-  # x <- gsub("<"  , "\\\\<", x, useBytes = TRUE)
-  # x <- gsub("#"  , "\\\\#", x, useBytes = TRUE)
-  # x <- gsub("_"  , "\\\\_", x, useBytes = TRUE)
-  # x <- gsub("~"  , "\\\\~", x, useBytes = TRUE)
-  # x <- gsub("~"  , '\\\\"', x, useBytes = TRUE)
-  # x <- gsub("@"  , "\\\\@", x, useBytes = TRUE)
-  # x <- gsub("`"  , "\\\\`", x, useBytes = TRUE)
-  # x <- gsub("\\*"  , "\\\\*", x, useBytes = TRUE)
-  # x <- gsub("\\["  , "\\\\[", x, useBytes = TRUE)
-  # x <- gsub("\\]"  , "\\\\]", x, useBytes = TRUE)
-  # x <- gsub("\\$"  , "\\\\$", x, useBytes = TRUE)
-  # x <- gsub("\n"  , "\\\\\n", x, useBytes = TRUE)
+  x <- gsub("`"  , '`#raw("`")`', x, useBytes = TRUE)
   Encoding(x) <- 'UTF-8'
   x
 }

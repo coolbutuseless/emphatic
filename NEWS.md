@@ -1,5 +1,5 @@
 
-# emphatic 0.1.6.9006  2024-05-01
+# emphatic 0.1.6.9008  2024-05-02
 
 * Removed `hl_mat()` and associated vignettes.
     * function is not exported for now as the selection process is too 
@@ -11,9 +11,8 @@
   rendered to PDF
 * Remove `scale_mode` argument to `hl()`
 * Support for output to `typst` in quarto docs
-    * Updated the list of characters to escape for typst
-    * Switched to `raw` text blocks for output as they have better overflow
-      behaviour.  Still not perfect, but better!
+    * Output to raw blocks in typst
+    * only character to be escaped is the backtick
 
 # emphatic 0.1.6  2024-04-27
 
