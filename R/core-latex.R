@@ -82,13 +82,15 @@ escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
   x = gsub("\\\\textbackslash", "\\\\textbackslash{}", x)
   x = gsub("~", "\\\\textasciitilde{}", x)
   x = gsub("\\^", "\\\\textasciicircum{}", x)
-  # if (newlines)
-  #   x = gsub("(?<!\n)\n(?!\n)", "\\\\\\\\", x, perl = TRUE)
-  x = gsub("\n", "\\\\\\\\\n", x, perl = TRUE)
+  x = gsub("\n", "\\\\\\\\ \n", x, perl = TRUE)
+
+  # for (i in seq(40, 1)) {
+  #   str <- paste(rep(" ", i), collapse = "")
+  #   replace <- sprintf("\\\\hspace*{%.1fem}", i * 0.5)
+  #   x <- gsub(str, replace, x, perl = TRUE)
+  # }
+
   x = gsub(" ", "\\\\hspace*{0.5em}", x, perl = TRUE)
-  # x = gsub(" ", "~", x, perl = TRUE)
-  # if (spaces)
-    # x = gsub("(?<= ) ", "\\\\ ", x, perl = TRUE)
   x
 }
 
