@@ -4,16 +4,24 @@
 \alias{as_svg_anim}
 \title{Wrap an emphatic object into an SVG for display in a github README.md}
 \usage{
-as_svg_anim(..., width = 1200, height = 900, duration = 1)
+as_svg_anim(
+  x,
+  width = 1200,
+  height = 900,
+  duration = 1,
+  playback = c("click", "hover", "infinite")
+)
 }
 \arguments{
-\item{...}{multiple emphatic objects}
+\item{x}{list of emphatic objects}
 
 \item{width, height}{viewBox dimensions for SVG}
 
 \item{duration}{frame duration in seconds. May be a single value used for
 all frames, or a vector of values (one duration value for each frame).
 Can be fractions of a second.}
+
+\item{playback}{'hover', 'click', 'infinite'}
 }
 \value{
 character string containing an SVG snippet.

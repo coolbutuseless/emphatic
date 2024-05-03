@@ -204,10 +204,21 @@ as_svg_group <- function(x, width = 1200, height = 900, visible = TRUE, extra = 
 }
 
 
-make_animate_tag <- function(i, n, dur = 1) {
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make_animate_tag <- function(i, n, dur = 1, playback = "click", class_name = "emphatic") {
   if (i == 1) {
-    sprintf('<set id="img%03i" attributeName="visibility" begin="0s;img%03i.end"
-            to="visible" dur="%fs" end="emphatic.click" />', i, n, dur)
+
+    playback_mode <- switch (
+      playback,
+      infinite = sprintf("0s;img%03i.end", n),
+      click    = sprintf("%s.click", class_name),
+      hover    = sprintf("%s.hover", class_name),
+    )
+
+    sprintf('<set id="img%03i" attributeName="visibility" begin="%s"
+            to="visible" dur="%fs" />', i, playback_mode, dur)
   } else {
     sprintf('<set id="img%03i" attributeName="visibility" begin="img%03i.end"
             to="visible" dur="%fs" />', i, i - 1, dur)
@@ -221,42 +232,52 @@ make_animate_tag <- function(i, n, dur = 1) {
 #' Idea borrowed from pointblank
 #'
 #' @param width,height viewBox dimensions for SVG
-#' @param ... multiple emphatic objects
+#' @param x list of emphatic objects
 #' @param duration frame duration in seconds. May be a single value used for
 #'        all frames, or a vector of values (one duration value for each frame).
 #'        Can be fractions of a second.
+#' @param playback 'hover', 'click', 'infinite'
 #'
 #' @return character string containing an SVG snippet.
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_svg_anim <- function(..., width = 1200, height = 900, duration = 1) {
+as_svg_anim <- function(x, width = 1200, height = 900, duration = 1, playback = c('click', 'hover', 'infinite')) {
 
   # <animate attributeName="visibility" begin="svg1.click" dur="3s" from="visible" to="hidden" repeatCount="indefinite" />
 
-  objs <- list(...)
-  groups <- vector('list', length(objs))
+  playback <- match.arg(playback)
 
-  if (length(duration) != 1 && length(duration) != length(objs)) {
+  N <- length(x)
+  groups <- vector('list', N)
+
+  if (length(duration) != 1 && length(duration) != N) {
     stop("delay must be length = 1, or match number of objects")
   }
   if (length(duration) == 1) {
-    duration <- rep(duration, length(objs))
+    duration <- rep(duration, N)
   }
 
 
-  for (i in seq_along(objs)) {
-    groups[[i]] <- as_svg_group(objs[[i]], width = width, height = height,
-                                visible = FALSE,
-                                extra = make_animate_tag(i, length(objs), duration[1]))
+  for (i in seq_along(x)) {
+    groups[[i]] <- as_svg_group(
+      x[[i]],
+      width = width,
+      height = height,
+      visible = i == 1,
+      extra = make_animate_tag(
+        i, N,
+        dur        = duration[i],
+        playback   = playback,
+        class_name =
+      )
+    )
   }
 
   svg_text <- paste(
     "<svg id=\"emphatic\" fill=\"none\" viewBox=\"0 0 ", width, " ", height,
     "\" width=\"", width, "\" height=\"", height, "\" xmlns=\"http://www.w3.org/2000/svg\">",
     paste(unlist(groups), collapse = ""),
-    # groups[[1]],
-    # as_svg_group(objs[i], width = width, height = height, extra = NULL),
     '</svg>\n',
     collapse = "\n"
   )
@@ -271,16 +292,18 @@ as_svg_anim <- function(..., width = 1200, height = 900, duration = 1) {
 if (FALSE) {
 
   as_svg_anim(
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1),
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:2),
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:3),
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:4),
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:5),
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:6),
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:7),
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:8),
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:9),
-    mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:10),
+    list(
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1),
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:2),
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:3),
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:4),
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:5),
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:6),
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:7),
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:8),
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:9),
+      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:10)
+    ),
     duration = 0.2
   ) |> writeLines("~/Desktop/demo2.svg")
 
@@ -317,9 +340,8 @@ if (FALSE) {
     ~create_sinus(.x, .y)
   )
 
-  groups$duration <- 0.1
 
-  do.call(as_svg_anim, groups) |> writeLines("~/Desktop/demo2.svg")
+  as_svg_anim(groups, duration = 0.1) |> writeLines("~/Desktop/demo2.svg")
 
   as_svg_anim(
     create_sinus(0.1, 0.1),
