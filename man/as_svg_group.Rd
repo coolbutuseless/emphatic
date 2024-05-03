@@ -4,12 +4,17 @@
 \alias{as_svg_group}
 \title{Wrap an emphatic object into an SVG for display in a github README.md}
 \usage{
-as_svg_group(x, width = 1200, height = 900, ...)
+as_svg_group(x, width = 1200, height = 900, visible = TRUE, extra = NULL, ...)
 }
 \arguments{
 \item{x}{emphatic object}
 
 \item{width, height}{viewBox dimensions for SVG}
+
+\item{visible}{should the group be visible? Default: TRUE.  When animating,
+every frame other than the first should be set as \code{visible = FALSE}.}
+
+\item{extra}{extra tags to insert into group. default NULL}
 
 \item{...}{other arguments passed to \code{as.character.emphatic}}
 }

@@ -19,5 +19,6 @@ Suggests:
     dplyr,
     ggplot2,
     tidyr,
-    testthat
+    testthat,
+    openxlsx
 VignetteBuilder: knitr
