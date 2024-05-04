@@ -19,7 +19,7 @@
 #' @examples
 #' hl_diff('hello', 'there') |> as_svg()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_svg <- function(x, ..., width = 1200, height = 900, browsable = FALSE) {
+as_svg <- function(x, width = 1200, height = 900, ..., browsable = FALSE) {
 
   # res <- as_html(x, ...)
 
@@ -180,7 +180,7 @@ as_svg_anim <- function(x, width = 1200, height = 900, duration = 1, playback = 
       x[[i]],
       width   = width,
       height  = height,
-      visible = i == 1,  # only first frame starts visible
+      visible = FALSE,
       extra = make_animate_tag(
         i, N,
         dur        = duration[i],

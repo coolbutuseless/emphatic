@@ -1,10 +1,10 @@
 Package: emphatic
 Type: Package
-Title: Highlight R Output using Colour
-Version: 0.1.6.9010
+Title: Highlight R Output
+Version: 0.1.6.9011
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
-Description: User-defined colour of data.frames and other R output. 
+Description: User-defined colour highlighting of data.frames and other R output. 
 URL: https://coolbutuseless.github.io/package/emphatic/, https://github.com/coolbutuseless/emphatic
 BugReports: https://github.com/coolbutuseless/emphatic/issues
 License: MIT + file LICENSE
