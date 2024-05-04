@@ -1,6 +1,4 @@
 
-
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Convert a vector of colours to opening latex code for background colour
 #'
@@ -20,9 +18,7 @@ col2fill_typst <- function(colours) {
     '#[`',  # do nothing
     paste0('#highlight(fill: rgb("', colours, '"))[`')
   )
-
 }
-
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,10 +43,18 @@ col2text_typst <- function(colours) {
 
 }
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Reset styling ready for next text block
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 reset_typst         <- "`]]"
 underline_on_typst  <- "#underline["
 underline_off_typst <- "]"
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Approximately of what the output in 'typst' code looks like
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #  #highlight(fill: rgb("aaaaaa"))[
 #    #text(font: "Courier New", fill: rgb("#0000ff"))[
 #      Hello\u{00a0}\u{00a0}\u{00a0}\u{00a0}there \
@@ -58,10 +62,10 @@ underline_off_typst <- "]"
 #  ]
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Escape typst by replacing special characters
-# Now that export is using 'raw' blocks, don't need to escape anything!
+# Since export is using 'raw' blocks, don't need to escape anything
+# except for the backtick
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 escape_typst <- function(x) {
   x <- enc2utf8(x)
@@ -70,16 +74,22 @@ escape_typst <- function(x) {
   x
 }
 
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Render an emphatic object to typst
 #'
 #' @param x emphatic object
-#' @param ... other arguments passed to \code{as.character.emphatic}
-#' @param font name of font. Default: 'Courier New'
+#' @param ... other arguments passed to \code{as.character.emphatic()}
+#' @param font name of font. Default: NA means to just use the default raw
+#'        font
 #' @param font_size font size in points. default: 10
 #' @param line_spacing line spacing in \code{em} units. Default: 0.3
 #'
+#' @return Character string containing \code{typst} representation
 #' @export
+#' @examples
+#' hl_diff("hello", "there") |> as_typst()
+#'
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_typst <- function(x, ..., font_size = 10, font = NA, line_spacing = 0.3) {
 

@@ -30,9 +30,6 @@
 "challenger"
 
 
-
-
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Monthly Southern Sea Ice Area over the last 40 years
 #'

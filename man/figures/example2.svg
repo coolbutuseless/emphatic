@@ -1,6 +1,8 @@
 <svg fill="none" viewBox="0 0 650 380" width="650" height="380" xmlns="http://www.w3.org/2000/svg">
-      <foreignObject width="100%" height="100%">
-      <div xmlns="http://www.w3.org/1999/xhtml"><pre><span style='text-decoration:underline;'>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
+<g visibility="visible">
+<foreignObject width="100%" height="100%">
+<div xmlns="http://www.w3.org/1999/xhtml">
+<pre><span style='text-decoration:underline;'>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 Mazda RX4           <span style='color:#000000;'><span style='background-color:#6dc85e;'> 21.0</span></span><span style='color:#000000;'><span style='background-color:#6dc85e;'>   6</span></span><span style='color:#000000;'><span style='background-color:#6dc85e;'> 160.0</span></span><span><span> 110</span></span><span><span> 3.90</span></span><span><span> 2.620</span></span><span><span> 16.46</span></span><span><span>  0</span></span><span><span>  1</span></span><span><span>    4</span></span><span><span>    4</span></span>
 Mazda RX4 Wag       <span style='color:#000000;'><span style='background-color:#6dc85e;'> 21.0</span></span><span style='color:#000000;'><span style='background-color:#6dc85e;'>   6</span></span><span style='color:#000000;'><span style='background-color:#6dc85e;'> 160.0</span></span><span><span> 110</span></span><span><span> 3.90</span></span><span><span> 2.875</span></span><span><span> 17.02</span></span><span><span>  0</span></span><span><span>  1</span></span><span><span>    4</span></span><span><span>    4</span></span>
 Datsun 710          <span style='color:#000000;'><span style='background-color:#b7db42;'> 22.8</span></span><span style='color:#000000;'><span style='background-color:#b7db42;'>   4</span></span><span style='color:#000000;'><span style='background-color:#b7db42;'> 108.0</span></span><span><span>  93</span></span><span><span> 3.85</span></span><span><span> 2.320</span></span><span><span> 18.61</span></span><span><span>  1</span></span><span><span>  1</span></span><span><span>    4</span></span><span><span>    1</span></span>
@@ -17,7 +19,9 @@ Merc 450SL          <span style='color:#ffffff;'><span style='background-color:#
 Merc 450SLC         <span style='color:#ffffff;'><span style='background-color:#35698c;'> 15.2</span></span><span style='color:#ffffff;'><span style='background-color:#35698c;'>   8</span></span><span style='color:#ffffff;'><span style='background-color:#35698c;'> 275.8</span></span><span><span> 180</span></span><span><span> 3.07</span></span><span><span> 3.780</span></span><span><span> 18.00</span></span><span><span>  0</span></span><span><span>  0</span></span><span><span>    3</span></span><span><span>    3</span></span>
 Cadillac Fleetwood  <span style='color:#ffffff;'><span style='background-color:#440154;'> 10.4</span></span><span style='color:#ffffff;'><span style='background-color:#440154;'>   8</span></span><span style='color:#ffffff;'><span style='background-color:#440154;'> 472.0</span></span><span><span> 205</span></span><span><span> 2.93</span></span><span><span> 5.250</span></span><span><span> 17.98</span></span><span><span>  0</span></span><span><span>  0</span></span><span><span>    3</span></span><span><span>    4</span></span>
 
-<span><span>mpg: </span></span><span style='color:#ffffff;'><span style='background-color:#44367a;'> 12.5</span></span><span style='color:#ffffff;'><span style='background-color:#38668c;'> 15.0</span></span><span style='color:#ffffff;'><span style='background-color:#2b9189;'> 17.5</span></span><span style='color:#000000;'><span style='background-color:#54b971;'> 20.0</span></span><span style='color:#000000;'><span style='background-color:#a9d946;'> 22.5</span></span></pre></div>
-    </foreignObject>
-    </svg>
-    
+<span><span>mpg: </span></span><span style='color:#ffffff;'><span style='background-color:#44367a;'> 12.5</span></span><span style='color:#ffffff;'><span style='background-color:#38668c;'> 15.0</span></span><span style='color:#ffffff;'><span style='background-color:#2b9189;'> 17.5</span></span><span style='color:#000000;'><span style='background-color:#54b971;'> 20.0</span></span><span style='color:#000000;'><span style='background-color:#a9d946;'> 22.5</span></span></pre>
+</div>
+</foreignObject>
+
+</g>
+</svg>

@@ -41,7 +41,6 @@ col2fill_html <- function(colours) {
 }
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Convert a vector of colours to opening html spans for text colour
 #'
@@ -64,25 +63,30 @@ col2text_html <- function(colours) {
 
 }
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Extra tags for
+#   - closing a section of same coloured text
+#   - turning underline on/off
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 reset_html         <- "</span></span>"
 underline_on_html  <- "<span style='text-decoration:underline;'>"
 underline_off_html <- "</span>"
 
 
-
-
-html_replacement <- c(
-  `&` = "&amp;",
-  `<` = "&lt;",
-  `>` = "&gt;",
-  `"` = "&quot;",
-  `'` = "&#39;"
-)
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Escape HTML by replacing special characters
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 escape_html <- function(x) {
+
+  html_replacement <- c(
+    `&` = "&amp;",
+    `<` = "&lt;",
+    `>` = "&gt;",
+    `"` = "&quot;",
+    `'` = "&#39;"
+  )
+
   x <- enc2utf8(x)
   for (orig in names(html_replacement)) {
     x <- gsub(orig, html_replacement[[orig]], x, fixed = TRUE, useBytes = TRUE)
@@ -91,70 +95,57 @@ escape_html <- function(x) {
   x
 }
 
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Render an emphatic object to HTML
 #'
 #' @param x emphatic object
 #' @param style html tag styling to apply to the \code{<pre>} wrapper for the
 #'        returned HTML
-#' @param ... other arguments passed to \code{as.character.emphatic}
+#' @param ... other arguments passed to \code{as.character.emphatic()}
 #' @param complete logical. Default: FALSE.  If TRUE, then add DOCTYPE and
 #'        the tags for 'html', 'body' and 'head' to make a complete standalone
 #'        html file.
+#' @inheritParams as_svg_anim
 #'
+#' @return Character string containing HTML representation
 #' @export
+#' @examples
+#' hl_diff('hello', 'there') |> as_html()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_html <- function(x, style = NULL, ..., complete = FALSE) {
+as_html <- function(x, ..., style = NULL, complete = FALSE, browsable = FALSE) {
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Style the <pre> tag
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (!is.null(style)) {
     pre <- paste0("<pre style='", style, "'>")
   } else {
     pre <- "<pre>"
   }
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Create HTML
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   res <- paste0(pre, as.character(x, ..., mode = 'html'), "</pre>")
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Should the HTML be 'complete'?
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (isTRUE(complete)) {
     res <- paste0("<!DOCTYPE html>\n<html>\n<head></head>\n<body>", res, "\n</body>\n</html>")
   }
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Set as browsable to show in the Rstudio viewer instead of the console
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (isTRUE(browsable)) {
+    attr(res, "html") <- TRUE
+    attr(res, "browsable_html") <- TRUE
+  }
+  class(res) <- union(c('knit_asis', 'html', 'character'), class(res))
 
-  class(res) <- unique(c('knit_asis', class(res)))
 
   res
 }
 
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Wrap an emphatic object into an SVG for display in a github README.md
-#'
-#' Idea borrowed from pointblank
-#'
-#' @inheritParams as_html
-#' @param width,height viewBox dimensions for SVG
-#'
-#' @return character string containing an SVG snippet.
-#'
-#' @export
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_svg <- function(x, width = 1200, height = 900, ...) {
-
-  res <- as_html(x, ...)
-
-
-  svg_text <- paste0(
-    "<svg fill=\"none\" viewBox=\"0 0 ", width, " ", height,
-    "\" width=\"", width, "\" height=\"", height, "\" xmlns=\"http://www.w3.org/2000/svg\">
-      <foreignObject width=\"100%\" height=\"100%\">
-      <div xmlns=\"http://www.w3.org/1999/xhtml\">",
-    res,
-    "</div>
-    </foreignObject>
-    </svg>
-    ")
-
-
-  svg_text <- gsub("style>", ">", svg_text, fixed = TRUE)
-
-  svg_text
-}

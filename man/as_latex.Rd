@@ -9,8 +9,14 @@ as_latex(x, ...)
 \arguments{
 \item{x}{emphatic object}
 
-\item{...}{other arguments passed to \code{as.character.emphatic}}
+\item{...}{other arguments passed to \code{as.character.emphatic()}}
+}
+\value{
+single character string containing a latex representation
 }
 \description{
 Render an emphatic object to Latex
+}
+\examples{
+hl_diff("hello", "there") |> as_latex()
 }

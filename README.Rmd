@@ -71,6 +71,12 @@ image_read("man/figures/logo.png")
 * `hl()` for user-controlled highlighting of data.frames
 * `hl_diff()` for highlighting differences between two objects 
 * `hl_grep()` highlight regular expression matches in an object or string
+* Conversion of the "emphatic" object to formats for rendering Rmarkdown/Quarto
+  documents, and saving to file:
+    * `as_html()`
+    * `as_svg()` and animated `as_svg_anim()`
+    * `as_typst()`
+    * `write_xlsx()` - Excel document
     
 
 <span style="font-size:smaller">`hl_` prefix can be read as `highlight`</span>
@@ -251,6 +257,42 @@ hl_grep(mode, 'switch') |>
 ```
 
 <img src="man/figures/example-hlgrep-2.svg" width="100%">
+
+
+# Animated SVG
+
+Multiple *emphatic* objects may be rendered to an svg animation using `as_svg_anim()`
+
+
+```{r eval = FALSE}
+objs <- list(
+  hl_grep("hello", "there"),
+  hl_grep("goodbye", "good boy")
+) 
+
+svg <- as_svg_anim(objs, width = 600, height = 300, duration = 3, 
+                   playback = 'infinite')
+```
+
+
+```{r echo = FALSE}
+objs <- list(
+  hl_diff("hello", "there"),
+  hl_diff("goodbye", "good boy")
+) 
+
+svg <- as_svg_anim(objs, width = 200, height = 100, duration = 1.5, 
+                   playback = 'infinite', browsable = FALSE)
+
+# writeLines(svg, "man/figures/example-svg-anim.svg")
+svg
+```
+
+
+<!-- <img src="man/figures/example-svg-anim.svg" width="100%"> -->
+
+
+
 
 ## Options
 

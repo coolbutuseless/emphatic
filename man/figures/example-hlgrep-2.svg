@@ -1,6 +1,8 @@
 <svg fill="none" viewBox="0 0 600 250" width="600" height="250" xmlns="http://www.w3.org/2000/svg">
-      <foreignObject width="100%" height="100%">
-      <div xmlns="http://www.w3.org/1999/xhtml"><pre><span><span>function (x) 
+<g visibility="visible">
+<foreignObject width="100%" height="100%">
+<div xmlns="http://www.w3.org/1999/xhtml">
+<pre><span><span>function (x) 
 {
     if (is.expression(x)) 
         return(&quot;expression&quot;)
@@ -11,8 +13,10 @@
     else </span></span><span style='color:#ffffff;'><span style='background-color:#0f19f0;'>switch</span></span><span><span>(tx &lt;- typeof(x), double = , integer = &quot;numeric&quot;, 
         closure = , builtin = , special = &quot;function&quot;, tx)
 }
-&lt;bytecode: 0x13c8fc6b0&gt;
-&lt;environment: namespace:base&gt;</span></span></pre></div>
-    </foreignObject>
-    </svg>
-    
+&lt;bytecode: 0x14a625168&gt;
+&lt;environment: namespace:base&gt;</span></span></pre>
+</div>
+</foreignObject>
+
+</g>
+</svg>
