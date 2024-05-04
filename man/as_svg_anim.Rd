@@ -2,14 +2,15 @@
 % Please edit documentation in R/core-html.R
 \name{as_svg_anim}
 \alias{as_svg_anim}
-\title{Wrap an emphatic object into an SVG for display in a github README.md}
+\title{Wrap multiple emphatic object into an SVG animation}
 \usage{
 as_svg_anim(
   x,
   width = 1200,
   height = 900,
   duration = 1,
-  playback = c("click", "hover", "infinite")
+  playback = c("infinite", "click"),
+  svg_id = NULL
 )
 }
 \arguments{
@@ -21,7 +22,7 @@ as_svg_anim(
 all frames, or a vector of values (one duration value for each frame).
 Can be fractions of a second.}
 
-\item{playback}{'hover', 'click', 'infinite'}
+\item{playback}{'click', 'infinite'}
 }
 \value{
 character string containing an SVG snippet.

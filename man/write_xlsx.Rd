@@ -2,19 +2,21 @@
 % Please edit documentation in R/core-xlsx.R
 \name{write_xlsx}
 \alias{write_xlsx}
-\title{Convert emphatic to Excel workbook}
+\title{Write an emphatic data.frame to an Excel workbook}
 \usage{
-write_xlsx(x, xlsx_filename, colNames = TRUE)
+write_xlsx(x, xlsx_filename, colNames = TRUE, opts = hl_opts())
 }
 \arguments{
-\item{x}{emphatic object}
+\item{x}{emphatic data.frame object}
 
 \item{xlsx_filename}{xlsx filename}
 
-\item{colNames}{logical. Default: TRUE}
+\item{colNames}{Display column names? logical. Default: TRUE}
+
+\item{opts}{rendering options}
 }
 \description{
-Convert emphatic to Excel workbook
+Write an emphatic data.frame to an Excel workbook
 }
 \examples{
 mtcars |>
