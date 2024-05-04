@@ -9,7 +9,7 @@ as_svg(x, ..., width = 1200, height = 900, browsable = FALSE)
 \arguments{
 \item{x}{emphatic object}
 
-\item{...}{other arguments passed to \code{as.character.emphatic}}
+\item{...}{other arguments passed to \code{as.character.emphatic()}}
 
 \item{width, height}{viewBox dimensions for SVG}
 
@@ -18,6 +18,8 @@ when printed (instead of console output)? Default: FALSE}
 }
 \value{
 character string containing an SVG snippet.
+
+Character string containing SVG representation
 }
 \description{
 This is mainly useful within a github \code{README.md} since github will
@@ -26,4 +28,7 @@ if it is within a \code{<svg>} tags.
 }
 \details{
 This is just a the results of \code{as_html()} wrapped in \code{<svg>} tags
+}
+\examples{
+hl_diff('hello', 'there') |> as_svg()
 }

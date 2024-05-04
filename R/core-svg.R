@@ -14,7 +14,10 @@
 #'
 #' @return character string containing an SVG snippet.
 #'
+#' @return Character string containing SVG representation
 #' @export
+#' @examples
+#' hl_diff('hello', 'there') |> as_svg()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_svg <- function(x, ..., width = 1200, height = 900, browsable = FALSE) {
 
@@ -57,9 +60,13 @@ as_svg <- function(x, ..., width = 1200, height = 900, browsable = FALSE) {
 #' @param visible should the group be visible? Default: TRUE.  When animating,
 #'        every frame other than the first should be set as \code{visible = FALSE}.
 #'
-#' @return character string containing an SVG snippet.
 #'
+#' @return Character string containing representation as an SVG group element
+#'         i.e. \code{<g>}.  This result is suitable for combining with other
+#'         SVG elements into a custom SVG document.
 #' @export
+#' @examples
+#' hl_diff('hello', 'there') |> as_svg_group()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_svg_group <- function(x, width = 1200, height = 900, visible = TRUE, extra = NULL, ...) {
 
@@ -129,9 +136,12 @@ make_animate_tag <- function(i, n, dur = 1, playback, svg_id) {
 #' @param browsable Should the SVG be rendered to the RStudio Viewer pane when
 #'        when printed (instead of console output)? Default: FALSE
 #'
-#' @return character string containing an SVG snippet.
-#'
+#' @return Character string containing an animated SVG representation displaying
+#'         all elements sequentially
 #' @export
+#' @examples
+#' elems <- list(hl_diff('hello', 'there'), hl_diff('hello', 'there'))
+#' as_svg_anim(elems)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_svg_anim <- function(x, width = 1200, height = 900, duration = 1, playback = c('infinite', 'click'),
                         svg_id = NULL, browsable = FALSE) {
@@ -200,40 +210,15 @@ as_svg_anim <- function(x, width = 1200, height = 900, duration = 1, playback = 
   }
   class(svg_text) <- union(c('knit_asis', 'html', 'character'), class(svg_text))
 
-
   svg_text
 }
 
 
-if (FALSE) {
-
-  as_svg_anim(
-    list(
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1),
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:2),
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:3),
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:4),
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:5),
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:6),
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:7),
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:8),
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:9),
-      mtcars |> head(5) |> hl(ggplot2::scale_color_distiller(), cols = 1, scale_apply = 1:10)
-    ),
-    duration = c(rep(0.2, 9), 3)
-  ) |> writeLines("~/Desktop/demo2.svg")
-
-  as_svg_anim(hl_grep(mode, "switch"), hl_diff("hello", "there")) |> cat()
-}
 
 
-# show_svg <- function(
-#     )
-
-
-
-
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Examples
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if (FALSE) {
   library(dplyr)
   library(tidyr)

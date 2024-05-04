@@ -9,7 +9,7 @@ as_html(x, ..., style = NULL, complete = FALSE, browsable = FALSE)
 \arguments{
 \item{x}{emphatic object}
 
-\item{...}{other arguments passed to \code{as.character.emphatic}}
+\item{...}{other arguments passed to \code{as.character.emphatic()}}
 
 \item{style}{html tag styling to apply to the \code{<pre>} wrapper for the
 returned HTML}
@@ -21,6 +21,12 @@ html file.}
 \item{browsable}{Should the SVG be rendered to the RStudio Viewer pane when
 when printed (instead of console output)? Default: FALSE}
 }
+\value{
+Character string containing HTML representation
+}
 \description{
 Render an emphatic object to HTML
+}
+\examples{
+hl_diff('hello', 'there') |> as_html()
 }

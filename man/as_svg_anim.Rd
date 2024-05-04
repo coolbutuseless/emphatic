@@ -32,8 +32,13 @@ ID}
 when printed (instead of console output)? Default: FALSE}
 }
 \value{
-character string containing an SVG snippet.
+Character string containing an animated SVG representation displaying
+        all elements sequentially
 }
 \description{
 Idea borrowed from pointblank
+}
+\examples{
+elems <- list(hl_diff('hello', 'there'), hl_diff('hello', 'there'))
+as_svg_anim(elems)
 }

@@ -1,20 +1,24 @@
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Reset back to terminal defaults
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 reset_ansi         <- "\033[39m\033[49m"
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Turn Underline on/off
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 underline_on_ansi  <- "\033[4m"
 underline_off_ansi <- "\033[24m"
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Convert an R colour to a 216-colour ANSI string. Suitable for most terminals
+#' including Rstudio terminal
 #'
 #' Ref: \url{https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit}
 #'
 #' If all the RGB colour components are equal then the colour is matched to one
-#' of 24 grey levels, other wise it is converted to one of 216 standard colours.
+#' of 24 grey levels, otherwise it is converted to one of 216 standard ANSI colours.
 #'
 #' @param rcolour any R colour e.g. 'red', '#445566'
 #'
@@ -68,7 +72,6 @@ col2code <- function(rcolour) {
 
   ifelse(is_grey & !possibly_white, grey_code, colour_code)
 }
-
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

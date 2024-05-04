@@ -41,7 +41,6 @@ col2fill_latex <- function(colours) {
 }
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Convert a vector of colours to opening latex code for text colour
 #'
@@ -64,13 +63,19 @@ col2text_latex <- function(colours) {
 
 }
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 'reset' text ready for next text block
+# Turn underline on/off
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 reset_latex         <- "\\vrule height 3mm depth 1.25mm width 0mm}}"
 underline_on_latex  <- r"(\underline{)"
 underline_off_latex <- "}"
 
-# res <- r"(\texttt{
-# \colorbox{BurntOrange}{\textcolor[HTML]{AFFE90}{hello  }}\colorbox[HTML]{AFFE90}{\textcolor{blue}{there}}
-# })"
+# \texttt{
+# \colorbox{BurntOrange}{\textcolor[HTML]{AFFE90}{hello  }}
+# \colorbox[HTML]{AFFE90}{\textcolor{blue}{there}}
+# }"
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,26 +89,23 @@ escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
   x = gsub("\\^", "\\\\textasciicircum{}", x)
   x = gsub("\n", "\\\\\\\\ \n", x, perl = TRUE)
 
-  # for (i in seq(40, 1)) {
-  #   str <- paste(rep(" ", i), collapse = "")
-  #   replace <- sprintf("\\\\hspace*{%.1fem}", i * 0.5)
-  #   x <- gsub(str, replace, x, perl = TRUE)
-  # }
-
+  # I really struggled finding a way to insert significant whitespace at
+  # the start of a line. This is the best I could come up with.
   x = gsub(" ", "\\\\hspace*{0.5em}", x, perl = TRUE)
   x
 }
-
-
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Render an emphatic object to Latex
 #'
 #' @param x emphatic object
-#' @param ... other arguments passed to \code{as.character.emphatic}
+#' @param ... other arguments passed to \code{as.character.emphatic()}
 #'
+#' @return single character string containing a latex representation
 #' @export
+#' @examples
+#' hl_diff("hello", "there") |> as_latex()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_latex <- function(x, ...) {
 

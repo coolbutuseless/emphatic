@@ -15,6 +15,9 @@ write_xlsx(x, xlsx_filename, colNames = TRUE, opts = hl_opts())
 
 \item{opts}{rendering options}
 }
+\value{
+None
+}
 \description{
 Write an emphatic data.frame to an Excel workbook
 }

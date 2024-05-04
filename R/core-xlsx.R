@@ -7,6 +7,7 @@
 #' @param colNames Display column names? logical. Default: TRUE
 #' @param opts rendering options
 #'
+#' @return None
 #' @export
 #' @examples
 #' mtcars |>
@@ -79,11 +80,6 @@ write_xlsx <- function(x, xlsx_filename, colNames = TRUE, opts = hl_opts()) {
   } else {
     stop("write_xlsx(): Need to have `openxlsx` installed")
   }
-}
 
-
-
-if (FALSE) {
-  x <- head(mtcars) |> hl('blue')
-  x <- hl_grep(mode, 'switch')
+  invisible(xlsx_filename)
 }

@@ -16,10 +16,12 @@ every frame other than the first should be set as \code{visible = FALSE}.}
 
 \item{extra}{extra tags to insert into group. default NULL}
 
-\item{...}{other arguments passed to \code{as.character.emphatic}}
+\item{...}{other arguments passed to \code{as.character.emphatic()}}
 }
 \value{
-character string containing an SVG snippet.
+Character string containing representation as an SVG group element
+        i.e. \code{<g>}.  This result is suitable for combining with other
+        SVG elements into a custom SVG document.
 }
 \description{
 This function wraps \code{html} in SVG group tags (i.e. \code{<g>}).  This
@@ -27,4 +29,7 @@ may then be wrapped in \code{<svg>} tags to create a stand-along SVG.
 }
 \details{
 This function is used internall by both \code{as_svg()} and \code{as_svg_anim()}
+}
+\examples{
+hl_diff('hello', 'there') |> as_svg_group()
 }

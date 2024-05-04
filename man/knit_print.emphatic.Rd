@@ -12,7 +12,7 @@ knit_print.emphatic(x, style = NULL, ...)
 \item{style}{html tag styling to apply to the \code{<pre>} wrapper for the
 returned HTML}
 
-\item{...}{other arguments passed to \code{as.character.emphatic}}
+\item{...}{other arguments passed to \code{as.character.emphatic()}}
 }
 \description{
 Automatically output emphatic objects to HTML knitted documents.
