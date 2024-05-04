@@ -101,10 +101,11 @@ escape_html <- function(x) {
 #' @param complete logical. Default: FALSE.  If TRUE, then add DOCTYPE and
 #'        the tags for 'html', 'body' and 'head' to make a complete standalone
 #'        html file.
+#' @inheritParams as_svg_anim
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_html <- function(x, style = NULL, ..., complete = FALSE) {
+as_html <- function(x, ..., style = NULL, complete = FALSE, browsable = FALSE) {
 
   if (!is.null(style)) {
     pre <- paste0("<pre style='", style, "'>")
@@ -118,8 +119,15 @@ as_html <- function(x, style = NULL, ..., complete = FALSE) {
     res <- paste0("<!DOCTYPE html>\n<html>\n<head></head>\n<body>", res, "\n</body>\n</html>")
   }
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Set as browsable to show in the Rstudio viewer instead of the console
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (isTRUE(browsable)) {
+    attr(res, "html") <- TRUE
+    attr(res, "browsable_html") <- TRUE
+  }
+  class(res) <- union(c('knit_asis', 'html', 'character'), class(res))
 
-  class(res) <- unique(c('knit_asis', class(res)))
 
   res
 }
