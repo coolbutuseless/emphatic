@@ -284,12 +284,12 @@ objs <- list(
 svg <- as_svg_anim(objs, width = 200, height = 100, duration = 1.5, 
                    playback = 'infinite', browsable = FALSE)
 
-# writeLines(svg, "man/figures/example-svg-anim.svg")
-svg
+writeLines(svg, "man/figures/example-svg-anim.svg")
+# svg
 ```
 
 
-<!-- <img src="man/figures/example-svg-anim.svg" width="100%"> -->
+<img src="man/figures/example-svg-anim.svg" width="100%">
 
 
 

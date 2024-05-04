@@ -164,32 +164,7 @@ svg <- as_svg_anim(objs, width = 600, height = 300, duration = 3,
                    playback = 'infinite')
 ```
 
-<svg id="emphatic76o1puvz" fill="none" viewBox="0 0 200 100" width="200" height="100" xmlns="http://www.w3.org/2000/svg">
-<g visibility="hidden"> <foreignObject width="100%" height="100%">
-
-<div xmlns="http://www.w3.org/1999/xhtml">
-
-<pre><span><span>[1] &quot;</span></span><span style='color:#ffffff;'><span style='background-color:#006400;'> </span></span><span><span>he</span></span><span style='color:#ffffff;'><span style='background-color:#1e90ff;'>ll</span></span><span style='color:#ffffff;'><span style='background-color:#b22222;'>o</span></span><span><span>&quot;</span></span><br/><span><span>[1] &quot;</span></span><span style='color:#ffffff;'><span style='background-color:#006400;'>t</span></span><span><span>he</span></span><span style='color:#ffffff;'><span style='background-color:#1e90ff;'>re</span></span><span style='color:#ffffff;'><span style='background-color:#b22222;'> </span></span><span><span>&quot;</span></span></pre>
-
-</div>
-
-</foreignObject>
-<set id="emphatic76o1puvz001" attributeName="visibility" begin="0s;emphatic76o1puvz002.end"
-            to="visible" dur="1.500000s" /> </g>
-
-<g visibility="hidden"> <foreignObject width="100%" height="100%">
-
-<div xmlns="http://www.w3.org/1999/xhtml">
-
-<pre><span><span>[1] &quot;good</span></span><span style='color:#ffffff;'><span style='background-color:#006400;'> </span></span><span><span>b</span></span><span style='color:#ffffff;'><span style='background-color:#006400;'> </span></span><span><span>y</span></span><span style='color:#ffffff;'><span style='background-color:#b22222;'>e</span></span><span><span>&quot;</span></span><br/><span><span>[1] &quot;good</span></span><span style='color:#ffffff;'><span style='background-color:#006400;'> </span></span><span><span>b</span></span><span style='color:#ffffff;'><span style='background-color:#006400;'>o</span></span><span><span>y</span></span><span style='color:#ffffff;'><span style='background-color:#b22222;'> </span></span><span><span>&quot;</span></span></pre>
-
-</div>
-
-</foreignObject>
-<set id="emphatic76o1puvz002" attributeName="visibility" begin="emphatic76o1puvz001.end"
-            to="visible" dur="1.500000s" /> </g>
-</svg>
-<!-- <img src="man/figures/example-svg-anim.svg" width="100%"> -->
+<img src="man/figures/example-svg-anim.svg" width="100%">
 
 ## Options
 
