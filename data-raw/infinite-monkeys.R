@@ -10,7 +10,7 @@ text <- "mtcars |>
 monkey <- function(text) {
   chars <- strsplit(text, '')[[1]]
 
-  delay <- min(0.04, 1/nchar(chars))
+  delay <- min(0.02, 1/nchar(chars))
   pauses <- runif(1000, 0.005, delay)
 
   Sys.sleep(0.1)
@@ -31,7 +31,7 @@ monkey <- function(text) {
 
   print(eval(parse(text = text)))
 
-  Sys.sleep(1.1)
+  Sys.sleep(1.7)
 }
 
 
@@ -52,10 +52,11 @@ codes <- c(
 
 system.time({
   cat("\014")
-  Sys.sleep(5)
+  Sys.sleep(3)
   for (code in codes) {
     monkey(code)
   }
+  cat("\n\n\n\n")
 })
 
 
