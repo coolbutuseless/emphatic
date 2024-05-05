@@ -328,7 +328,7 @@ writeLines(svg, "data-raw/figures/example-svg-anim.svg")
 |  | `"remove"` remove all text without a user-defined colour  |
 | `HL_TEXT_CONTRAST` | When `text_mode = "contrast"` this numeric value (in range [0, 1]) adjusts the visibility of the text. Default: 1 (high contrast)  |
 | `HL_GREP_COL`      |The fill colour to use with `hl_grep()` if no colour is specified. Default: "#0F19F0"|
-| `HL_SUB_COL`, `HL_INS_COL`, `HL_DEL_COL`     |  the default colours to use with `hl_diff()` for substitution, insertion and deletion (respectively). Defaults: `dodgerblue` (substitute), `darkgreen` (insert) and `firebrick` (delete)  |
+| `HL_SUB_COL`, `HL_INS_COL`, `HL_DEL_COL`     |  the default colours to use with `hl_diff()` for substitution, insertion and deletion (respectively).  |
 
 
 ## Vignettes

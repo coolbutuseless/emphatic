@@ -17,3 +17,9 @@ None
 \description{
 Show HTML or SVG content in the rstudio viewer pane
 }
+\examples{
+# Will try and spawn a viewer for content
+hl_grep(mode, "switch") |>
+  as_html() |>
+  show_html()
+}

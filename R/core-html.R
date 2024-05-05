@@ -157,6 +157,7 @@ as_html <- function(x, ..., style = NULL, complete = FALSE, browsable = FALSE) {
 #' @param viewer function which activates viewer
 #' @return None
 #' @export
+#' @examples
 #' # Will try and spawn a viewer for content
 #' hl_grep(mode, "switch") |>
 #'   as_html() |>
