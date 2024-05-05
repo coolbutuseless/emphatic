@@ -1,4 +1,77 @@
 
+backends <- c('ansi', 'html', 'latex', 'typst')
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# How should the raw text be escaped in order to handle special characters
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+escape <- list(
+  ansi  = identity,
+  html  = escape_html,
+  latex = escape_latex,
+  typst = escape_typst
+)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# If multiple outputs are being collapsed together, what should they
+# be collapsed with
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+collapse = list(
+  ansi  = "\n",
+  html  = "<br/>",
+  latex = "\\\\\n",
+  typst = "\\\n"
+)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# How does the current block of text get set back to the default
+# e.g. closing all spans, ending all subcommands
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+reset = list(
+  ansi  = reset_ansi,
+  html  = reset_html,
+  latex = reset_latex,
+  typst = reset_typst
+)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Colouring of foreground (text)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+col2text <- list(
+  ansi   = col2text_ansi,
+  ansi24 = col2text_ansi24,
+  html   = col2text_html,
+  latex  = col2text_latex,
+  typst  = col2text_typst
+)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Colouring of background (fill)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+col2fill <- list(
+  ansi   = col2fill_ansi,
+  ansi24 = col2fill_ansi24,
+  html   = col2fill_html,
+  latex  = col2fill_latex,
+  typst  = col2fill_typst
+)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Underline markup
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+underline_on <- list(
+  ansi  = underline_on_ansi,
+  html  = underline_on_html,
+  latex = underline_on_latex,
+  typst = underline_on_typst
+)
+
+underline_off <- list(
+  ansi  = underline_off_ansi,
+  html  = underline_off_html,
+  latex = underline_off_latex,
+  typst = underline_off_typst
+)
+
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Convert a data.frame, matrix or atomic vector into an emphatic version
@@ -148,19 +221,10 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (is.list(x) && !is.data.frame(x)) {
     strs <- vapply(x, as.character, character(1), ..., mode = mode)
-    if (mode == 'ansi') {
-      return (paste(strs, collapse = "\n"))
-    } else if (mode == 'html') {
-      return (paste(strs, collapse = "<br/>"))
-    } else if (mode == 'latex') {
-      return (paste(strs, collapse = "\\\\\n"))
-    } else if (mode == 'typst') {
-      return (paste(strs, collapse = "\\\n"))
-    }
+    return(paste(strs, collapse = collapse[[mode]]))
   }
 
-
-  stopifnot(mode %in% c('ansi', 'html', 'latex', 'typst'))
+  stopifnot(mode %in% backends)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Remove the 'emphatic' class here, so that if any subsequent operations
@@ -294,11 +358,8 @@ as_character_inner <- function(m,
   stopifnot(is.character(m))
   stopifnot((is_atomic(m) && length(m) == length(text)) || identical(dim(m), dim(text)))
   stopifnot((is_atomic(m) && length(m) == length(fill)) || identical(dim(m), dim(fill)))
-  stopifnot(mode %in% c('ansi', 'html', 'latex', 'typst'))
-
-  collapser <- "\n"
-  if (mode == 'latex') collapser <- '\\\\\n'
-  if (mode == 'typst') collapser <- '\\\n'
+  stopifnot(mode %in% backends)
+  collapser <- collapse[[mode]]
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Automatic contrasting text for foreground?
@@ -320,37 +381,15 @@ as_character_inner <- function(m,
   # After each cell we will add the ansi RESET code to revert
   # text and fill attributes to the terminal default
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (mode == 'ansi') {
-    end <- matrix(reset_ansi , nrow = nrow(m), ncol = ncol(m))
-  } else if (mode == 'html') {
-    end <- matrix(reset_html , nrow = nrow(m), ncol = ncol(m))
-  } else if (mode == 'latex') {
-    end <- matrix(reset_latex, nrow = nrow(m), ncol = ncol(m))
-  } else if (mode == 'typst') {
-    end <- matrix(reset_typst, nrow = nrow(m), ncol = ncol(m))
-  }
+  end <- matrix(reset[[mode]], nrow = nrow(m), ncol = ncol(m))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Convert matrices of R colours to matrices of ANSI codes
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (mode == 'ansi') {
-    if (isTRUE(full_colour)) {
-      text[] <- col2text_ansi24(text)
-      fill[] <- col2fill_ansi24(fill)
-    } else {
-      text[] <- col2text_ansi(text)
-      fill[] <- col2fill_ansi(fill)
-    }
-  } else if (mode == 'html') {
-    text[] <- col2text_html(text)
-    fill[] <- col2fill_html(fill)
-  } else if (mode == 'latex') {
-    text[] <- col2text_latex(text)
-    fill[] <- col2fill_latex(fill)
-  } else if (mode == 'typst') {
-    text[] <- col2text_typst(text)
-    fill[] <- col2fill_typst(fill)
-  }
+  mode2 <- ifelse(mode == 'ansi' && isTRUE(full_colour), 'ansi24', mode)
+  text[] <- col2text[[mode2]](text)
+  fill[] <- col2fill[[mode2]](fill)
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Determine the full width for each column
@@ -384,22 +423,15 @@ as_character_inner <- function(m,
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Escape html
+  # Escape text
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (mode == 'html') {
-    att <- attributes(m)
-    m <- escape_html(m)
-    attributes(m) <- att
-  } else if (mode == 'latex') {
-    att <- attributes(m)
-    m <- escape_latex(m)
-    attributes(m) <- att
-  } else if (mode == 'typst') {
-    att <- attributes(m)
-    m <- escape_typst(m)
-    attributes(m) <- att
-  }
+  att <- attributes(m)
+  m <- escape[[mode]](m)
+  attributes(m) <- att
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Collapse text markup, fill markup, actual contents and reset markup
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ansi_mat <- paste0(text, fill, m, end)
   ansi_mat <- matrix(ansi_mat, nrow = nrow(text), ncol = ncol(text))
 
@@ -475,21 +507,15 @@ as_character_inner <- function(m,
       max_nchar     <- max(nchar(this_rownames))
       fmt           <- paste0("%-", max_nchar + 1, "s ")
       this_rownames <- sprintf(fmt, this_rownames)
-      if (mode == 'html') {
-        this_rownames <- escape_html(this_rownames)
-      } else if (mode == 'latex') {
-        this_rownames <- escape_latex(this_rownames)
-      } else if (mode == 'typst') {
-        this_rownames <- escape_typst(this_rownames)
+      this_rownames <- escape[[mode]](this_rownames)
+      if (mode == 'typst') {
         this_rownames <- paste0("`", this_rownames, "`")
       }
       ansi_mat      <- cbind(this_rownames, ansi_mat)
       col_names     <- c(sprintf(fmt, ''), col_names)
     } else {
-      if (mode == 'latex') {
-        rownames(m) <- escape_latex(rownames(m))
-      } else if (mode == 'typst') {
-        rownames(m) <- escape_typst(rownames(m))
+      rownames(m) <- escape[[mode]](rownames(m))
+       if (mode == 'typst') {
         rownames(m) <- paste0("`", rownames(m), "`")
       }
       col_names <- c('', col_names)
@@ -502,18 +528,11 @@ as_character_inner <- function(m,
       header <- NULL
     } else {
       header <- paste(col_names, collapse = " ")
-      if (mode == 'ansi') {
-        header <- paste0(underline_on_ansi, header, underline_off_ansi)
-      } else if (mode == 'html') {
-        header <- escape_html(header)
-        header <- paste0(underline_on_html, header, underline_off_html)
-      } else if (mode == 'latex') {
-        header <- escape_latex(header)
-        header <- paste0(underline_on_latex, header, underline_off_latex)
-      } else if (mode == 'typst') {
-        header <- escape_typst(header)
-        header <- paste0(underline_on_typst, '`', header, '`', underline_off_typst)
+      header <- escape[[mode]](header)
+      if (mode == 'typst') {
+        header <- paste0('`', header, '`')
       }
+      header <- paste0(underline_on[[mode]], header, underline_off[[mode]])
     }
 
     body   <- apply(ansi_mat, 1, paste, collapse = '')

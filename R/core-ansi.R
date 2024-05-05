@@ -34,7 +34,7 @@ col2fill_ansi <- function(rcolour) {
   ifelse(
     is.na(rcolour),
     '',
-    paste0("\033[48;5;", col2code(rcolour), "m")
+    paste0("\033[48;5;", col2code_ansi(rcolour), "m")
   )
 }
 
@@ -49,7 +49,7 @@ col2text_ansi <- function(rcolour) {
   ifelse(
     is.na(rcolour),
     '',
-    paste0("\033[38;5;", col2code(rcolour), "m")
+    paste0("\033[38;5;", col2code_ansi(rcolour), "m")
   )
 }
 
@@ -59,7 +59,7 @@ col2text_ansi <- function(rcolour) {
 #'
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-col2code <- function(rcolour) {
+col2code_ansi <- function(rcolour) {
   cols <- grDevices::col2rgb(rcolour)
 
   is_grey        <- cols[1,] == cols[2,] & cols[2,] == cols[3,]

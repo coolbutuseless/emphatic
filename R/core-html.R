@@ -149,3 +149,36 @@ as_html <- function(x, ..., style = NULL, complete = FALSE, browsable = FALSE) {
   res
 }
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Show HTML or SVG content in the rstudio viewer pane
+#'
+#' @param x svg or html
+#' @param viewer function which activates viewer
+#' @return None
+#' @export
+#' # Will try and spawn a viewer for content
+#' hl_grep(mode, "switch") |>
+#'   as_html() |>
+#'   show_html()
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+show_html <- function(x, viewer = getOption("viewer", utils::browseURL)) {
+
+  if (Sys.getenv("RSTUDIO", "0") != "1" || is.null(viewer)) {
+    message("No viewer available")
+    invisible(NULL)
+  }
+
+  dir <- tempfile('html')
+  dir.create(dir, showWarnings = FALSE)
+  index_file <- file.path(dir, "index.html")
+  writeLines(x, index_file)
+
+  viewer(index_file)
+
+  invisible(index_file)
+}
+
+
+
+
