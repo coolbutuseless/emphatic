@@ -16,7 +16,7 @@ Note: RStudio only supports 8 bit ANSI output (24bit ANSI is
 rendered invisibly in Rstudio).  For 24bit colour output, try R in the terminal
 e.g. 'iTerm' on OSX.}
 
-\item{text_mode}{How to handle textif no text colour has been
+\item{text_mode}{How to handle text if no text colour has been
 explicitly specified by the user.
 \describe{
 \item{contrast}{(default) automatically select a contrasting colour for enhanced readability.}

@@ -10,26 +10,33 @@
 [![R-CMD-check](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-`{emphatic}` uses ANSI colouring in the terminal to add user-controlled
-highlighting to data.frames and other R output.
+`{emphatic}` allows for user-defined highlighting of data.frames.
 
-<!-- <img src="man/figures/examples.gif"/> -->
+This highlighting works
+
+- in the console
+- rendered to HTML (e.g. in Rmarkdown documents)
+- rendered to latex
+- rendered to [typst](https://typst.app) (e.g. in Quarto documents)
+- rendered to SVG and animated SVG
+
+<img src="data-raw/figures/examples.gif"/>
 
 #### What’s in the box
 
-- `hl()` for user-controlled highlighting of data.frames
+- `hl()` for user-defined highlighting of data.frames
 - `hl_diff()` for highlighting differences between two objects
 - `hl_grep()` highlight regular expression matches in an object or
   string
-- Conversion of the “emphatic” object to formats for rendering
-  Rmarkdown/Quarto documents, and saving to file:
+- Output from `hl_*()` functions will automatically be rendered in
+  Rmarkdown and Quarto documents with output formats of html, PDF and
+  typst.
+- The highlighted output can be explicitly converted to other formats
+  using:
   - `as_html()`
   - `as_svg()` and animated `as_svg_anim()`
   - `as_typst()`
   - `write_xlsx()` - Excel document
-
-<span style="font-size:smaller">`hl_` prefix can be read as
-`highlight`</span>
 
 #### Installation
 
@@ -41,15 +48,15 @@ You can install from
 remotes::install_github('coolbutuseless/emphatic', ref = 'main')
 ```
 
-## `hl()` - user-controlled highlighting of data.frames
+## User-controlled highlighting of data.frames with `hl()`
 
 - specify rows and columns you want to highlight
-- specify a colour
+- specify a palette
   - a single colour
   - a vector of colours
   - a `ggplot2` “Scale” object e.g. `scale_colour_continuous()`
 
-#### `hl()` simple example of highlighting a data.frame
+#### Simple highlighting a data.frame
 
 By default, colouring will be applied to all rows and columns.
 
@@ -59,19 +66,21 @@ mtcars |>
   hl(c('red', 'white', 'blue')) 
 ```
 
-<img src="man/figures/example1.svg" width="100%">
+<img src="data-raw/figures/example1.svg" width="100%">
 
-#### `hl()` complex example of highlighting a data.frame
+#### Complex example of highlighting a data.frame
 
 A more complex example showing how to highlight the `mtcars` dataset
 where:
 
-- colour each row to indicate the miles-per-gallon rating
-- do not colour the `gear` or `carb` columns
-- highlight the car with the minimum horsepower (`hp`) in `hotpink`
+- Determine the colours using `scale_colour_viridis_c()` applied to
+  `mpg`
+- Apply the scale’s colouring to all columns from `mpg` to `disp`
+- highlight the row for the car with the minimum horsepower (`hp`) in
+  `hotpink`
 
-Note also that `hl()` calls are cumulative, and you can build up the
-highlighting you need step by step
+`hl()` calls are cumulative - you can build up the highlighting you need
+step-by-step
 
 ``` r
 mtcars |>
@@ -85,9 +94,9 @@ mtcars |>
   hl('hotpink', rows = hp == min(hp), cols = hp:carb) 
 ```
 
-<img src="man/figures/example2.svg" width="100%">
+<img src="data-raw/figures/example2.svg" width="100%">
 
-## `hl_diff()` highlight difference between two objects
+## Highlight difference between two objects with `hl_diff()`
 
 The Levenshtein edit distance is calculated between the string
 representation of two objects and these edits are then coloured 🟢 =
@@ -99,7 +108,7 @@ y <- "Not Paris in the spring!"
 hl_diff(x, y)
 ```
 
-<img src="man/figures/example-strdiff-3.svg" width="100%">
+<img src="data-raw/figures/example-strdiff-3.svg" width="100%">
 
 Levenshtein’s edit distance naturally applies to strings, but
 `hl_diff()` can visualise the difference between arbitrary objects by
@@ -114,9 +123,9 @@ function definitions is highlighted.
 hl_diff(mean, median, coerce = 'print', sep = " ")
 ```
 
-<img src="man/figures/example-strdiff-4.svg" width="100%">
+<img src="data-raw/figures/example-strdiff-4.svg" width="100%">
 
-## `hl_grep()` highlight regular expression matches in objects
+## Highlight regular expression matches in objects with `hl_grep()`
 
 `hl_grep()` highlights the regular expression matches within a string or
 objects coerced into a string representation.
@@ -124,15 +133,17 @@ objects coerced into a string representation.
 #### Highlight regular expression matches in a character string
 
 ``` r
-gettysburg <- c(
-  "Four score and seven years ago our fathers brought forth on",
-  "this continent, a new nation, conceived in Liberty, and dedicated to the", 
-  "proposition that all men are created equal."
-)
-hl_grep(gettysburg, "men.*equal")
+txt <- "Among the few possessions he left to his heirs was a set of 
+Encyclopedia Britannica in storage at the Lindbergh Palace Hotel under the 
+names Ari and Uzi Tenenbaum. No-one spoke at the funeral, and Father 
+Petersen's leg had not yet mended, but it was agreed among them that Royal 
+would have found the event to be most satisfactory.
+[Chas, now wearing a black Adidas tracksuit, nods to his sons]"
+
+hl_grep(txt, "event.*satisfactory", coerce = 'character')
 ```
 
-<img src="man/figures/example-hlgrep-1.svg" width="100%">
+<img src="data-raw/figures/example-hlgrep-1.svg" width="100%">
 
 #### Highlight regular expression matches within an object
 
@@ -147,7 +158,7 @@ In this example, the function body for `mode()` is searched for the word
 hl_grep(mode, 'switch')
 ```
 
-<img src="man/figures/example-hlgrep-2.svg" width="100%">
+<img src="data-raw/figures/example-hlgrep-2.svg" width="100%">
 
 # Animated SVG
 
@@ -160,29 +171,36 @@ objs <- list(
   hl_grep("goodbye", "good boy")
 ) 
 
-svg <- as_svg_anim(objs, width = 600, height = 300, duration = 3, 
+svg <- as_svg_anim(objs, width = 600, height = 300, duration = 2, 
                    playback = 'infinite')
 ```
 
-<img src="man/figures/example-svg-anim.svg" width="100%">
+<img src="data-raw/figures/example-svg-anim.svg">
 
 ## Options
 
 - `hl_opts()` create a named list of default options accepted by the
   functions in this package
 - `hl_adjust()` to adjust options after creation.
-- Set the following options to control global behaviour within a
-  session.
-  - `HL_NA`
-  - `HL_FULL_COLOUR`
-  - `HL_TEXT_MODE`
-  - `HL_TEXT_CONTRAST`
-- The above R options are initialised using `Sys.getenv()` during
-  package start, and otherwise use a default value. Set these values as
-  environment variables in your `.Rprofile` to save your preferred
-  settings across different sessions. e.g.
-  - `Sys.setenv(HL_NA = FALSE)` prior to loading package
+- These options are initialised at package start time using
+  `Sys.getenv()`. Set these values as environment variables in your
+  `.Rprofile` to save your preferred settings across different sessions.
+  e.g.
+  - `Sys.setenv(HL_NA = "<none>")` prior to loading package or in
+    `.Rprofile`
   - `options(HL_NA = FALSE)` at any time
+
+| Option                                   | Description                                                                                                                                                                             |
+|:-----------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `HL_NA`                                  | String to use for NA values. Default “NA”                                                                                                                                               |
+| `HL_FULL_COLOUR`                         | Should full colour ANSI codes be used when outputting to the console? Default: FALSE on Rstudio, but TRUE on all other R consoles                                                       |
+| `HL_TEXT_MODE`                           | How to handle text if no text colour has been explicitly specified by the user                                                                                                          |
+|                                          | `"contrast"` (default) automatically select a colour which contrasts with the background                                                                                                |
+|                                          | `"asis"` do not change the colour from the console’s default                                                                                                                            |
+|                                          | `"remove"` remove all text without a user-defined colour                                                                                                                                |
+| `HL_TEXT_CONTRAST`                       | When `text_mode = "contrast"` this numeric value (in range \[0, 1\]) adjusts the visibility of the text. Default: 1 (high contrast)                                                     |
+| `HL_GREP_COL`                            | The fill colour to use with `hl_grep()` if no colour is specified. Default: “\#0F19F0”                                                                                                  |
+| `HL_SUB_COL`, `HL_INS_COL`, `HL_DEL_COL` | the default colours to use with `hl_diff()` for substitution, insertion and deletion (respectively). Defaults: `dodgerblue` (substitute), `darkgreen` (insert) and `firebrick` (delete) |
 
 ## Vignettes
 

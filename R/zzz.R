@@ -67,11 +67,19 @@ get_env_dbl <- function(nm, unset) {
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .onLoad <- function(libname, pkgname) {
 
-  options(HL_NA            = Sys.getenv ("HL_NA"           , unset =       'NA'))
-  options(HL_FULL_COLOUR   = get_env_lgl("HL_FULL_COLOUR"  , unset =      FALSE))
-  options(HL_TEXT_MODE     = Sys.getenv ("HL_TEXT_MODE"    , unset = 'contrast'))
-  options(HL_TEXT_CONTRAST = get_env_dbl("HL_TEXT_CONTRAST", unset =          1))
-  options(HL_UNDERLINE     = get_env_lgl("HL_UNDERLINE"    , unset =       TRUE))
+  options(HL_NA            = Sys.getenv ("HL_NA"           , unset =          'NA'))
+  options(HL_TEXT_MODE     = Sys.getenv ("HL_TEXT_MODE"    , unset =    'contrast'))
+  options(HL_TEXT_CONTRAST = get_env_dbl("HL_TEXT_CONTRAST", unset =             1))
+  options(HL_GREP_COL      = Sys.getenv("HL_GREP_COL"      , unset =     "#0F19F0"))
+  options(HL_SUB_COL       = Sys.getenv("HL_SUB_COL"       , unset =  "dodgerblue"))
+  options(HL_INS_COL       = Sys.getenv("HL_INS_COL"       , unset =   "darkgreen"))
+  options(HL_DEL_COL       = Sys.getenv("HL_DEL_COL"       , unset =   "firebrick"))
+
+  # Is this the Rstudio 256 colour console?
+  rstudio_256 <- Sys.getenv("RSTUDIO_CONSOLE_COLOR", 0) == 256
+
+  # Assume anything not Rstudio is 24-bit colour
+  options(HL_FULL_COLOUR   = get_env_lgl("HL_FULL_COLOUR"  , unset = !rstudio_256))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Enable knit_print compatibility without requiring 'knitr' in 'Imports'

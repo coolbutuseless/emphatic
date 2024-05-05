@@ -37,7 +37,7 @@ hl_grep <- function(x,
   # Choose colours
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (is.null(fill)) {
-    fill <- "#0F19F0"
+    fill <- getOption("HL_GREP_COL", "#0F19F0")
   }
   if (is.null(text)) {
     text <- calc_contrasting_text(

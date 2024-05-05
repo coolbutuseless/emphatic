@@ -41,7 +41,11 @@ hl_diff <- function(x, y,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Default colours
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  fill_default_dark  <- list(sub = 'dodgerblue' , ins = 'darkgreen', del = 'firebrick' )
+  fill_default_dark  <- list(
+    sub = getOption("HL_SUB_COL", 'dodgerblue') ,
+    ins = getOption("HL_INS_COL", 'darkgreen' ) ,
+    del = getOption("HL_DEL_COL", 'firebrick' )
+  )
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Work hard to ensure we have a full complement of colours for both

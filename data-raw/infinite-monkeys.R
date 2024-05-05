@@ -1,10 +1,9 @@
 
 
-library(dplyr)
 library(ggplot2)
 library(emphatic)
 
-text <- "mtcars %>%
+text <- "mtcars |>
   hl('red', rows = 1:5)"
 
 
@@ -39,23 +38,24 @@ monkey <- function(text) {
 
 codes <- c(
   "mtcars",
-  "mtcars %>% hl('grey80')",
-  "mtcars %>% hl(rainbow(32))",
-  "mtcars %>% hl(c('blue', 'white'))",
-  "mtcars %>% hl(c('hotpink', 'yellow'), rows = 10:15)",
-  "mtcars %>% hl('skyblue', rows = seq(1, 32, 2))",
-  "mtcars %>% hl('limegreen', rows = cyl == 6)",
-  "mtcars %>% hl(scale_colour_viridis_c(), cols = mpg)",
-  "mtcars %>% hl(scale_colour_viridis_c(), rows = cyl != 4, cols = mpg)",
-  "mtcars %>% hl(scale_colour_viridis_c(), cols = mpg, scale_apply = mpg:qsec)",
-  "mtcars %>% hl(scale_colour_viridis_c(), cols = mpg) %>%\n   hl(scale_colour_distiller(), cols = wt)"
+  "mtcars |> hl('grey80')",
+  "mtcars |> hl(rainbow(32))",
+  "mtcars |> hl(c('blue', 'white'))",
+  "mtcars |> hl(c('hotpink', 'yellow'), rows = 10:15)",
+  "mtcars |> hl('skyblue', rows = seq(1, 32, 2))",
+  "mtcars |> hl('limegreen', rows = cyl == 6)",
+  "mtcars |> hl(scale_colour_viridis_c(), cols = mpg)",
+  "mtcars |> hl(scale_colour_viridis_c(), rows = cyl != 4, cols = mpg)",
+  "mtcars |> hl(scale_colour_viridis_c(), cols = mpg, scale_apply = mpg:qsec)",
+  "mtcars |> hl(scale_colour_viridis_c(), cols = mpg) |>\n   hl(scale_colour_distiller(), cols = wt)"
 )
 
 system.time({
-cat("\014")
-for (code in codes) {
-  monkey(code)
-}
+  cat("\014")
+  Sys.sleep(5)
+  for (code in codes) {
+    monkey(code)
+  }
 })
 
 

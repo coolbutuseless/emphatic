@@ -1,5 +1,5 @@
 
-# emphatic 0.1.6.9011  2024-05-04
+# emphatic 0.1.6.9012  2024-05-05
 
 * Removed `hl_mat()` and associated vignettes.
     * function is not exported for now as the selection process is too 
@@ -16,6 +16,7 @@
 * latex rendering now has better whitespace at start of line
 * SVG anim support
 * Excel export
+* Refactor options for hl_grep and hl_diff
 
 # emphatic 0.1.6  2024-04-27
 
