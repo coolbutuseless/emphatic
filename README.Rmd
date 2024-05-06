@@ -297,7 +297,6 @@ svg <- as_svg_anim(objs, width = 600, height = 100, duration = 2,
                    playback = 'infinite', font_size = "2em")
 
 writeLines(svg, "data-raw/figures/example-svg-anim.svg")
-# svg
 ```
 
 
