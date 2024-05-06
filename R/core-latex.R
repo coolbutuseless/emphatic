@@ -91,7 +91,7 @@ escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
 
   # I really struggled finding a way to insert significant whitespace at
   # the start of a line. This is the best I could come up with.
-  x = gsub(" ", "\\\\hspace*{0.5em}", x, perl = TRUE)
+  x = gsub(" ", "\\\\hspace*{0.524em}", x, perl = TRUE)
   x
 }
 
