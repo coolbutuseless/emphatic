@@ -13,7 +13,7 @@
     else </span></span><span style='color:#000000;'><span style='background-color:#ffff00;'>switch</span></span><span><span>(tx &lt;- typeof(x), double = , integer = &quot;numeric&quot;, 
         closure = , builtin = , special = &quot;function&quot;, tx)
 }
-&lt;bytecode: 0x112fb3a70&gt;
+&lt;bytecode: 0x158bccaf0&gt;
 &lt;environment: namespace:base&gt;</span></span></pre>
 </div>
 </foreignObject>

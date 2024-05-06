@@ -29,8 +29,8 @@ This highlighting works
 - `hl_grep()` highlight regular expression matches in an object or
   string
 - Output from `hl_*()` functions will automatically be rendered in
-  Rmarkdown and Quarto documents with output formats of html, PDF and
-  typst.
+  Rmarkdown and Quarto documents (where the output format is one of
+  html, PDF or typst).
 - The highlighted output can be explicitly converted to other formats
   using:
   - `as_html()`
@@ -48,7 +48,7 @@ You can install from
 remotes::install_github('coolbutuseless/emphatic', ref = 'main')
 ```
 
-## User-controlled highlighting of data.frames with `hl()`
+## Highlighting of data.frames with `hl()`
 
 - specify rows and columns you want to highlight
 - specify a palette
@@ -56,9 +56,10 @@ remotes::install_github('coolbutuseless/emphatic', ref = 'main')
   - a vector of colours
   - a `ggplot2` “Scale” object e.g. `scale_colour_continuous()`
 
-#### Simple highlighting a data.frame
+#### Simple data.frame example
 
-By default, colouring will be applied to all rows and columns.
+By default, colouring will be applied to all rows and columns, and the
+supplied vector of colours will be recycled to meet the required length.
 
 ``` r
 mtcars |>
@@ -68,7 +69,7 @@ mtcars |>
 
 <img src="data-raw/figures/example1.svg" width="100%">
 
-#### Complex example of highlighting a data.frame
+#### Complex data.frame example
 
 A more complex example showing how to highlight the `mtcars` dataset
 where:

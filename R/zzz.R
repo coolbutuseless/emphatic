@@ -73,7 +73,7 @@ get_env_dbl <- function(nm, unset) {
   options(HL_GREP_COL      = Sys.getenv("HL_GREP_COL"      , unset =         "yellow"))
   options(HL_SUB_COL       = Sys.getenv("HL_SUB_COL"       , unset = "darkslategray1"))
   options(HL_INS_COL       = Sys.getenv("HL_INS_COL"       , unset =     "palegreen1"))
-  options(HL_DEL_COL       = Sys.getenv("HL_DEL_COL"       , unset =     "rosybrown1"))
+  options(HL_DEL_COL       = Sys.getenv("HL_DEL_COL"       , unset =          "coral"))
 
   # Is this the Rstudio 256 colour console?
   rstudio_256 <- Sys.getenv("RSTUDIO_CONSOLE_COLOR", 0) == 256
