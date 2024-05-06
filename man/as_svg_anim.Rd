@@ -10,6 +10,8 @@ as_svg_anim(
   height = 900,
   duration = 1,
   playback = c("infinite", "click"),
+  font_size = NULL,
+  style = list(),
   svg_id = NULL,
   browsable = FALSE
 )

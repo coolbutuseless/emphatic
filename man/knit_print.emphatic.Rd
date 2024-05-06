@@ -4,7 +4,7 @@
 \alias{knit_print.emphatic}
 \title{Automatically output emphatic objects to HTML knitted documents.}
 \usage{
-knit_print.emphatic(x, style = NULL, ...)
+knit_print.emphatic(x, style = list(), ...)
 }
 \arguments{
 \item{x}{emphatic object}

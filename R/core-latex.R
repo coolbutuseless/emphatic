@@ -91,7 +91,7 @@ escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
 
   # I really struggled finding a way to insert significant whitespace at
   # the start of a line. This is the best I could come up with.
-  x = gsub(" ", "\\\\hspace*{0.524em}", x, perl = TRUE)
+  x = gsub(" ", "\\\\hspace*{0.52em}", x, perl = TRUE)
   x
 }
 
@@ -101,19 +101,33 @@ escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
 #'
 #' @param x emphatic object
 #' @param ... other arguments passed to \code{as.character.emphatic()}
+#' @param font_size Integer value indicating font size measured in points.
+#'        Default: NULL.
 #'
 #' @return single character string containing a latex representation
 #' @export
 #' @examples
 #' hl_diff("hello", "there") |> as_latex()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_latex <- function(x, ...) {
+as_latex <- function(x, ..., font_size = NULL) {
+
+  font_text <- NULL
+  if (!is.null(font_size)) {
+    if (!is.numeric(font_size)) {
+    stop("as_latex(): 'font_size' must be a numeric indicating font size in points")
+    }
+    font_size <- as.integer(font_size)
+    font_text <- sprintf("\\fontsize{%ipt}{%ipt}\\selectfont", font_size, font_size + 2)
+  }
 
   res <- paste0(
+    "\\begingroup",
+    font_text,
     "\\setlength{\\fboxsep}{0pt}\n",
     "\\texttt{",
     as.character(x, ..., mode = 'latex'),
-    "}"
+    "}",
+    "\\endgroup"
   )
 
   class(res) <- unique(c('knit_asis', class(res)))

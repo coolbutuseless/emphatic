@@ -4,7 +4,14 @@
 \alias{as_html}
 \title{Render an emphatic object to HTML}
 \usage{
-as_html(x, ..., style = NULL, complete = FALSE, browsable = FALSE)
+as_html(
+  x,
+  ...,
+  font_size = NULL,
+  style = list(),
+  complete = FALSE,
+  browsable = FALSE
+)
 }
 \arguments{
 \item{x}{emphatic object}

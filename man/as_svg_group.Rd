@@ -4,12 +4,24 @@
 \alias{as_svg_group}
 \title{Wrap an emphatic object to part of an SVG}
 \usage{
-as_svg_group(x, width = 1200, height = 900, visible = TRUE, extra = NULL, ...)
+as_svg_group(
+  x,
+  width = 1200,
+  height = 900,
+  font_size = NULL,
+  style = list(),
+  visible = TRUE,
+  extra = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{emphatic object}
 
 \item{width, height}{viewBox dimensions for SVG}
+
+\item{style}{html tag styling to apply to the \code{<pre>} wrapper for the
+returned HTML}
 
 \item{visible}{should the group be visible? Default: TRUE.  When animating,
 every frame other than the first should be set as \code{visible = FALSE}.}

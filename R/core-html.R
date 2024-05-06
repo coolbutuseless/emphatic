@@ -113,16 +113,21 @@ escape_html <- function(x) {
 #' @examples
 #' hl_diff('hello', 'there') |> as_html()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_html <- function(x, ..., style = NULL, complete = FALSE, browsable = FALSE) {
+as_html <- function(x, ..., font_size = NULL, style = list(), complete = FALSE, browsable = FALSE) {
+
+  if (!is.list(style)) {
+    stop("'style' must a named list of CSS style options")
+  }
+
+  if (!is.null(font_size)) {
+    style$`font-size` <- font_size
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Style the <pre> tag
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (!is.null(style)) {
-    pre <- paste0("<pre style='", style, "'>")
-  } else {
-    pre <- "<pre>"
-  }
+  style <- paste(names(style), style, collapse = "; ", sep = ":")
+  pre <- paste0("<pre style='", style, "'>")
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Create HTML

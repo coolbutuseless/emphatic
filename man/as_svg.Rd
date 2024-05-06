@@ -4,7 +4,15 @@
 \alias{as_svg}
 \title{Wrap a single emphatic object into an SVG for display}
 \usage{
-as_svg(x, width = 1200, height = 900, ..., browsable = FALSE)
+as_svg(
+  x,
+  width = 1200,
+  height = 900,
+  ...,
+  font_size = NULL,
+  style = list(),
+  browsable = FALSE
+)
 }
 \arguments{
 \item{x}{emphatic object}
@@ -12,6 +20,9 @@ as_svg(x, width = 1200, height = 900, ..., browsable = FALSE)
 \item{width, height}{viewBox dimensions for SVG}
 
 \item{...}{other arguments passed to \code{as.character.emphatic()}}
+
+\item{style}{html tag styling to apply to the \code{<pre>} wrapper for the
+returned HTML}
 
 \item{browsable}{Should the SVG be rendered to the RStudio Viewer pane when
 when printed (instead of console output)? Default: FALSE}

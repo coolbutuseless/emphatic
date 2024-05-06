@@ -4,12 +4,15 @@
 \alias{as_latex}
 \title{Render an emphatic object to Latex}
 \usage{
-as_latex(x, ...)
+as_latex(x, ..., font_size = NULL)
 }
 \arguments{
 \item{x}{emphatic object}
 
 \item{...}{other arguments passed to \code{as.character.emphatic()}}
+
+\item{font_size}{Integer value indicating font size measured in points.
+Default: NULL.}
 }
 \value{
 single character string containing a latex representation

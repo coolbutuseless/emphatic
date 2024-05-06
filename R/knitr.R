@@ -6,7 +6,7 @@
 #'
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-knit_print.emphatic <- function(x, style = NULL, ...) {
+knit_print.emphatic <- function(x, style = list(), ...) {
 
   if (requireNamespace('knitr', quietly = TRUE)) {
     if (knitr::is_latex_output()) {

@@ -1,5 +1,5 @@
 
-# emphatic 0.1.6.9012  2024-05-05
+# emphatic 0.1.6.9013  2024-05-05
 
 * Removed `hl_mat()` and associated vignettes.
     * function is not exported for now as the selection process is too 
@@ -17,6 +17,7 @@
 * SVG anim support
 * Excel export
 * Refactor options for hl_grep and hl_diff
+* html, typst, svg and latex output all now support font size argument
 
 # emphatic 0.1.6  2024-04-27
 

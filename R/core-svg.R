@@ -19,7 +19,8 @@
 #' @examples
 #' hl_diff('hello', 'there') |> as_svg()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_svg <- function(x, width = 1200, height = 900, ..., browsable = FALSE) {
+as_svg <- function(x, width = 1200, height = 900, ..., font_size = NULL,
+                   style = list(), browsable = FALSE) {
 
   # res <- as_html(x, ...)
 
@@ -27,7 +28,8 @@ as_svg <- function(x, width = 1200, height = 900, ..., browsable = FALSE) {
   svg_text <- paste0(
     "<svg fill=\"none\" viewBox=\"0 0 ", width, " ", height,
     "\" width=\"", width, "\" height=\"", height, "\" xmlns=\"http://www.w3.org/2000/svg\">",
-    as_svg_group(x, width = width, height = height, ...),
+    as_svg_group(x, width = width, height = height, font_size = font_size,
+                 style = style, ...),
     '</svg>'
   )
 
@@ -68,9 +70,10 @@ as_svg <- function(x, width = 1200, height = 900, ..., browsable = FALSE) {
 #' @examples
 #' hl_diff('hello', 'there') |> as_svg_group()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-as_svg_group <- function(x, width = 1200, height = 900, visible = TRUE, extra = NULL, ...) {
+as_svg_group <- function(x, width = 1200, height = 900, font_size = NULL,
+                         style = list(), visible = TRUE, extra = NULL, ...) {
 
-  res <- as_html(x, ...)
+  res <- as_html(x, font_size = font_size, style = style, ...)
 
 
   svg_text <- paste(
@@ -144,6 +147,7 @@ make_animate_tag <- function(i, n, dur = 1, playback, svg_id) {
 #' as_svg_anim(elems)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_svg_anim <- function(x, width = 1200, height = 900, duration = 1, playback = c('infinite', 'click'),
+                        font_size = NULL, style = list(),
                         svg_id = NULL, browsable = FALSE) {
 
   # <animate attributeName="visibility" begin="svg1.click" dur="3s" from="visible" to="hidden" repeatCount="indefinite" />
@@ -178,9 +182,11 @@ as_svg_anim <- function(x, width = 1200, height = 900, duration = 1, playback = 
   for (i in seq_along(x)) {
     groups[[i]] <- as_svg_group(
       x[[i]],
-      width   = width,
-      height  = height,
-      visible = FALSE,
+      width     = width,
+      height    = height,
+      visible   = FALSE,
+      font_size = font_size,
+      style     = style,
       extra = make_animate_tag(
         i, N,
         dur        = duration[i],
