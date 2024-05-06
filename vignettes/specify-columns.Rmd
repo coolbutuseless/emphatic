@@ -26,6 +26,26 @@ test_df <- head(mtcars, 10)
 ```
 
 
+The methods for selecting columns works similar to `tidyselect` used by 
+dplyr.   This is a bespoke implementation of these selections, and may not work
+exactly the same:
+
+
+| selector | description | example
+|---------:|------------:|--------------:|
+|`starts_with()` |names of columns start with the given text | `starts_with("day")`|
+|`ends_with()` |names of columns end with the given text  |`ends_width("2024")` |
+|`everything()` |all columns (the default behaviour)  |`everything()` |
+|`all_of()` | **all** of the named columns |`all_of(c('mpg', 'wt'))` |
+|`any_of()` | **any** of the named columns | `any_of(c('mpg', 'wt'))`|
+|`matches()` |regular expression matches against column names |`matches("day0\\d+")` |
+|`contains()` |name contains the given text |`contains("value")` |
+|`col_number()` |the number of column | `col_number() == 3` |
+|`all()` |select everything |`all()` |
+|`n()` | returns integer specifying number of cols |`cols = n()` will select the last column |
+
+
+
 
 Select all cols
 ------------------------------------------------------------------------------
@@ -42,7 +62,7 @@ test_df |>
 
 ```{r}
 test_df |>
-  hl('skyblue', cols = .all)
+  hl('skyblue', cols = all())
 ```
 
 
@@ -62,12 +82,13 @@ test_df |>
   hl('skyblue', cols = c('mpg', 'gear'))
 ```
 
+
 Select cols by rowname symbol
 ------------------------------------------------------------------------------
 
 ```{r}
 test_df |>
-  hl('skyblue', cols = drat)
+  hl('skyblue', cols = c(drat, am))
 ```
 
 ```{r}

@@ -70,8 +70,7 @@ challenger %>%
   hl(
     scale_color_gradient(low = 'pink', high = 'red'),
     rows = damage > 0,
-    cols = damage,
-    scale_apply = erosion:date
+    cols = damage
   ) 
 ```
 
@@ -82,7 +81,7 @@ challenger %>%
 Second Iteration with `{emphatic}`
 ------------------------------------------------------------------------------
 
-* Expand temperature range to highlight the full limits of flight conditions
+* Expand temperature range to highlight the full limits of possible flight conditions
 * Highlight the Challenger launch temperature in grey (31 degrees)
 * add a colorbar legend for `damage`
 * It is now obvious that no real information is available at this low temperature,
@@ -98,19 +97,21 @@ challenger_expanded <- challenger %>%
   arrange(desc(temp)) %>%
   as.data.frame() %>%
   mutate(temp = as.numeric(levels(temp))[temp]) %>%
-  select(flight, everything())
+  select(flight, everything()) %>%
+  mutate(
+    flight = if_else(temp == 31, "Challenger", flight)
+  )
 
 
 challenger_expanded %>% 
-  hl(scale_color_viridis_c(option = 'B'), cols = temp) %>%
+  hl(scale_color_viridis_c(option = 'B'), cols = temp, show_legend = TRUE) %>%
   hl(
-    scale_color_gradient(low = 'pink', high = 'red'),
-    rows = damage > 0,
+    scale_color_gradient(low = 'lightblue', high = 'orange'),
+    rows = !is.na(damage),
     cols = damage,
-    scale_apply = erosion:date,
     show_legend = TRUE
   ) %>%
-  hl('grey50', rows = temp == 31, cols = erosion:date) %>%
+  hl('firebrick1', rows = temp == 31, cols = flight) %>%
   hl_adjust(na = '')
 ```
 

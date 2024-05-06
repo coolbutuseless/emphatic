@@ -27,6 +27,26 @@ test_df <- head(mtcars, 10)
 
 
 
+The methods for selecting rows works similar to `tidyselect` used by 
+dplyr.   This is a bespoke implementation of these selections, and may not work
+exactly the same:
+
+
+| selector | description | example
+|---------:|------------:|--------------:|
+|`all()` |all rows | `all()`|
+|`starts_with()` |rownames start with the given text | `starts_with("day")`|
+|`ends_with()` |rownames end with the given text  |`ends_width("2024")` |
+|`everything()` |all rows (the default behaviour)  |`everything()` |
+|`all_of()` | **all** of the specified rownames |`all_of(c('mpg', 'wt'))` |
+|`any_of()` | **any** of the specified rownames | `any_of(c('mpg', 'wt'))`|
+|`matches()` |regular expression matches against rownames |`matches("day0\\d+")` |
+|`contains()` |rowname contains the given text |`contains("value")` |
+|`row_number()` |the number of row | `row_number() == 3` |
+|`all()` |select everything |`all()` |
+|`n()` | returns integer specifying number of rows |`rows = c(n(), n() / 2)` will select last row and half-way|
+
+
 Select all rows
 ------------------------------------------------------------------------------
 
@@ -42,7 +62,7 @@ test_df |>
 
 ```{r}
 test_df |>
-  hl('skyblue', rows = .all)
+  hl('skyblue', rows = all())
 ```
 
 

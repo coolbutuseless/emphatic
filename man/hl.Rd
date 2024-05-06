@@ -73,7 +73,7 @@ as \code{filter()} and \code{select()}
      implementations so there may be some differences}
 \item{NULL}{specifying \code{NULL} means that all rows/columns will be
      selected}
-\item{.all}{specifying \code{.all} means that all rows/columns will be
+\item{all()}{specifying \code{all()} means that all rows/columns will be
      selected}
 \item{code that will evaluate to row positions}{For \emph{row} selection only, the user
      can specify code which will evaluate to a logical vector of rows which

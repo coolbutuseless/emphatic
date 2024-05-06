@@ -55,6 +55,9 @@ test_df |>
 Specify a colour scale to apply to a variable, and apply the colouring to multiple columns
 ------------------------------------------------------------------------------
 
+The colourscale is calibrated against only the variable `disp`, but the colouring
+is applied to multiple columns.
+
 ```{r}
 test_df |>
   hl(ggplot2::scale_colour_viridis_c(), cols = disp, scale_apply = mpg:drat)
@@ -68,6 +71,17 @@ Specify a colour scale to apply to multiple variables independently
 test_df |>
   hl(ggplot2::scale_colour_viridis_c(), cols = mpg, show_legend = TRUE) |>
   hl(ggplot2::scale_colour_viridis_c(), cols = disp, show_legend = TRUE)
+```
+
+
+Specify a colour scale to apply to multiple variables as a whole
+------------------------------------------------------------------------------
+
+The scale is calibrated against all data in the nominated `cols`
+
+```{r}
+test_df |>
+  hl(ggplot2::scale_colour_viridis_c(), cols = c(wt, gear, carb), show_legend = TRUE) 
 ```
 
 

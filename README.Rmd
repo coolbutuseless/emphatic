@@ -283,7 +283,7 @@ objs <- list(
 ) 
 
 svg <- as_svg_anim(objs, width = 600, height = 300, duration = 2, 
-                   playback = 'infinite')
+                   playback = 'infinite', font_size = "2em")
 ```
 
 

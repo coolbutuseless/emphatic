@@ -67,12 +67,17 @@ gen_col_number <- function(.data) {
   }
 }
 
-gen_n <- function(.data) {
+gen_n_row <- function(.data) {
   function() {
     nrow(.data)
   }
 }
 
+gen_n_col <- function(.data) {
+  function() {
+    ncol(.data)
+  }
+}
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -96,10 +101,12 @@ loc_expr_to_ids <- function(.data, expr, axis) {
     labels <- rownames(.data)
     len    <- nrow(.data)
     env    <- list2env(.data, parent = parent.frame())
+    gen_n  <- gen_n_row
   } else {
     labels <- colnames(.data)
     len    <- ncol(.data)
     env    <- new.env(parent = parent.frame())
+    gen_n  <- gen_n_col
   }
 
 
@@ -130,7 +137,7 @@ loc_expr_to_ids <- function(.data, expr, axis) {
   env$row_number  <- gen_row_number (.data)
   env$col_number  <- gen_col_number (.data)
   env$n           <- gen_n          (.data)
-  env$.all        <- TRUE
+  env$all         <- function(...) TRUE
   env$.x          <- .data
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
