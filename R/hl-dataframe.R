@@ -216,12 +216,22 @@ hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_l
 #'        Default: FALSE
 #' @inheritParams hl_grep
 #'
-#' @examples
-#' hl(mtcars, ggplot2::scale_colour_viridis_c(), rows = cyl == 6, cols = mpg,
-#'    scale_apply = c(mpg, cyl))
-#'
-#'
 #' @export
+#' @examples
+#' # Simple
+#' mtcars |>
+#'   head() |>
+#'   hl(c('red', 'blue'))
+#'
+#' # More involved example
+#' mtcars |>
+#'   head() |>
+#'   hl(
+#'     ggplot2::scale_colour_viridis_c(),
+#'     rows = cyl == 6,
+#'     cols = mpg,
+#'     scale_apply = c(mpg, cyl)
+#'   )
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl <- function(.data, palette,
                rows = NULL, cols = NULL,

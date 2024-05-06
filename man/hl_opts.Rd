@@ -38,5 +38,4 @@ Create a set of options
 \examples{
 # Generate a standard set of options
 hl_opts()
-
 }

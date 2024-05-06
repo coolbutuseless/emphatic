@@ -17,7 +17,9 @@
 #' @return Character string containing SVG representation
 #' @export
 #' @examples
-#' hl_diff('hello', 'there') |> as_svg()
+#' hl_diff('hello', 'there') |>
+#'   as_svg() |>
+#'   cat()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_svg <- function(x, width = 1200, height = 900, ..., font_size = NULL,
                    style = list(), browsable = FALSE) {
@@ -68,7 +70,9 @@ as_svg <- function(x, width = 1200, height = 900, ..., font_size = NULL,
 #'         SVG elements into a custom SVG document.
 #' @export
 #' @examples
-#' hl_diff('hello', 'there') |> as_svg_group()
+#' hl_diff('hello', 'there') |>
+#'   as_svg_group() |>
+#'   cat()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_svg_group <- function(x, width = 1200, height = 900, font_size = NULL,
                          style = list(), visible = TRUE, extra = NULL, ...) {
@@ -128,6 +132,7 @@ make_animate_tag <- function(i, n, dur = 1, playback, svg_id) {
 #'
 #' Idea borrowed from pointblank
 #'
+#' @inheritParams as_svg
 #' @param width,height viewBox dimensions for SVG
 #' @param x list of emphatic objects
 #' @param duration frame duration in seconds. May be a single value used for
@@ -143,8 +148,12 @@ make_animate_tag <- function(i, n, dur = 1, playback, svg_id) {
 #'         all elements sequentially
 #' @export
 #' @examples
-#' elems <- list(hl_diff('hello', 'there'), hl_diff('hello', 'there'))
-#' as_svg_anim(elems)
+#' list(
+#'   hl_diff('hello', 'there'),
+#'   hl_diff('goodbye', 'good boy')
+#' ) |>
+#'   as_svg_anim() |>
+#'   cat()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_svg_anim <- function(x, width = 1200, height = 900, duration = 1, playback = c('infinite', 'click'),
                         font_size = NULL, style = list(),

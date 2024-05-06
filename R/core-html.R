@@ -107,11 +107,16 @@ escape_html <- function(x) {
 #'        the tags for 'html', 'body' and 'head' to make a complete standalone
 #'        html file.
 #' @inheritParams as_svg_anim
+#' @param font_size CSS font-size. Default: NULL means to not adjust font size.
+#'        Otherwise, use valid CSS \code{font-size} specification e.g.
+#'        "3em", "22px" etc.
 #'
 #' @return Character string containing HTML representation
 #' @export
 #' @examples
-#' hl_diff('hello', 'there') |> as_html()
+#' hl_diff('hello', 'there') |>
+#'   as_html() |>
+#'   cat()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_html <- function(x, ..., font_size = NULL, style = list(), complete = FALSE, browsable = FALSE) {
 
@@ -127,12 +132,12 @@ as_html <- function(x, ..., font_size = NULL, style = list(), complete = FALSE, 
   # Style the <pre> tag
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   style <- paste(names(style), style, collapse = "; ", sep = ":")
-  pre <- paste0("<pre style='", style, "'>")
+  pre <- paste0("<pre style='", style, "'>\n")
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Create HTML
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  res <- paste0(pre, as.character(x, ..., mode = 'html'), "</pre>")
+  res <- paste0(pre, as.character(x, ..., mode = 'html'), "\n</pre>")
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Should the HTML be 'complete'?

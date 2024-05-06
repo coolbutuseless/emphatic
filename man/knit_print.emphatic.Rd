@@ -17,3 +17,8 @@ returned HTML}
 \description{
 Automatically output emphatic objects to HTML knitted documents.
 }
+\examples{
+mtcars |>
+  hl('red') |>
+  knit_print.emphatic()
+}

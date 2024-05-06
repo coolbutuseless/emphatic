@@ -88,22 +88,28 @@ escape_typst <- function(x) {
 #' @return Character string containing \code{typst} representation
 #' @export
 #' @examples
-#' hl_diff("hello", "there") |> as_typst()
-#'
+#' hl_diff("hello", "there") |>
+#'   as_typst() |>
+#'   cat()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_typst <- function(x, ..., font_size = 10, font = NA, line_spacing = 0.3) {
 
   res <- as.character(x, ..., mode = 'typst')
 
+  set_font <- NULL
+  if (!is.na(font)) {
+    set_font <- paste0('#show raw: set text(font: "', font, '")')
+  }
+
   res <- paste(
-    "\n```{=typst}\n",
+    "\n```{=typst}",
     "#[",
     paste0('#set text(size: ', font_size, 'pt, hyphenate: false)'),
     paste0('#set par(leading: ', line_spacing, 'em)'),
-    ifelse(is.na(font), '', paste0('#show raw: set text(font: "', font, '")')),
+    set_font,
     res,
     "]",
-    "\n```\n",
+    "```\n",
     sep = "\n"
   )
 

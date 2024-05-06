@@ -17,7 +17,7 @@ escape <- list(
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 collapse = list(
   ansi  = "\n",
-  html  = "<br/>",
+  html  = "<br/>\n",
   latex = "\\\\\n",
   typst = "\\\n"
 )
@@ -90,6 +90,10 @@ underline_off <- list(
 #' @return An \code{emphatic} version of the given .data with added attributes for text and fill colours
 #'
 #' @export
+#' @examples
+#' mtcars |>
+#'   head() |>
+#'   as_emphatic()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_emphatic <- function(.data) {
   stopifnot(is_matrix(.data) || is.data.frame(.data) || is_atomic(.data))
@@ -149,6 +153,10 @@ get_legends <- function(.data) {
 #' @param x Object to test
 #'
 #' @export
+#' @examples
+#' mtcars |>
+#'   hl('red') |>
+#'   is_emphatic()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 is_emphatic <- function(x) {
 
@@ -183,6 +191,11 @@ is_emphatic <- function(x) {
 #' @inheritParams as.character.emphatic
 #'
 #' @export
+#' @examples
+#' mtcars |>
+#'   head() |>
+#'   hl('red') |>
+#'   print()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 print.emphatic <- function(x, ...) {
 
@@ -208,6 +221,10 @@ print.emphatic <- function(x, ...) {
 #'        choose 'ansi'.
 #'
 #' @export
+#' @examples
+#' mtcars |>
+#'   as_emphatic() |>
+#'   as.character()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as.character.emphatic <- function(x, ..., mode = 'ansi') {
 

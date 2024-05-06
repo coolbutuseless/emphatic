@@ -107,7 +107,9 @@ escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
 #' @return single character string containing a latex representation
 #' @export
 #' @examples
-#' hl_diff("hello", "there") |> as_latex()
+#' hl_diff("hello", "there") |>
+#'   as_latex() |>
+#'   cat()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 as_latex <- function(x, ..., font_size = NULL) {
 
@@ -117,16 +119,16 @@ as_latex <- function(x, ..., font_size = NULL) {
     stop("as_latex(): 'font_size' must be a numeric indicating font size in points")
     }
     font_size <- as.integer(font_size)
-    font_text <- sprintf("\\fontsize{%ipt}{%ipt}\\selectfont", font_size, font_size + 2)
+    font_text <- sprintf("\\fontsize{%ipt}{%ipt}\\selectfont\n", font_size, font_size + 2)
   }
 
   res <- paste0(
-    "\\begingroup",
+    "\\begingroup\n",
     font_text,
     "\\setlength{\\fboxsep}{0pt}\n",
-    "\\texttt{",
+    "\\texttt{\n",
     as.character(x, ..., mode = 'latex'),
-    "}",
+    "\n}\n",
     "\\endgroup"
   )
 

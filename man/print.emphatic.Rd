@@ -14,3 +14,9 @@
 \description{
 Print an \code{emphatic} data.frame, matrix or atomic vector
 }
+\examples{
+mtcars |>
+  head() |>
+  hl('red') |>
+  print()
+}

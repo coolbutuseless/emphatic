@@ -21,5 +21,7 @@ single character string containing a latex representation
 Render an emphatic object to Latex
 }
 \examples{
-hl_diff("hello", "there") |> as_latex()
+hl_diff("hello", "there") |>
+  as_latex() |>
+  cat()
 }

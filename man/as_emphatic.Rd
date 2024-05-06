@@ -23,3 +23,8 @@ the text colour and one for the background colour.
 Colour information is stored as R colour names (e.g. 'red') or 6 character
 hex colours (e.g. '#ff0000').
 }
+\examples{
+mtcars |>
+  head() |>
+  as_emphatic()
+}

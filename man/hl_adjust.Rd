@@ -35,3 +35,8 @@ emphatic object with updated options
 \description{
 Set options for printing on the emphatic matrix or data.frame
 }
+\examples{
+mtcars |>
+  hl('red') |>
+  hl_adjust(text_contrast = 0.3)
+}

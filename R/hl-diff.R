@@ -29,6 +29,8 @@
 #' @importFrom utils adist
 #' @importFrom utils head
 #' @export
+#' @examples
+#' hl_diff('hello', 'there')
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_diff <- function(x, y,
                     coerce = "default",

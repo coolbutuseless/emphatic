@@ -59,3 +59,6 @@ the generalized Levenshtein (edit) distance (using \code{adist()})
 This works character-by-character, so the displayed difference for multiline
 strings can be quite busy if there are a lot of changes.
 }
+\examples{
+hl_diff('hello', 'there')
+}

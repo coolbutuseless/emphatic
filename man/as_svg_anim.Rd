@@ -27,6 +27,13 @@ Can be fractions of a second.}
 
 \item{playback}{'click', 'infinite'}
 
+\item{font_size}{CSS font-size. Default: NULL means to not adjust font size.
+Otherwise, use valid CSS \code{font-size} specification e.g.
+"3em", "22px" etc.}
+
+\item{style}{html tag styling to apply to the \code{<pre>} wrapper for the
+returned HTML}
+
 \item{svg_id}{ID to use for the SVG tag.  Default: NULL means to create a random
 ID}
 
@@ -41,6 +48,10 @@ Character string containing an animated SVG representation displaying
 Idea borrowed from pointblank
 }
 \examples{
-elems <- list(hl_diff('hello', 'there'), hl_diff('hello', 'there'))
-as_svg_anim(elems)
+list(
+  hl_diff('hello', 'there'),
+  hl_diff('goodbye', 'good boy')
+) |>
+  as_svg_anim() |>
+  cat()
 }

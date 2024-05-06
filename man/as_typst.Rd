@@ -25,6 +25,7 @@ Character string containing \code{typst} representation
 Render an emphatic object to typst
 }
 \examples{
-hl_diff("hello", "there") |> as_typst()
-
+hl_diff("hello", "there") |>
+  as_typst() |>
+  cat()
 }

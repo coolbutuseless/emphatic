@@ -20,6 +20,10 @@ as_svg_group(
 
 \item{width, height}{viewBox dimensions for SVG}
 
+\item{font_size}{CSS font-size. Default: NULL means to not adjust font size.
+Otherwise, use valid CSS \code{font-size} specification e.g.
+"3em", "22px" etc.}
+
 \item{style}{html tag styling to apply to the \code{<pre>} wrapper for the
 returned HTML}
 
@@ -43,5 +47,7 @@ may then be wrapped in \code{<svg>} tags to create a stand-along SVG.
 This function is used internall by both \code{as_svg()} and \code{as_svg_anim()}
 }
 \examples{
-hl_diff('hello', 'there') |> as_svg_group()
+hl_diff('hello', 'there') |>
+  as_svg_group() |>
+  cat()
 }

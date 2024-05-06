@@ -52,3 +52,6 @@ only works in a terminal which supports ANSI colour codes.
 There are slightly different versions of the highlighting function depending
 upon which text version of the object you'd like to match against:
 }
+\examples{
+hl_grep(mode, 'switch')
+}

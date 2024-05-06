@@ -18,6 +18,10 @@ as_html(
 
 \item{...}{other arguments passed to \code{as.character.emphatic()}}
 
+\item{font_size}{CSS font-size. Default: NULL means to not adjust font size.
+Otherwise, use valid CSS \code{font-size} specification e.g.
+"3em", "22px" etc.}
+
 \item{style}{html tag styling to apply to the \code{<pre>} wrapper for the
 returned HTML}
 
@@ -35,5 +39,7 @@ Character string containing HTML representation
 Render an emphatic object to HTML
 }
 \examples{
-hl_diff('hello', 'there') |> as_html()
+hl_diff('hello', 'there') |>
+  as_html() |>
+  cat()
 }

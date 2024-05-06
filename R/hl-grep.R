@@ -24,6 +24,8 @@
 #'
 #' @importFrom utils capture.output str
 #' @export
+#' @examples
+#' hl_grep(mode, 'switch')
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_grep <- function(x,
                     pattern,

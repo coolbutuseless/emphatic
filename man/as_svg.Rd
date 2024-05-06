@@ -21,6 +21,10 @@ as_svg(
 
 \item{...}{other arguments passed to \code{as.character.emphatic()}}
 
+\item{font_size}{CSS font-size. Default: NULL means to not adjust font size.
+Otherwise, use valid CSS \code{font-size} specification e.g.
+"3em", "22px" etc.}
+
 \item{style}{html tag styling to apply to the \code{<pre>} wrapper for the
 returned HTML}
 
@@ -41,5 +45,7 @@ if it is within a \code{<svg>} tags.
 This is just a the results of \code{as_html()} wrapped in \code{<svg>} tags
 }
 \examples{
-hl_diff('hello', 'there') |> as_svg()
+hl_diff('hello', 'there') |>
+  as_svg() |>
+  cat()
 }

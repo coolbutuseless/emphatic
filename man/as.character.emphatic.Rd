@@ -20,3 +20,8 @@ The output contains ANSI escape codes to colour the elements in the
 object. This string would then be suitable to pass on to \code{fansi}
 for further manipulation e.g. conversion to HTML for displaying in a vignette.
 }
+\examples{
+mtcars |>
+  as_emphatic() |>
+  as.character()
+}

@@ -10,6 +10,10 @@
 #'
 #' @importFrom utils modifyList
 #' @export
+#' @examples
+#' mtcars |>
+#'   hl('red') |>
+#'   hl_adjust(text_contrast = 0.3)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_adjust <- function(.data, na, full_colour, text_mode, text_contrast) {
 
@@ -73,11 +77,9 @@ find_args <- function () {
 #'        range [0, 1] adjusts the visibility. Default: 1 (high contrast)
 #'
 #' @export
-#'
 #' @examples
 #' # Generate a standard set of options
 #' hl_opts()
-#'
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_opts <- function(na               = getOption("HL_NA", "NA"),
                     full_colour      = getOption("HL_FULL_COLOUR", FALSE),

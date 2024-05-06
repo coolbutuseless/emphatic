@@ -12,3 +12,8 @@ is_emphatic(x)
 \description{
 Check if data.frame, matrix or atomic vector is a valid emphatic version
 }
+\examples{
+mtcars |>
+  hl('red') |>
+  is_emphatic()
+}

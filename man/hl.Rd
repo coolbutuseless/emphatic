@@ -83,8 +83,18 @@ as \code{filter()} and \code{select()}
 }
 
 \examples{
-hl(mtcars, ggplot2::scale_colour_viridis_c(), rows = cyl == 6, cols = mpg,
-   scale_apply = c(mpg, cyl))
+# Simple
+mtcars |>
+  head() |>
+  hl(c('red', 'blue'))
 
-
+# More involved example
+mtcars |>
+  head() |>
+  hl(
+    ggplot2::scale_colour_viridis_c(),
+    rows = cyl == 6,
+    cols = mpg,
+    scale_apply = c(mpg, cyl)
+  )
 }
