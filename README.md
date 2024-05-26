@@ -39,7 +39,7 @@ This highlighting works
 <summary style="font-size: large;">
 Click here to show/hide gif demo
 </summary>
-<img src="data-raw/figures/examples.gif"/>
+<img src="man/figures/examples.gif"/>
 </details>
 
 #### What’s in the box
@@ -100,7 +100,7 @@ mtcars |>
   hl(c('red', 'white', 'blue')) 
 ```
 
-<img src="data-raw/figures/example1.svg" width="100%">
+<img src="man/figures/example1.svg" width="100%">
 
 #### Complex example
 
@@ -125,7 +125,7 @@ mtcars |>
   ) 
 ```
 
-<img src="data-raw/figures/example2.svg" width="100%">
+<img src="man/figures/example2.svg" width="100%">
 
 ## Highlight difference between two objects with `hl_diff()`
 
@@ -139,7 +139,7 @@ y <- "Not Paris in the spring!"
 hl_diff(x, y)
 ```
 
-<img src="data-raw/figures/example-strdiff-3.svg" width="100%">
+<img src="man/figures/example-strdiff-3.svg" width="100%">
 
 Levenshtein’s edit distance naturally applies to strings, but
 `hl_diff()` can visualise the difference between arbitrary objects by
@@ -154,7 +154,7 @@ function definitions is highlighted.
 hl_diff(mean, median, coerce = 'print', sep = " ")
 ```
 
-<img src="data-raw/figures/example-strdiff-4.svg" width="100%">
+<img src="man/figures/example-strdiff-4.svg" width="100%">
 
 ## Highlight regular expression matches in objects with `hl_grep()`
 
@@ -174,7 +174,7 @@ that Royal would have found the event to be most satisfactory.
 hl_grep(txt, "event.*satisfactory", coerce = 'character')
 ```
 
-<img src="data-raw/figures/example-hlgrep-1.svg" width="100%">
+<img src="man/figures/example-hlgrep-1.svg" width="100%">
 
 #### Highlight regular expression matches within an object
 
@@ -189,7 +189,7 @@ In this example, the function body for `mode()` is searched for the word
 hl_grep(mode, 'switch')
 ```
 
-<img src="data-raw/figures/example-hlgrep-2.svg" width="100%">
+<img src="man/figures/example-hlgrep-2.svg" width="100%">
 
 # Animated SVG
 
@@ -206,7 +206,7 @@ svg <- as_svg_anim(objs, width = 600, height = 300, duration = 2,
                    playback = 'infinite', font_size = "2em")
 ```
 
-<img src="data-raw/figures/example-svg-anim.svg">
+<img src="man/figures/example-svg-anim.svg">
 
 ## Options
 

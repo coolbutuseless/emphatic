@@ -8,7 +8,7 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "data-raw/figures/README-",
+  fig.path = "man/figures/README-",
   out.width = "100%"
 )
 
@@ -33,7 +33,7 @@ if (FALSE) {
 
 
 ```{r echo = FALSE, eval = FALSE}
-img <- image_read("data-raw/figures/white.png")
+img <- image_read("man/figures/white.png")
 
 
 hexSticker::sticker(subplot  = img,
@@ -50,9 +50,9 @@ hexSticker::sticker(subplot  = img,
                     h_size   = 1.2,
                     h_fill   = "#ffffff",
                     h_color  = "#223344",
-                    filename = "data-raw/figures/logo.png")
+                    filename = "man/figures/logo.png")
 
-image_read("data-raw/figures/logo.png")
+image_read("man/figures/logo.png")
 ```
 
 
@@ -87,7 +87,7 @@ This highlighting works
 
 <details open>
 <summary style="font-size: large;">Click here to show/hide gif demo</summary>
-<img src="data-raw/figures/examples.gif"/>
+<img src="man/figures/examples.gif"/>
 </details>
 
 #### What's in the box
@@ -152,10 +152,10 @@ mtcars |>
   head(15) |>
   hl(c('red', 'white', 'blue')) |>
   as_svg(650, 350) |>
-  cat(file = "data-raw/figures/example1.svg")
+  cat(file = "man/figures/example1.svg")
 ```
 
-<img src="data-raw/figures/example1.svg" width="100%">
+<img src="man/figures/example1.svg" width="100%">
 
 
 #### Complex example
@@ -193,10 +193,10 @@ mtcars |>
   ) |>
   hl('hotpink', rows = hp == min(hp), cols = hp:carb) |>
   as_svg(650, 380) |>
-  cat(file = "data-raw/figures/example2.svg")
+  cat(file = "man/figures/example2.svg")
 ```
 
-<img src="data-raw/figures/example2.svg" width="100%">
+<img src="man/figures/example2.svg" width="100%">
 
 
 
@@ -218,10 +218,10 @@ x <- "Paris in the the spring?"
 y <- "Not Paris in the spring!"
 hl_diff(x, y) |>
   as_svg(600, 80) |>
-  cat(file = "data-raw/figures/example-strdiff-3.svg")
+  cat(file = "man/figures/example-strdiff-3.svg")
 ```
 
-<img src="data-raw/figures/example-strdiff-3.svg" width="100%">
+<img src="man/figures/example-strdiff-3.svg" width="100%">
 
 Levenshtein's edit distance naturally applies to strings, but `hl_diff()` can 
 visualise the difference between arbitrary objects by first converting them
@@ -238,10 +238,10 @@ hl_diff(mean, median, coerce = 'print', sep = " ")
 ```{r echo=FALSE}
 hl_diff(mean, median, coerce = 'print', sep = " ") |>
   as_svg(600, 200) |>
-  cat(file = "data-raw/figures/example-strdiff-4.svg")
+  cat(file = "man/figures/example-strdiff-4.svg")
 ```
 
-<img src="data-raw/figures/example-strdiff-4.svg" width="100%">
+<img src="man/figures/example-strdiff-4.svg" width="100%">
 
 ## Highlight regular expression matches in objects with `hl_grep()` 
 
@@ -271,10 +271,10 @@ that Royal would have found the event to be most satisfactory.
 [Chas, now wearing a black Adidas tracksuit, nods to his sons]"
 hl_grep(txt, "event.*satisfactory", coerce = 'character')|>
   as_svg(600, 200) |>
-  cat(file = "data-raw/figures/example-hlgrep-1.svg")
+  cat(file = "man/figures/example-hlgrep-1.svg")
 ```
 
-<img src="data-raw/figures/example-hlgrep-1.svg" width="100%">
+<img src="man/figures/example-hlgrep-1.svg" width="100%">
 
 #### Highlight regular expression matches within an object
 
@@ -291,10 +291,10 @@ hl_grep(mode, 'switch')
 ```{r echo = FALSE}
 hl_grep(mode, 'switch') |>
   as_svg(600, 250) |>
-  cat(file = "data-raw/figures/example-hlgrep-2.svg")
+  cat(file = "man/figures/example-hlgrep-2.svg")
 ```
 
-<img src="data-raw/figures/example-hlgrep-2.svg" width="100%">
+<img src="man/figures/example-hlgrep-2.svg" width="100%">
 
 
 # Animated SVG
@@ -322,11 +322,11 @@ objs <- list(
 svg <- as_svg_anim(objs, width = 600, height = 100, duration = 2, 
                    playback = 'infinite', font_size = "2em")
 
-writeLines(svg, "data-raw/figures/example-svg-anim.svg")
+writeLines(svg, "man/figures/example-svg-anim.svg")
 ```
 
 
-<img src="data-raw/figures/example-svg-anim.svg">
+<img src="man/figures/example-svg-anim.svg">
 
 
 
