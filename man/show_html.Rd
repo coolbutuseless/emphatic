@@ -18,11 +18,10 @@ None
 Show HTML or SVG content in the rstudio viewer pane
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # This example will try and spawn an external viewer for HTML content
-# and is thus marked as 'dontrun' so it does not get executed on CRAN
 hl_grep(mode, "switch") |>
   as_html() |>
   show_html()
-}
+\dontshow{\}) # examplesIf}
 }

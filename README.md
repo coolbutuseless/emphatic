@@ -18,21 +18,9 @@ between *tabular output* and *graphical output* - like a table it shows
 all values, but like graphs these values are used to control appearance
 (i.e. colour).
 
-|                       | Table | Emphatic | Graph |
-|:----------------------|------:|---------:|------:|
-| View all raw values   |   Yes |      Yes |     . |
-| Values control colour |     . |      Yes |   Yes |
-
-To make it easier to get started with `{emphatic}` it follows the
-conventions of `{dplyr}` for selecting rows and columns, and advanced
-colouring is via colour *scales* objects provided by `{ggplot2}` and
-other packages.
-
-The output is focussed on the display of a data grid, highlighting
-user-selected elements, but with minimal extra [“chart
-junk”](https://en.wikipedia.org/wiki/Chartjunk). This makes it suited to
-data exploration, but may not meet everyone’s needs for
-“publication-ready” output.
+`{emphatic}` follows the conventions of `{dplyr}` for selecting rows and
+columns; advanced colouring is via colour scales provided by
+`{ggplot2}`.
 
 #### Supported output
 
@@ -65,7 +53,7 @@ Click here to show/hide gif demo
   - `as_svg()` and animated `as_svg_anim()`
   - `as_typst()`
   - `write_xlsx()` - Excel document
-- Automatic conversion to the correct format is performed automatically
+- Conversion to the correct output format is performed automatically
   when knitting an Rmarkdown or Quarto document.
 
 #### Installation
@@ -75,7 +63,7 @@ You can install from
 
 ``` r
 # install.packages('remotes')
-remotes::install_github('coolbutuseless/emphatic', ref = 'main')
+remotes::install_github('coolbutuseless/emphatic')
 ```
 
 ## Highlighting of data.frames with `hl()`
@@ -86,14 +74,13 @@ data.frame the palette should apply to.
 `hl()` calls are cumulative - so the required highlighting can be built
 up one-step-at-a-time.
 
-To add highlighing to a data.frame, specify a palette and define the
-rows/columns to be highlighted:
+To add highlighing to a data.frame:
 
-- specify a `palette`
+- **Specify a palette**
   - a single colour or vector of colours
   - a `ggplot2` *Scale* object e.g. `scale_colour_continuous()`
-- specify `rows`/`cols` to highlight (default: `NULL` highlights all
-  rows/cols). Specify row/column selection using:
+- **Specify rows and columns**
+  - default: highlight all rows and all columns.
   - numeric vector giving row/column indices e.g. `c(1, 2, 8)`, `1:8`
   - character vector giving row/column names e.g. `c('mpg', 'wt')`
   - vector of bare column names e.g. `c(mpg, wt)`, `mpg:wt`
@@ -102,7 +89,7 @@ rows/columns to be highlighted:
     `row_number()`, `n()`
   - row selection using filtering operations e.g. `cyl == 6 & mpg > 20`
 
-#### Simple data.frame example
+#### Simple example
 
 By default, colouring will be applied to all rows and columns, and the
 supplied vector of colours will be recycled to meet the required length.
@@ -115,20 +102,16 @@ mtcars |>
 
 <img src="data-raw/figures/example1.svg" width="100%">
 
-#### Complex data.frame example
+#### Complex example
 
 A more complex example showing how to highlight the `mtcars` dataset
 where:
 
-- highlight the row for the car with the minimum horsepower (`hp`) in
-  `hotpink`
+- Highlight the row for the car with the minimum horsepower
 - Determine an expressive colouring for `mpg` using
   `scale_colour_viridis_c()` - where low values are darker, and high
   values are a bright yellow
 - Apply the scale’s colouring to all columns from `mpg` to `disp`
-
-`hl()` calls are cumulative - you can build up the highlighting you need
-step-by-step
 
 ``` r
 mtcars |>
