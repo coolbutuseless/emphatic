@@ -23,7 +23,7 @@
 #'        for no separation. Use the empty string to insert an empty line.
 #' @inheritParams hl_grep
 #'
-#' @return list of 'emphatic' objects which could be rendered to ANSI or HTML
+#' @return list of 'emphatic' objects which could be rendered to ANSI (for example)
 #'
 #' @importFrom grDevices col2rgb
 #' @importFrom utils adist

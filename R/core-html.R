@@ -112,6 +112,7 @@ escape_html <- function(x) {
 #'        "3em", "22px" etc.
 #'
 #' @return Character string containing HTML representation
+#'
 #' @export
 #' @examples
 #' hl_diff('hello', 'there') |>

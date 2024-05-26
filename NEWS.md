@@ -1,23 +1,10 @@
 
-# emphatic 0.1.6.9014  2024-05-26
+# emphatic 0.1.7  2024-05-26
 
-* Removed `hl_mat()` and associated vignettes.
-    * function is not exported for now as the selection process is too 
-      difficult to describe well. Needs a rethink
-* Refactored colour handling for `hl_grep()` and `hl_diff()`
-* Settled on `text`/`fill` nomenclature
-* Refactored arguments to `hl()` for more clarity
-* Added latex output so Quarto/Rmd will show emphatic objects when 
-  rendered to PDF
-* Remove `scale_mode` argument to `hl()`
-* Support for output to `typst` in quarto docs
-    * Output to raw blocks in typst
-    * only character to be escaped is the backtick
-* latex rendering now has better whitespace at start of line
-* SVG anim support
-* Excel export
-* Refactor options for hl_grep and hl_diff
-* html, typst, svg and latex output all now support font size argument
+* Support for conversion to `typst`, `latex`, `html`, `svg` and `Excel`
+* Automatic conversion to appropriate type when knitting Rmarkdown and Quarto
+* Internal refactor
+* Removed `hl_mat()`
 
 # emphatic 0.1.6  2024-04-27
 

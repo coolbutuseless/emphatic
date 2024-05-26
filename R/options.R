@@ -75,6 +75,8 @@ find_args <- function () {
 #' @param text_contrast When \code{text_mode='contrast'} this numeric value in
 #'        range [0, 1] adjusts the visibility. Default: 1 (high contrast)
 #'
+#' @return named list of standard options
+#'
 #' @export
 #' @examples
 #' # Generate a standard set of options

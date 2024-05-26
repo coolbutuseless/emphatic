@@ -21,6 +21,8 @@
 #' @inheritParams hl_diff
 #' @param opts create options list
 #'
+#' @return An emphatic object suitable to output to console (for example)
+#'
 #' @importFrom utils capture.output str
 #' @export
 #' @examples

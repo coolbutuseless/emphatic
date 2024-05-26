@@ -1,10 +1,18 @@
 Package: emphatic
 Type: Package
-Title: Highlight R Output
-Version: 0.1.6.9014
-Author: mikefc
-Maintainer: mikefc <mikefc@coolbutuseless.com>
-Description: User-defined colour highlighting of data.frames and other R output. 
+Title: Tools for Exploratory Analysis of Tabular Data using Colour Highlighting
+Version: 0.1.7
+Authors@R: c(
+    person("Mike", "Cheng", role = c("aut", "cre", 'cph'), email = "mikefc@coolbutuseless.com")
+    )
+Maintainer: Mike Cheng <mikefc@coolbutuseless.com>
+Description: Tools for exploratory analysis of tabular data using colour 
+  highlighting.  By specifying a palette and row/column positions, data-dependent 
+  colouring can be applied to data.frames in a pipe-friendly
+  manner.  Highlighting is displayed in any console supporting ANSI
+  colouring. Quarto and Rmarkdown rendering are also supported.  It is 
+  also possible to add colour to regular expression matches and 
+  highlight differences between two objects.
 URL: https://coolbutuseless.github.io/package/emphatic/, https://github.com/coolbutuseless/emphatic
 BugReports: https://github.com/coolbutuseless/emphatic/issues
 License: MIT + file LICENSE

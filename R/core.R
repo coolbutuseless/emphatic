@@ -220,6 +220,8 @@ print.emphatic <- function(x, ...) {
 #'        be represented in text. If you're in a terminal or console, then
 #'        choose 'ansi'.
 #'
+#' @return A character string of the requested mode
+#'
 #' @export
 #' @examples
 #' mtcars |>

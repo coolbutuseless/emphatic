@@ -42,6 +42,9 @@ Default: FALSE}
 
 \item{opts}{create options list}
 }
+\value{
+An emphatic object suitable to output to console (for example)
+}
 \description{
 Highlight elements in a data.frame by specifying rows and columns, and the
 colour to be applied.  The colour can be either a vector of colours expressed

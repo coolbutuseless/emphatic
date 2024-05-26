@@ -216,6 +216,8 @@ hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_l
 #'        Default: FALSE
 #' @inheritParams hl_grep
 #'
+#' @return An emphatic object suitable to output to console (for example)
+#'
 #' @export
 #' @examples
 #' # Simple

@@ -86,6 +86,7 @@ escape_typst <- function(x) {
 #' @param line_spacing line spacing in \code{em} units. Default: 0.3
 #'
 #' @return Character string containing \code{typst} representation
+#'
 #' @export
 #' @examples
 #' hl_diff("hello", "there") |>

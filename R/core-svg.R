@@ -15,6 +15,7 @@
 #' @return character string containing an SVG snippet.
 #'
 #' @return Character string containing SVG representation
+#'
 #' @export
 #' @examples
 #' hl_diff('hello', 'there') |>
@@ -67,6 +68,7 @@ as_svg <- function(x, width = 1200, height = 900, ..., font_size = NULL,
 #' @return Character string containing representation as an SVG group element
 #'         i.e. \code{<g>}.  This result is suitable for combining with other
 #'         SVG elements into a custom SVG document.
+#'
 #' @export
 #' @examples
 #' hl_diff('hello', 'there') |>
@@ -145,6 +147,7 @@ make_animate_tag <- function(i, n, dur = 1, playback, svg_id) {
 #'
 #' @return Character string containing an animated SVG representation displaying
 #'         all elements sequentially
+#'
 #' @export
 #' @examples
 #' list(

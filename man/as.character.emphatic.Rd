@@ -15,6 +15,9 @@
 be represented in text. If you're in a terminal or console, then
 choose 'ansi'.}
 }
+\value{
+A character string of the requested mode
+}
 \description{
 The output contains ANSI escape codes to colour the elements in the
 object. This string would then be suitable to pass on to \code{fansi}

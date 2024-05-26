@@ -4,6 +4,8 @@
 #'
 #' @inheritParams as_html
 #'
+#' @return a character vector suitable for output during an rmarkdown render
+#'
 #' @export
 #' @examples
 #' mtcars |>

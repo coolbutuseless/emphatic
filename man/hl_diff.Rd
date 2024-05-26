@@ -48,7 +48,7 @@ for no separation. Use the empty string to insert an empty line.}
 \item{...}{further arguments passed to \code{adist()}}
 }
 \value{
-list of 'emphatic' objects which could be rendered to ANSI or HTML
+list of 'emphatic' objects which could be rendered to ANSI (for example)
 }
 \description{
 Highlight the differences between two strings in

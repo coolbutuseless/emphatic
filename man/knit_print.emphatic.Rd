@@ -14,6 +14,9 @@ returned HTML}
 
 \item{...}{other arguments passed to \code{as.character.emphatic()}}
 }
+\value{
+a character vector suitable for output during an rmarkdown render
+}
 \description{
 Automatically output emphatic objects to HTML knitted documents.
 }

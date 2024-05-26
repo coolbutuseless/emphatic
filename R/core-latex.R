@@ -105,6 +105,7 @@ escape_latex <- function (x, newlines = FALSE, spaces = TRUE) {
 #'        Default: NULL.
 #'
 #' @return single character string containing a latex representation
+#'
 #' @export
 #' @examples
 #' hl_diff("hello", "there") |>

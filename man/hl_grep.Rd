@@ -45,6 +45,9 @@ will be seleted which contrasts with the \code{fill} colour.}
 
 \item{perl}{logical. use perl style regex. default: TRUE}
 }
+\value{
+An emphatic object suitable to output to console (for example)
+}
 \description{
 Highlight text within an R object which matches a given regex. This
 only works in a terminal which supports ANSI colour codes.
