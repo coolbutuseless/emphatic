@@ -1,7 +1,4 @@
 
-
-
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Create a single line legend
 #'
@@ -117,30 +114,4 @@ create_legend_string <- function(
   ansi_vec <- paste0(text, fill, key_vals, end)
 
   paste(ansi_vec, collapse = '')
-}
-
-
-if (FALSE) {
-
-  suppressPackageStartupMessages({
-    library(ggplot2)
-  })
-
-  scale <- scale_colour_viridis_c()
-  values <- runif(20)
-  scale$reset()
-  scale$train(values)
-
-  cat(create_legend_string(scale, values, label = "hello"), "\n")
-
-
-  scale  <- scale_colour_viridis_d()
-  values <- sample(c('alpha', 'beta', 'gam', 'epsilon'), 20, T)
-  scale$reset()
-  scale$train(values)
-
-  cat(create_legend_string(scale, values, label = 'cyl'), "\n")
-
-
-
 }

@@ -168,10 +168,13 @@ as_html <- function(x, ..., font_size = NULL, style = list(), complete = FALSE, 
 #' @return None
 #' @export
 #' @examples
-#' # Will try and spawn a viewer for content
+#' \dontrun{
+#' # This example will try and spawn an external viewer for HTML content
+#' # and is thus marked as 'dontrun' so it does not get executed on CRAN
 #' hl_grep(mode, "switch") |>
 #'   as_html() |>
 #'   show_html()
+#' }
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 show_html <- function(x, viewer = getOption("viewer", utils::browseURL)) {
 

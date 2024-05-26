@@ -1,0 +1,50 @@
+---
+title: "Rain in Sydney"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Rain in Sydney}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(emphatic)
+sydney_rain |> head(15)
+```
+
+## Average monthly rainfall during the period 1960 - 2023
+
+```{r}
+(mean_rain <- mean(unlist(sydney_rain[,-1]), na.rm = TRUE))
+```
+
+## Floods in NSW 
+
+Years in which flooding occurred in New South Wales according to [wikipedia](https://en.wikipedia.org/wiki/Floods_in_Australia)
+
+```{r}
+flood_years <- c(1970, 1971, 1984, 1986, 1990, 1996, 1998, 2007, 2012, 2013, 2015, 2016, 2020, 2021, 2022)
+```
+
+
+## Highlight months with above average rainfall and mark years in which flooding occurred
+
+```{r}
+sydney_rain |>
+  hl(
+    ggplot2::scale_colour_gradient2(na.value = 'white', low = 'white', 
+                                    high = 'darkgreen', midpoint = mean_rain), 
+    cols = Jan:Dec
+  ) |>
+  hl('skyblue', rows = Year %in% flood_years, cols = 'Year') |>
+  hl_adjust(na = '') |>
+  as_svg(height = 1300)
+```
+

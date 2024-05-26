@@ -7,9 +7,6 @@
 \format{
 Matrix of sea ice area, monthly from 1978 to 2020.
 }
-\source{
-\url{ftp://sidads.colorado.edu/DATASETS/NOAA/G02135/south/monthly/data/}
-}
 \usage{
 sea_ice_area
 }

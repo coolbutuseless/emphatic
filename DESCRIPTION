@@ -1,7 +1,7 @@
 Package: emphatic
 Type: Package
 Title: Highlight R Output
-Version: 0.1.6.9013
+Version: 0.1.6.9014
 Author: mikefc
 Maintainer: mikefc <mikefc@coolbutuseless.com>
 Description: User-defined colour highlighting of data.frames and other R output. 
@@ -19,6 +19,7 @@ Suggests:
     dplyr,
     ggplot2,
     tidyr,
+    purrr,
     testthat,
     openxlsx
 VignetteBuilder: knitr

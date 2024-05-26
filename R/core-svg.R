@@ -49,7 +49,6 @@ as_svg <- function(x, width = 1200, height = 900, ..., font_size = NULL,
 
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Wrap an emphatic object to part of an SVG
 #'
@@ -81,7 +80,6 @@ as_svg_group <- function(x, width = 1200, height = 900, font_size = NULL,
 
 
   svg_text <- paste(
-    "",
     ifelse(visible, '<g visibility="visible">', '<g visibility="hidden">'),
     '<foreignObject width=\"100%\" height=\"100%\">',
     '<div xmlns=\"http://www.w3.org/1999/xhtml\">',
@@ -90,7 +88,6 @@ as_svg_group <- function(x, width = 1200, height = 900, font_size = NULL,
     "</foreignObject>",
     extra,
     "</g>",
-    "",
     sep = "\n"
   )
 
@@ -100,6 +97,7 @@ as_svg_group <- function(x, width = 1200, height = 900, font_size = NULL,
 
   svg_text
 }
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,6 +123,7 @@ make_animate_tag <- function(i, n, dur = 1, playback, svg_id) {
             to="visible" dur="%fs" />', svg_id, i, svg_id, i - 1, dur)
   }
 }
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -226,97 +225,4 @@ as_svg_anim <- function(x, width = 1200, height = 900, duration = 1, playback = 
   class(svg_text) <- union(c('knit_asis', 'html', 'character'), class(svg_text))
 
   svg_text
-}
-
-
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Examples
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-if (FALSE) {
-  library(dplyr)
-  library(tidyr)
-  m <- matrix(0.1, 10, 10)
-
-  w <- 16
-  h <- 50
-
-  create_sinus <- function(xoff, yoff) {
-    expand.grid(x=1:w, y=1:h) |>
-      as.data.frame() |>
-      mutate(val = cos((x - w/2)/w + xoff) + sin((y - h/3)/h + yoff) ) |>
-      mutate(val = round(val, 3)) |>
-      spread(x, val) |>
-      select(-y) |>
-      setNames(sprintf("% 7i", seq(w))) |>
-      hl(ggplot2::scale_color_gradient2(), cols = all())
-  }
-
-
-  groups <- purrr::map2(
-    cos(seq(0, 2*pi , length.out = 60)),
-    sin(seq(-2*pi, 2*pi, length.out = 60)),
-    ~create_sinus(.x, .y)
-  )
-
-
-  as_svg_anim(groups, duration = 0.1, playback = 'click') |>
-    writeLines("~/Desktop/demo2.svg")
-
-  create_sinus(0.3, -1.2)
-
-  as_svg_anim(groups, duration = 0.1, playback = 'infinite', browsable = TRUE)
-
-
-  # write_xlsx(create_sinus(0.3, -0.7), "working/sinus.xlsx", opts = hl_opts(text_mode = 'contrast'))
-
-
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Consolel print output
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  library(emphatic)
-  library(dplyr)
-  library(tidyr)
-
-  w <- 16
-  h <- 50
-
-  create_sinus <- function(xoff, yoff) {
-    expand.grid(x=1:w, y=1:h) |>
-      as.data.frame() |>
-      mutate(val = cos((x - w/2)/w + xoff) + sin((y - h/3)/h + yoff) ) |>
-      mutate(val = round(val, 3)) |>
-      spread(x, val) |>
-      select(-y) |>
-      setNames(sprintf("% 7i", seq(w))) |>
-      hl(ggplot2::scale_color_gradient2(), cols = all())
-  }
-  groups <- purrr::map2(
-    cos(seq(0, 2*pi , length.out = 60)),
-    sin(seq(-2*pi, 2*pi, length.out = 60)),
-    function(x, y) {
-      # cat("\014")
-      create_sinus(x, y) |>
-        hl_adjust(full_colour = TRUE, text_mode = 'asis') |>
-        as.character() |>
-        cat()
-      Sys.sleep(0.1)
-    }
-  )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

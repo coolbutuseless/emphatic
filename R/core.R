@@ -17,7 +17,7 @@ escape <- list(
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 collapse = list(
   ansi  = "\n",
-  html  = "<br/>\n",
+  html  = "<br/>",
   latex = "\\\\\n",
   typst = "\\\n"
 )
@@ -342,7 +342,6 @@ as.character.emphatic <- function(x, ..., mode = 'ansi') {
 
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Private function for converting an emphatic data.frame or matrix to a string
 #'
@@ -589,7 +588,6 @@ as_character_inner <- function(m,
 
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Calculate a contrasting text colours for vector of fill colours
 #'
@@ -696,11 +694,3 @@ interp_colour <- function(colour1, colour2, frac) {
 
   rgb(m[,1], m[,2], m[,3])
 }
-
-
-
-
-
-
-
-

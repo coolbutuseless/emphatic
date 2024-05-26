@@ -2,6 +2,8 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Write an emphatic data.frame to an Excel workbook
 #'
+#' Requires \code{openxlsx} package
+#'
 #' @param x emphatic data.frame object
 #' @param xlsx_filename xlsx filename
 #' @param colNames Display column names? logical. Default: TRUE

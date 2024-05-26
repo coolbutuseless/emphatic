@@ -19,7 +19,7 @@ write_xlsx(x, xlsx_filename, colNames = TRUE, opts = hl_opts())
 None
 }
 \description{
-Write an emphatic data.frame to an Excel workbook
+Requires \code{openxlsx} package
 }
 \examples{
 mtcars |>

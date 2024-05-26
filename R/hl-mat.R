@@ -1,6 +1,4 @@
 
-
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Highlight elements of a matrix or atomic vector
 #'
@@ -139,4 +137,3 @@ hl_mat <- function(.data, colour, selection = NULL, elem = 'fill',
 
   .data
 }
-

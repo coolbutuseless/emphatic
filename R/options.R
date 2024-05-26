@@ -1,5 +1,4 @@
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Set options for printing on the emphatic matrix or data.frame
 #'
@@ -113,16 +112,10 @@ hl_opts <- function(na               = getOption("HL_NA", "NA"),
     text_contrast <= 1
   })
 
-
-
   list(
     na               = na,
     full_colour      = full_colour,
     text_mode        = text_mode,
     text_contrast    = text_contrast
   )
-
 }
-
-
-

@@ -1,5 +1,5 @@
 
-# emphatic 0.1.6.9013  2024-05-05
+# emphatic 0.1.6.9014  2024-05-26
 
 * Removed `hl_mat()` and associated vignettes.
     * function is not exported for now as the selection process is too 

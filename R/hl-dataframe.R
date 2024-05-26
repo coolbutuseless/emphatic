@@ -310,17 +310,3 @@ hl <- function(.data, palette,
 
   .data
 }
-
-
-if (FALSE) {
-  mtcars |>
-    hl(ggplot2::scale_color_continuous(), cols = hp, show_legend = TRUE) |>
-    hl(ggplot2::scale_color_continuous(type = 'viridis'), cols = am, show_legend = TRUE) |>
-    hl(ggplot2::scale_color_gradient(low = 'hotpink', high = 'yellow'), cols = mpg, show_legend = TRUE)
-}
-
-
-
-
-
-

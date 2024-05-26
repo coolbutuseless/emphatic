@@ -1,5 +1,4 @@
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Standard NULL operator
 #'
@@ -14,6 +13,7 @@
     x
   }
 }
+
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Really atomic vector. Not a matrix or array!
@@ -51,7 +51,6 @@ chunked_indices <- function(total_len, chunk_len) {
   groups <- ceiling(seq_len(total_len)/chunk_len)
   split(seq_len(total_len), groups)
 }
-
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -115,8 +114,3 @@ modify_list <- function (current, new) {
 
   current
 }
-
-
-
-
-

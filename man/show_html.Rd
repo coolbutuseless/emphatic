@@ -18,8 +18,11 @@ None
 Show HTML or SVG content in the rstudio viewer pane
 }
 \examples{
-# Will try and spawn a viewer for content
+\dontrun{
+# This example will try and spawn an external viewer for HTML content
+# and is thus marked as 'dontrun' so it does not get executed on CRAN
 hl_grep(mode, "switch") |>
   as_html() |>
   show_html()
+}
 }

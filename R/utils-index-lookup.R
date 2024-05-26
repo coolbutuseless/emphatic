@@ -177,8 +177,5 @@ loc_expr_to_ids <- function(.data, expr, axis) {
     stop(axis, " specification must not contain NAs:", deparse(ids))
   }
 
-
   ids
 }
-
-

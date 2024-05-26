@@ -6,21 +6,53 @@
 <!-- badges: start -->
 
 ![](https://img.shields.io/badge/cool-useless-green.svg)
-![](https://img.shields.io/badge/developing-rapidly-orange.svg)
 [![R-CMD-check](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-`{emphatic}` allows for user-defined highlighting of data.frames.
+`{emphatic}` is a tool for exploratory analysis of tabular data. It
+allows the user to visually colour elements of the data, yet still keep
+all values visible.
+
+Conceptually, `{emphatic}` highlighting could be considered to lie
+between *tabular output* and *graphical output* - like a table it shows
+all values, but like graphs these values are used to control appearance
+(i.e. colour).
+
+|                       | Table | Emphatic | Graph |
+|:----------------------|------:|---------:|------:|
+| View all raw values   |   Yes |      Yes |     . |
+| Values control colour |     . |      Yes |   Yes |
+
+To make it easier to get started with `{emphatic}` it follows the
+conventions of `{dplyr}` for selecting rows and columns, and advanced
+colouring is via colour *scales* objects provided by `{ggplot2}` and
+other packages.
+
+The output is focussed on the display of a data grid, highlighting
+user-selected elements, but with minimal extra [“chart
+junk”](https://en.wikipedia.org/wiki/Chartjunk). This makes it suited to
+data exploration, but may not meet everyone’s needs for
+“publication-ready” output.
+
+#### Supported output
 
 This highlighting works
 
-- in the console
-- rendered to HTML (e.g. in Rmarkdown documents)
-- rendered to latex
-- rendered to [typst](https://typst.app) (e.g. in Quarto documents)
-- rendered to SVG and animated SVG
+- in the **console**
+- when output to **Excel** (using `write_xlsx()`)
+- rendered in **Rmarkdown** documents (to `HTML`, `latex` and `typst`
+  outputs)
+- rendered in **Quarto** documents (to `HTML`, `latex` and `typst`
+  outputs)
+- rendered to **SVG**
+- rendered as multiple frames to **animated SVG**
 
+<details open>
+<summary style="font-size: large;">
+Click here to show/hide gif demo
+</summary>
 <img src="data-raw/figures/examples.gif"/>
+</details>
 
 #### What’s in the box
 
@@ -28,15 +60,13 @@ This highlighting works
 - `hl_diff()` for highlighting differences between two objects
 - `hl_grep()` highlight regular expression matches in an object or
   string
-- Output from `hl_*()` functions will automatically be rendered in
-  Rmarkdown and Quarto documents (where the output format is one of
-  html, PDF or typst).
-- The highlighted output can be explicitly converted to other formats
-  using:
+- Manual conversion to other formats using:
   - `as_html()`
   - `as_svg()` and animated `as_svg_anim()`
   - `as_typst()`
   - `write_xlsx()` - Excel document
+- Automatic conversion to the correct format is performed automatically
+  when knitting an Rmarkdown or Quarto document.
 
 #### Installation
 
@@ -50,11 +80,27 @@ remotes::install_github('coolbutuseless/emphatic', ref = 'main')
 
 ## Highlighting of data.frames with `hl()`
 
-- specify rows and columns you want to highlight
-- specify a palette
-  - a single colour
-  - a vector of colours
-  - a `ggplot2` “Scale” object e.g. `scale_colour_continuous()`
+`hl()` lets you specify a palette, and the rows/columns of the
+data.frame the palette should apply to.
+
+`hl()` calls are cumulative - so the required highlighting can be built
+up one-step-at-a-time.
+
+To add highlighing to a data.frame, specify a palette and define the
+rows/columns to be highlighted:
+
+- specify a `palette`
+  - a single colour or vector of colours
+  - a `ggplot2` *Scale* object e.g. `scale_colour_continuous()`
+- specify `rows`/`cols` to highlight (default: `NULL` highlights all
+  rows/cols). Specify row/column selection using:
+  - numeric vector giving row/column indices e.g. `c(1, 2, 8)`, `1:8`
+  - character vector giving row/column names e.g. `c('mpg', 'wt')`
+  - vector of bare column names e.g. `c(mpg, wt)`, `mpg:wt`
+  - tidyselect-style selectors: `starts_with()`, `ends_with()`,
+    `everything()`, `all_of()`, `any_of()`, `matches()`, `contains()`,
+    `row_number()`, `n()`
+  - row selection using filtering operations e.g. `cyl == 6 & mpg > 20`
 
 #### Simple data.frame example
 
@@ -74,11 +120,12 @@ mtcars |>
 A more complex example showing how to highlight the `mtcars` dataset
 where:
 
-- Determine the colours using `scale_colour_viridis_c()` applied to
-  `mpg`
-- Apply the scale’s colouring to all columns from `mpg` to `disp`
 - highlight the row for the car with the minimum horsepower (`hp`) in
   `hotpink`
+- Determine an expressive colouring for `mpg` using
+  `scale_colour_viridis_c()` - where low values are darker, and high
+  values are a bright yellow
+- Apply the scale’s colouring to all columns from `mpg` to `disp`
 
 `hl()` calls are cumulative - you can build up the highlighting you need
 step-by-step
@@ -86,13 +133,13 @@ step-by-step
 ``` r
 mtcars |>
   head(15) |>
+  hl('hotpink', rows = hp == min(hp)) |>
   hl(
-    palette     = ggplot2::scale_colour_viridis_c(),
+    palette     = ggplot2::scale_colour_viridis_c(option = 'A'),
     cols        = mpg,      # Where the colour scale is calculated
     scale_apply = mpg:disp, # Where the colour scale is applied
     show_legend = TRUE
-  ) |>
-  hl('hotpink', rows = hp == min(hp), cols = hp:carb) 
+  ) 
 ```
 
 <img src="data-raw/figures/example2.svg" width="100%">
@@ -135,10 +182,10 @@ objects coerced into a string representation.
 
 ``` r
 txt <- "Among the few possessions he left to his heirs was a set of 
-Encyclopedia Britannica in storage at the Lindbergh Palace Hotel under the 
-names Ari and Uzi Tenenbaum. No-one spoke at the funeral, and Father 
-Petersen's leg had not yet mended, but it was agreed among them that Royal 
-would have found the event to be most satisfactory.
+Encyclopedia Britannica in storage at the Lindbergh Palace Hotel under
+the  names Ari and Uzi Tenenbaum. No-one spoke at the funeral, and 
+Father Petersen's leg had not yet mended, but it was agreed among them 
+that Royal would have found the event to be most satisfactory.
 [Chas, now wearing a black Adidas tracksuit, nods to his sons]"
 
 hl_grep(txt, "event.*satisfactory", coerce = 'character')
@@ -173,7 +220,7 @@ objs <- list(
 ) 
 
 svg <- as_svg_anim(objs, width = 600, height = 300, duration = 2, 
-                   playback = 'infinite')
+                   playback = 'infinite', font_size = "2em")
 ```
 
 <img src="data-raw/figures/example-svg-anim.svg">
@@ -189,7 +236,7 @@ svg <- as_svg_anim(objs, width = 600, height = 300, duration = 2,
   e.g.
   - `Sys.setenv(HL_NA = "<none>")` prior to loading package or in
     `.Rprofile`
-  - `options(HL_NA = FALSE)` at any time
+  - `options(HL_NA = ".")` at any time
 
 | Option                                   | Description                                                                                                                         |
 |:-----------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------|

@@ -1,0 +1,62 @@
+---
+title: "svg-animation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{svg-animation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r eval=TRUE}
+library(emphatic)
+library(dplyr)
+library(tidyr)
+
+# dimensions of data.frame
+w <- 8
+h <- 20
+
+# Create an emphatic object
+create_sinus <- function(xoff, yoff) {
+  expand.grid(x=1:w, y=1:h) |>
+    as.data.frame() |>
+    mutate(val = cos((x - w/2)/w + xoff) + sin((y - h/3)/h + yoff) ) |>
+    mutate(val = round(val, 3)) |>
+    spread(x, val) |>
+    select(-y) |>
+    setNames(sprintf("% 7i", seq(w))) |>
+    hl(ggplot2::scale_color_gradient2(), cols = all())
+}
+
+# Test
+create_sinus(0, 0)
+```
+
+
+```{r}
+# Loop over x,y and create a list of emphatic objects
+groups <- purrr::map2(
+  cos(seq(0, 2*pi , length.out = 60)),
+  sin(seq(-2*pi, 2*pi, length.out = 60)),
+  ~create_sinus(.x, .y)
+)
+
+# Save the list as an SVG animation to file
+if (FALSE) {
+  as_svg_anim(groups, duration = 0.1, playback = 'infinite') |>
+    writeLines("sinus.svg")
+}
+
+# Play the SVG animation back in the Rstudio console
+if (FALSE) {
+  as_svg_anim(groups, duration = 0.1, playback = 'infinite', browsable = TRUE)
+}
+```
+

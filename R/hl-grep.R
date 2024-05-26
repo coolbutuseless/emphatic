@@ -1,5 +1,4 @@
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Colour highlighting a regular expression search
 #'
@@ -124,10 +123,5 @@ hl_grep <- function(x,
   )
 
   attr(res, 'options') <- opts
-
-
   res
 }
-
-
-
