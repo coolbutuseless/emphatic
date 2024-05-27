@@ -9,3 +9,5 @@
 ^LICENSE\.md$
 ^.devcontainer$
 ^man/figures$
+^doc$
+^Meta$

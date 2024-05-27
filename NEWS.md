@@ -1,4 +1,14 @@
 
+# emphatic 0.1.8  2024-05-28
+
+* Fixes for CRAN
+    * Shorter 'Title' field.  Drop "Tools for" to make it under 65 chars.
+    * 'rmarkdown' and 'quarto' in 'Description' field are now 
+      quoted, and match the case for the actual package.
+    * Remove extra spaces at start of continuation lines in 'Description' field.
+    * Added documentation on return values for `is_emphatic` and `print_emphatic`
+    * There are no references for this package.
+
 # emphatic 0.1.7  2024-05-26
 
 * Support for conversion to `typst`, `latex`, `html`, `svg` and `Excel`

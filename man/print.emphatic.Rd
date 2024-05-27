@@ -11,6 +11,9 @@
 
 \item{...}{other arguments passed on to \code{format()}}
 }
+\value{
+None.
+}
 \description{
 Print an \code{emphatic} data.frame, matrix or atomic vector
 }

@@ -4,6 +4,7 @@
 #'
 #' @param x,y R objects
 #'
+#' @return x if not null else y
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 '%||%' <- function(x, y) {
@@ -20,6 +21,7 @@
 #'
 #' @param x R object
 #'
+#' @return logical
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 is_atomic <- function(x) {
@@ -31,7 +33,7 @@ is_atomic <- function(x) {
 # Really is a 2d matrix, not an array
 #'
 #' @param x R object
-#'
+#' @return logical
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 is_matrix <- function(x) {
@@ -44,7 +46,7 @@ is_matrix <- function(x) {
 #'
 #' @param total_len the total length of the sequence
 #' @param chunk_len the length of each chunk
-#'
+#' @return list of chunked indices
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 chunked_indices <- function(total_len, chunk_len) {
@@ -69,6 +71,9 @@ chunked_indices <- function(total_len, chunk_len) {
 #'   \item{str}{ - performs the matching on the output of calling
 #'           \code{str(x)}}
 #' }
+#'
+#' @return single character string representing the object
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 coerce_to_string <- function(x, coerce) {
   switch(

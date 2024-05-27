@@ -9,6 +9,9 @@ is_emphatic(x)
 \arguments{
 \item{x}{Object to test}
 }
+\value{
+Logical value
+}
 \description{
 Check if data.frame, matrix or atomic vector is a valid emphatic version
 }

@@ -86,7 +86,7 @@ gen_n_col <- function(.data) {
 #' @param .data data.frame
 #' @param expr an expression wihch will be interpreted as indices
 #' @param axis 'row' or 'column' expression?
-#'
+#' @return IDs matching the given expression
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 loc_expr_to_ids <- function(.data, expr, axis) {

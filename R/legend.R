@@ -8,6 +8,7 @@
 #' @param label label name to prefix legend. default NULL
 #' @inheritParams as_character_inner
 #'
+#' @return rendered text for legend
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 create_legend_string <- function(

@@ -12,8 +12,6 @@
 #' @inheritParams as_svg_anim
 #' @param width,height viewBox dimensions for SVG
 #'
-#' @return character string containing an SVG snippet.
-#'
 #' @return Character string containing SVG representation
 #'
 #' @export

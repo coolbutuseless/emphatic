@@ -18,9 +18,20 @@
 #'        operations. If \code{NULL}, then colours which contrast with \code{fill} will
 #'        be chosen automatically
 #' @param ... further arguments passed to \code{adist()}
-#' @inheritParams coerce_to_string
 #' @param sep character string of the  line separating the two objects. Default: \code{NULL}
 #'        for no separation. Use the empty string to insert an empty line.
+#' @param coerce How should non-character arguments be coerced to character strings?
+#' \describe{
+#'   \item{default}{ - the given object \code{x} must already be a character string}
+#'   \item{character}{ - performs the matching after first calling
+#'           \code{as.character(x)}}
+#'   \item{print}{ - performs the matching against the default
+#'            \code{print(x)} output}
+#'   \item{deparse}{ - performs the matching after first calling
+#'           \code{deparse1(x)}}
+#'   \item{str}{ - performs the matching on the output of calling
+#'           \code{str(x)}}
+#' }
 #' @inheritParams hl_grep
 #'
 #' @return list of 'emphatic' objects which could be rendered to ANSI (for example)

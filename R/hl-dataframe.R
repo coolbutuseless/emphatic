@@ -15,6 +15,9 @@
 #'        combinations of the specified rows and columns will be highlighted.
 #'        Otherwise the locations are
 #'        created using a simpler call to \code{cbind()}.
+#'
+#' @return emphatic object
+#' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_loc <- function(.data, palette, row_ids, col_ids, elem = 'fill', major = 'row', expand_grid = TRUE) {
 
@@ -94,6 +97,7 @@ hl_loc <- function(.data, palette, row_ids, col_ids, elem = 'fill', major = 'row
 #' @param column Single numeric index of the column to colour
 #' @param dest_col_ids column ids to apply highlighting to
 #'
+#' @return emphatic object
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 hl_inner <- function(.data, palette, row_ids, column, dest_col_ids, elem, show_legend) {

@@ -152,6 +152,7 @@ get_legends <- function(.data) {
 #'
 #' @param x Object to test
 #'
+#' @return Logical value
 #' @export
 #' @examples
 #' mtcars |>
@@ -190,6 +191,7 @@ is_emphatic <- function(x) {
 #' @inheritParams hl_opts
 #' @inheritParams as.character.emphatic
 #'
+#' @return None.
 #' @export
 #' @examples
 #' mtcars |>
@@ -659,6 +661,7 @@ calc_contrasting_text <- function(fill, text_contrast) {
 #'
 #' @importFrom grDevices col2rgb convertColor rgb
 #'
+#' @return colour
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 interp_colour <- function(colour1, colour2, frac) {

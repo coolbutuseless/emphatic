@@ -17,8 +17,18 @@
 #'        will be seleted which contrasts with the \code{fill} colour.
 #' @param ... extra args passed to \code{gsub}
 #' @param perl logical. use perl style regex. default: TRUE
-#' @inheritParams coerce_to_string
-#' @inheritParams hl_diff
+#' @param coerce How should non-character arguments be coerced to character strings?
+#' \describe{
+#'   \item{default}{ - the given object \code{x} must already be a character string}
+#'   \item{character}{ - performs the matching after first calling
+#'           \code{as.character(x)}}
+#'   \item{print}{ - performs the matching against the default
+#'            \code{print(x)} output}
+#'   \item{deparse}{ - performs the matching after first calling
+#'           \code{deparse1(x)}}
+#'   \item{str}{ - performs the matching on the output of calling
+#'           \code{str(x)}}
+#' }
 #' @param opts create options list
 #'
 #' @return An emphatic object suitable to output to console (for example)

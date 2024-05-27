@@ -32,8 +32,6 @@ returned HTML}
 when printed (instead of console output)? Default: FALSE}
 }
 \value{
-character string containing an SVG snippet.
-
 Character string containing SVG representation
 }
 \description{
