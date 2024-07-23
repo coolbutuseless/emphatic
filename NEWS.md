@@ -1,4 +1,8 @@
 
+# emphatic 0.1.8.9000  2024-07-23
+
+* Updating environment handling so `hl()` works within function calls.
+
 # emphatic 0.1.8  2024-05-28
 
 * Fixes for CRAN

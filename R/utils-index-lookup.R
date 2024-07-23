@@ -86,10 +86,11 @@ gen_n_col <- function(.data) {
 #' @param .data data.frame
 #' @param expr an expression wihch will be interpreted as indices
 #' @param axis 'row' or 'column' expression?
+#' @param user_env users calling environment
 #' @return IDs matching the given expression
 #' @noRd
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-loc_expr_to_ids <- function(.data, expr, axis) {
+loc_expr_to_ids <- function(.data, expr, axis, user_env = parent.frame()) {
   stopifnot(is.data.frame(.data))
   stopifnot(axis %in% c('row', 'column'))
 
@@ -100,12 +101,12 @@ loc_expr_to_ids <- function(.data, expr, axis) {
   if (axis == 'row') {
     labels <- rownames(.data)
     len    <- nrow(.data)
-    env    <- list2env(.data, parent = parent.frame())
+    env    <- list2env(.data, parent = user_env)
     gen_n  <- gen_n_row
   } else {
     labels <- colnames(.data)
     len    <- ncol(.data)
-    env    <- new.env(parent = parent.frame())
+    env    <- new.env(parent = user_env)
     gen_n  <- gen_n_col
   }
 

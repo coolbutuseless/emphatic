@@ -1,7 +1,7 @@
 Package: emphatic
 Type: Package
 Title: Exploratory Analysis of Tabular Data using Colour Highlighting
-Version: 0.1.8
+Version: 0.1.8.9000
 Authors@R: c(
     person("Mike", "Cheng", role = c("aut", "cre", 'cph'), email = "mikefc@coolbutuseless.com")
     )

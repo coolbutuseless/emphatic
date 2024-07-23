@@ -260,8 +260,8 @@ hl <- function(.data, palette,
   # Unpack which rows/columns are being highlighted
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   .x      <- .data  # used for lookup within loc_expr_to_ids()
-  col_ids <- loc_expr_to_ids(.data, expr = substitute(cols), axis = 'column')
-  row_ids <- loc_expr_to_ids(.data, expr = substitute(rows), axis = 'row'   )
+  col_ids <- loc_expr_to_ids(.data, expr = substitute(cols), axis = 'column', user_env = parent.frame())
+  row_ids <- loc_expr_to_ids(.data, expr = substitute(rows), axis = 'row'   , user_env = parent.frame())
 
   if (length(col_ids) == 0) {
     stop("hl(): No valid columns specified")
@@ -279,7 +279,7 @@ hl <- function(.data, palette,
   if (missing(scale_apply)) {
     dest_col_ids <- col_ids
   } else {
-    dest_col_ids <- loc_expr_to_ids(.data, expr = substitute(scale_apply), axis = 'column')
+    dest_col_ids <- loc_expr_to_ids(.data, expr = substitute(scale_apply), axis = 'column', user_env = parent.frame())
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
