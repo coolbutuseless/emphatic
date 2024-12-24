@@ -7,6 +7,7 @@
 
 ![](https://img.shields.io/badge/cool-useless-green.svg)
 [![R-CMD-check](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml)
+[![CRAN](https://www.r-pkg.org/badges/version/emphatic)](https://CRAN.R-project.org/package=emphatic)
 <!-- badges: end -->
 
 `{emphatic}` is a tool for exploratory analysis of tabular data. It
@@ -36,9 +37,12 @@ This highlighting works
 - rendered as multiple frames to **animated SVG**
 
 <details open>
+
 <summary style="font-size: large;">
+
 Click here to show/hide gif demo
 </summary>
+
 <img src="man/figures/examples.gif"/>
 </details>
 
@@ -56,14 +60,27 @@ Click here to show/hide gif demo
 - Conversion to the correct output format is performed automatically
   when knitting an Rmarkdown or Quarto document.
 
-#### Installation
+## Installation
 
-You can install from
+This package can be installed from CRAN
+
+``` r
+install.packages('emphatic')
+```
+
+You can install the latest development version from
 [GitHub](https://github.com/coolbutuseless/emphatic) with:
 
 ``` r
-# install.packages('remotes')
+# install.package('remotes')
 remotes::install_github('coolbutuseless/emphatic')
+```
+
+Pre-built source/binary versions can also be installed from
+[R-universe](https://r-universe.dev)
+
+``` r
+install.packages('emphatic', repos = c('https://coolbutuseless.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 ## Highlighting of data.frames with `hl()`
@@ -221,17 +238,17 @@ svg <- as_svg_anim(objs, width = 600, height = 300, duration = 2,
     `.Rprofile`
   - `options(HL_NA = ".")` at any time
 
-| Option                                   | Description                                                                                                                         |
-|:-----------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------|
-| `HL_NA`                                  | String to use for NA values. Default “NA”                                                                                           |
-| `HL_FULL_COLOUR`                         | Should full colour ANSI codes be used when outputting to the console? Default: FALSE on Rstudio, but TRUE on all other R consoles   |
-| `HL_TEXT_MODE`                           | How to handle text if no text colour has been explicitly specified by the user                                                      |
-|                                          | `"contrast"` (default) automatically select a colour which contrasts with the background                                            |
-|                                          | `"asis"` do not change the colour from the console’s default                                                                        |
-|                                          | `"remove"` remove all text without a user-defined colour                                                                            |
-| `HL_TEXT_CONTRAST`                       | When `text_mode = "contrast"` this numeric value (in range \[0, 1\]) adjusts the visibility of the text. Default: 1 (high contrast) |
-| `HL_GREP_COL`                            | The fill colour to use with `hl_grep()` if no colour is specified. Default: “\#0F19F0”                                              |
-| `HL_SUB_COL`, `HL_INS_COL`, `HL_DEL_COL` | the default colours to use with `hl_diff()` for substitution, insertion and deletion (respectively).                                |
+| Option | Description |
+|:---|:---|
+| `HL_NA` | String to use for NA values. Default “NA” |
+| `HL_FULL_COLOUR` | Should full colour ANSI codes be used when outputting to the console? Default: FALSE on Rstudio, but TRUE on all other R consoles |
+| `HL_TEXT_MODE` | How to handle text if no text colour has been explicitly specified by the user |
+|  | `"contrast"` (default) automatically select a colour which contrasts with the background |
+|  | `"asis"` do not change the colour from the console’s default |
+|  | `"remove"` remove all text without a user-defined colour |
+| `HL_TEXT_CONTRAST` | When `text_mode = "contrast"` this numeric value (in range \[0, 1\]) adjusts the visibility of the text. Default: 1 (high contrast) |
+| `HL_GREP_COL` | The fill colour to use with `hl_grep()` if no colour is specified. Default: “\#0F19F0” |
+| `HL_SUB_COL`, `HL_INS_COL`, `HL_DEL_COL` | the default colours to use with `hl_diff()` for substitution, insertion and deletion (respectively). |
 
 ## Vignettes
 

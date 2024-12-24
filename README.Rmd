@@ -61,6 +61,7 @@ image_read("man/figures/logo.png")
 <!-- badges: start -->
 ![](https://img.shields.io/badge/cool-useless-green.svg)
 [![R-CMD-check](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/emphatic/actions/workflows/R-CMD-check.yaml)
+[![CRAN](https://www.r-pkg.org/badges/version/emphatic)](https://CRAN.R-project.org/package=emphatic)
 <!-- badges: end -->
 
 `{emphatic}` is a tool for exploratory analysis of tabular data.  It allows the user
@@ -103,13 +104,27 @@ This highlighting works
 * Conversion to the correct output format is performed automatically when
   knitting an Rmarkdown or Quarto document.
 
-#### Installation
+## Installation
 
-You can install from [GitHub](https://github.com/coolbutuseless/emphatic) with:
+This package can be installed from CRAN
 
 ``` r
-# install.packages('remotes')
+install.packages('emphatic')
+```
+
+You can install the latest development version from
+[GitHub](https://github.com/coolbutuseless/emphatic) with:
+
+``` r
+# install.package('remotes')
 remotes::install_github('coolbutuseless/emphatic')
+```
+
+Pre-built source/binary versions can also be installed from
+[R-universe](https://r-universe.dev)
+
+``` r
+install.packages('emphatic', repos = c('https://coolbutuseless.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 
